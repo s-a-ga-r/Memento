@@ -903,7 +903,7 @@ class Projects {
 
         frappe.call({
             method: "memento.memento.page.project_hub.project_hub.delete_project",
-            args: {project_id: this.currentTaskId},
+            args: {project_id: this.currentTaskId}, 
             callback: function (r) {
                 if (r.message.status === "Success") {
                     // const $projectBox = $(`input[data-project-id="${r.file_id}"]`).closest(".project-post");
