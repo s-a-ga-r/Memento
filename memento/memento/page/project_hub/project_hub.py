@@ -37,10 +37,12 @@ def new_task(new_task):
 
 @frappe.whitelist()
 def delete_project(project_id):
-    # frappe.msgprint(str(project_id))
-    frappe.db.delete("Drive Manager", project_id)
 
+    frappe.msgprint(str(project_id))
     
-    # doc = frappe.get_doc('Projects', project_id)
-    # doc.delete()
-    return {"status":"Success","project_id":project_id}
+    # print("projectID :",project_id)
+    # frappe.db.delete("Projects", project_id)
+    # # doc = frappe.get_doc('Projects', project_id)
+    # # doc.delete()
+    # return {"status":"Success","project_id":project_id}
+    

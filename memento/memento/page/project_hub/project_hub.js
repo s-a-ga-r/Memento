@@ -858,17 +858,17 @@ class Projects {
     deleteProject() {
         let self = this
         $(document).on("click", ".delete-btn", function (event) {
-            event.stopPropagation();
+            // event.stopPropagation();
+            event.preventDefault();
             console.log("delete project clicked")
             let project = $(this).data("project-id");
-            console.log(project);
+            console.log("project id",project);
             self.confirmDeleteProject(project)
             // document.getElementById('projectModal').style.display = 'none';
         })
 
         $(document).on("click", ".cancel-btn", function (event) {
             console.log("cancel");
-           
             self.closeDeleteModal()
             // document.getElementById('projectModal').style.display = 'none';
         })
@@ -902,7 +902,7 @@ class Projects {
 
 
         frappe.call({
-            method: "task_blogger.task_blogger.page.task_blogging.task_blogging.delete_project",
+            method: "memento.memento.page.project_hub.project_hub.delete_project",
             args: {project_id: this.currentTaskId},
             callback: function (r) {
                 if (r.message.status === "Success") {
@@ -919,12 +919,12 @@ class Projects {
                     //     console.log("else")
                     // }
 
+                    console.log("callback project_id : ",r.message.project_id);
                     const $projectBox = $(`.project-post[data-project-id="${r.message.project_id}"]`);
                     console.log("Found file box:", $projectBox.length);
 
                     if ($projectBox.length > 0) {
                         console.log("vanishing roject here");
-                        
                         $projectBox.fadeOut(150, function () {
                             $(this).remove();
                         });
