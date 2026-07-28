@@ -888,7 +888,7 @@ class Projects {
   confirmDeleteProject(taskId) {
     let self = this;
     this.currentTaskId = taskId;
-    document.getElementById("deleteModal").style.display = "block";
+    // document.getElementById("deleteModal").style.display = "block";
 
     $(document).on("click", ".confirm-delete-btn", function (event) {
       event.stopPropagation();
@@ -900,7 +900,7 @@ class Projects {
   deleteProject() {
     let self = this;
     $(document).on("click", ".delete-btn", function (event) {
-      // event.stopPropagation();
+      event.stopPropagation();
       event.preventDefault();
       console.log("delete project clicked");
       let project = $(this).data("project-id");
@@ -944,7 +944,7 @@ class Projects {
     // this.currentTaskId = null;
 
     frappe.call({
-      method: "memento.memento.page.project_hub.project_hub.delete_project",
+      method: "memento.memento.page.projec_track.projec_track.delete_project",
       args: { project_id: this.currentTaskId },
       callback: function (r) {
         if (r.message.status === "Success") {
