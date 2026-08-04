@@ -227,65 +227,6 @@ class Projects {
         this.updateStats();
         this.openProject();
       });
-
-    // console.log("rendering Projects");
-    // const projectPosts = document.getElementById('projectPosts');
-    // let filteredProjects = this.projects;
-
-    // console.log("filteredProjects",filteredProjects);
-
-    // switch (this.currentFilter) {
-    //     case 'today':
-    //         const today = new Date().toDateString();
-    //         filteredProjects = this.projects.filter(task =>
-    //             new Date(task.startTime).toDateString() === today
-    //         );
-    //         break;
-    //     case 'high':
-    //         filteredProjects = this.projects.filter(task => task.priority === 'high');
-    //         break;
-    //     case 'completed':
-    //         filteredProjects = this.projects.filter(task => task.status === 'completed');
-    //         break;
-    //     case 'pending':
-    //         filteredProjects = this.projects.filter(task => task.status === 'pending');
-    //         break;
-    // }
-
-    // if (filteredProjects.length === 0) {
-    //     projectPosts.innerHTML = `
-    //         <div class="empty-state">
-    //             <h3>No tasks found</h3>
-    //             <p>Start by creating your first task!</p>
-    //         </div>
-    //     `;
-    //     return;
-    // }
-
-    // projectPosts.innerHTML = filteredProjects.map(task => `
-    //     <div class="project-post">
-    //         <div class="project-post-header">
-    //             <div class="task-author-avatar">${task.author.charAt(0)}</div>
-    //             <div class="project-post-meta">
-    //                 <div class="task-author-name">${task.author}</div>
-    //                 <div class="project-post-date">${this.formatDate(task.createdAt)}</div>
-    //             </div>
-    //             <div class="project-status ${task.status.replace('-', '')}">${task.status.replace('-', ' ').toUpperCase()}</div>
-    //         </div>
-    //         <h2 class="project-title">${task.title}</h2>
-    //         <div class="project-content project-content-preview">${task.description.split('\n')[0]}</div>
-    //         <div class="project-details">
-    //             <span class="project-category">${task.category.toUpperCase()}</span>
-    //             <span class="project-priority ${task.priority}">${task.priority.toUpperCase()}</span>
-    //         </div>
-    //         <div class="post-actions">
-    //             <button class="action-btn view-btn" data-task-id=${task.id}>Read More</button>
-    //             <button class="action-btn delete-btn" data-task-id="${task.id}">Delete</button>
-    //             <span class="project-time">${this.formatDateTime(task.startTime)} - ${this.formatDateTime(task.endTime)}</span>
-    //         </div>
-    //     </div>
-    // `).join('');
-    // this.viewProjectBlog()
   }
 
   renderTasks(project) {
@@ -439,34 +380,6 @@ class Projects {
                 </div>
             `;
         $(".container2").append(container_content);
-
-        // console.log("postmodel opened",$.fn.datepicker);
-        // console.log(typeof $.fn.datepicker);
-        // console.log("with window vanila js",window.AirDatepicker);
-
-        // new AirDatepicker('#startTime', {
-        //     view: 'months',
-        //     minView: 'months',
-        //     dateFormat: 'MMMM yyyy'
-        // })
-
-        // new AirDatepicker('#endTime', {
-        //     view: 'months',
-        //     minView: 'months',
-        //     dateFormat: 'MMMM yyyy'
-        // })
-
-        // $('#startTime').datepicker({
-        //     view: 'months',
-        //     minView: 'months',
-        //     dateFormat: 'MM yyyy'
-        // });
-
-        // $('#endTime').datepicker({
-        //     view: 'months',
-        //     minView: 'months',
-        //     dateFormat: 'MM yyyy'
-        // });
 
         self.renderTasks(project);
         self.createTask();
@@ -731,51 +644,6 @@ class Projects {
     });
   }
 
-  // viewTask(taskId) {
-  //     const task = task.projects.find(t => t.id === taskId);
-  //     if (!task) return;
-  //     this.currentTaskId = taskId;
-  //     // Populate blog reader modal
-  //     document.getElementById('blogTitle').textContent = task.title;
-  //     document.getElementById('blogAvatar').textContent = task.author.charAt(0);
-  //     document.getElementById('blogAuthor').textContent = task.author;
-  //     document.getElementById('blogDate').textContent = this.formatDate(task.createdAt);
-  //     document.getElementById('blogContent').innerHTML = task.description.replace(/\n/g, '<br>');
-
-  //     // $(".container2").html("");
-
-  //     // Populate task details
-
-  //     document.getElementById('blogDetails').innerHTML = `
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">Category</div>
-  //             <div class="blog-reader-detail-value">${task.category.charAt(0).toUpperCase() + task.category.slice(1)}</div>
-  //         </div>
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">Priority</div>
-  //             <div class="blog-reader-detail-value">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</div>
-  //         </div>
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">Status</div>
-  //             <div class="blog-reader-detail-value">${task.status.replace('-', ' ').toUpperCase()}</div>
-  //         </div>
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">Start Time</div>
-  //             <div class="blog-reader-detail-value">${this.formatFullDateTime(task.startTime)}</div>
-  //         </div>
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">End Time</div>
-  //             <div class="blog-reader-detail-value">${this.formatFullDateTime(task.endTime)}</div>
-  //         </div>
-  //         <div class="blog-reader-detail-item">
-  //             <div class="blog-reader-detail-label">Duration</div>
-  //             <div class="blog-reader-detail-value">${this.calculateDuration(task.startTime, task.endTime)}</div>
-  //         </div>
-  //     `;
-  //     // Show blog reader modal
-  //     document.getElementById('blogReaderModal').style.display = 'block';
-  // }
-
   goBack() {
     let self = this;
     $(document).on("click", ".go-back", function (event) {
@@ -786,80 +654,80 @@ class Projects {
   }
 
   createProject() {
+    let me = this;
     $(document).on("click", "#open-modal", function (event) {
-      console.log("clicked project");
-      document.getElementById("projectModal").style.display = "block";
+      var d = new frappe.ui.Dialog({
+        title: this.title || this.subject || __("New Project"),
+        no_submit_on_enter: true,
+        fields: me.get_fields(),
+        primary_action_label: __("Create", null, "Send Email"),
+        primary_action(values) {
+          // me.send_action();
+
+          frappe
+            .xcall(
+              "task_blogger.task_blogger.page.task_blogging.task_blogging.new_project",
+              {
+                new_task: values,
+              },
+            )
+            .then((r) => {
+              console.log(r);
+
+              d.hide();
+
+              const newTask = {
+                id: Date.now(),
+                blogger: values.frappe.session.user,
+                taskTitle: values.task_name,
+                content: values.description,
+                priority: this.selectedPriority,
+                status: values.status,
+                startTime: values.expected_start_date,
+                endTime: values.expected_end_date,
+                createdAt: new Date().toISOString(),
+                author: "TaskUser",
+              };
+
+              frappe.msgprint(
+                `Task ${values.task_name} Created Successfully !`,
+              );
+
+              this.projects.unshift(newTask);
+              this.saveProjects();
+              this.renderTasks();
+              this.updateStats();
+              this.closeModal();
+              form.reset();
+              this.setDefaultDateTime();
+
+              // Reset priority selection
+              document
+                .querySelectorAll(".priority-tag")
+                .forEach((t) => t.classList.remove("selected"));
+              document
+                .querySelector(".priority-tag.medium")
+                .classList.add("selected");
+              this.selectedPriority = "medium";
+            });
+
+
+        },
+        secondary_action_label: __("Discard", null, "Discard Email"),
+        secondary_action() {
+          d.hide();
+          // me.clear_cache();
+        },
+        size: "large",
+        minimizable: true,
+      });
+
+      d.show();
+
+      // console.log("clicked project");
+      // document.getElementById("projectModal").style.display = "block";
     });
   }
-
-  // createProject() {
-  //     $(document).on("click", "#open-model", function (event) {
-  //         console.log("creating task ...")
-  //         // document.getElementById('postModal').style.display = 'block';
-  //         let project = $(this).data('project-id');
-  //         console.log("creating task for project ",project);
-
-  //         let d = new frappe.ui.Dialog({
-  //             title: "Create Task for project "+project,
-  //             fields: [
-  //                 { fieldtype: 'Data', label: 'Project Name', fieldname: 'project_name' },
-  //                 { fieldtype: 'Data', label: 'Project', fieldname: 'project',default:project,read_only:true},
-  //                 { fieldtype: 'Date', label: 'Expected Start Date', fieldname: 'expected_start_date'},
-  //                 { fieldtype: 'Date', label: 'Expected End Date', fieldname: 'expected_end_date'},
-  //                 { fieldtype: 'Data', label: 'Status', fieldname: 'status', default:'Open'},
-  //                 { fieldtype: 'Select', label: 'Priority', fieldname: 'priority', options: ['High', 'Medium', 'Low'],reqd: 1, default:'Medium'},
-  //                 { fieldtype: 'Select', label: 'Priority', fieldname: 'priority', options: 'High \nMedium \nLow',default:'Medium'},
-  //                 { fieldtype: 'Text Editor', label: 'Task Description', fieldname: 'description' },
-  //                 // { fieldtype: 'Data', label: 'created', fieldname: 'task_name' },
-  //             ],
-  //             primary_action_label: 'Create Task',
-  //             primary_action(values) {
-
-  //                 frappe.xcall("task_blogger.task_blogger.page.task_blogging.task_blogging.new_task", {
-  //                     new_task: values
-  //                 }).then(r => {
-  //                     console.log(r);
-
-  //                     d.hide();
-
-  //                     const newTask = {
-  //                         id: Date.now(),
-  //                         blogger: values.frappe.session.user,
-  //                         taskTitle: values.task_name,
-  //                         content: values.description,
-  //                         priority: this.selectedPriority,
-  //                         status: values.status,
-  //                         startTime: values.expected_start_date,
-  //                         endTime: values.expected_end_date,
-  //                         createdAt: new Date().toISOString(),
-  //                         author: 'TaskUser'
-  //                     };
-
-  //                     frappe.msgprint(`Task ${values.task_name} Created Successfully !`);
-
-  //                     this.projects.unshift(newTask);
-  //                     this.saveProjects();
-  //                     this.renderTasks();
-  //                     this.updateStats();
-  //                     this.closeModal();
-  //                     form.reset();
-  //                     this.setDefaultDateTime();
-
-  //                     // Reset priority selection
-  //                     document.querySelectorAll('.priority-tag').forEach(t => t.classList.remove('selected'));
-  //                     document.querySelector('.priority-tag.medium').classList.add('selected');
-  //                     this.selectedPriority = 'medium';
-
-  //                 });
-  //             }
-  //         });
-  //         d.show();
-  //         var values = d.get_values();
-  //         console.log("values",values);
-
-  //     })
-
-  // }
 
   closeCreateProject() {
     $(document).on("click", ".close-model", function (event) {
@@ -888,7 +756,7 @@ class Projects {
   confirmDeleteProject(taskId) {
     let self = this;
     this.currentTaskId = taskId;
-    // document.getElementById("deleteModal").style.display = "block";
+    document.getElementById("deleteModal").style.display = "block";
 
     $(document).on("click", ".confirm-delete-btn", function (event) {
       event.stopPropagation();
@@ -934,14 +802,6 @@ class Projects {
     );
 
     console.log("current project id", this.currentTaskId);
-
-    // this.saveProjects();
-    // this.renderTasks();
-    // this.renderProjects()
-    // this.updateStats();
-    // this.closeDeleteModal();
-    // this.closeBlogReader();
-    // this.currentTaskId = null;
 
     frappe.call({
       method: "memento.memento.page.projec_track.projec_track.delete_project",
@@ -1206,59 +1066,84 @@ class Projects {
       .toISOString()
       .slice(0, 16);
   }
+
+
+  get_fields(project) {
+    const fields = [
+      { fieldtype: "Data", label: "Task Name", fieldname: "task_name" },
+          {
+            fieldtype: "Data",
+            label: "Project",
+            fieldname: "project",
+            read_only: true,
+          },
+          {
+            fieldtype: "Date",
+            label: "Expected Start Date",
+            fieldname: "expected_start_date",
+          },
+          {
+            fieldtype: "Date",
+            label: "Expected End Date",
+            fieldname: "expected_end_date",
+          },
+          {
+            fieldtype: "Data",
+            label: "Status",
+            fieldname: "status",
+            default: "Open",
+          },
+          {
+            fieldtype: "Select",
+            label: "Priority",
+            fieldname: "priority",
+            onchange: function () {
+              me.select_priorities();
+            },  
+           
+          },
+          {
+            fieldtype: "Select",
+            label: "Priority",
+            fieldname: "priority",
+            options: "High \nMedium \nLow",
+            default: "Medium",
+          },
+          {
+            fieldtype: "Text Editor",
+            label: "Task Description",
+            fieldname: "description",
+          },
+      
+    ]
+    return fields;
+  }
+
+    guess_language() {
+    // when attach print for print format changes try to guess language
+    // if print format has language then set that else boot lang.
+
+    // Print language resolution:
+    // 1. Document's print_language field
+    // 2. print format's default field
+    // 3. user lang
+    // 4. system lang
+    // 3 and 4 are resolved already in boot
+    let document_lang = this.frm?.doc?.language;
+    let print_format = this.dialog.get_value("select_print_format");
+
+    let print_format_lang;
+    if (print_format != "Standard") {
+      print_format_lang = frappe.get_doc(
+        "Print Format",
+        print_format,
+      )?.default_print_language;
+    }
+
+    let lang = document_lang || print_format_lang || frappe.boot.lang;
+    this.dialog.set_value("print_language", lang);
+  }
 }
-
-// Global functions
-// function openModal() {
-//     taskBlogApp.openModal();
-// }
-
-// function closeModal() {
-//     taskBlogApp.closeModal();
-// }
-
-// function filterTasks(filter) {
-//     taskBlogApp.filterTasks(filter);
-// }
-
-// function viewTask(taskId) {
-//     taskBlogApp.viewTask(taskId);
-// }
-
-// function confirmDeleteTask(taskId) {
-//     taskBlogApp.confirmDeleteTask(taskId);
-// }
-
-// function deleteTask() {
-//     taskBlogApp.deleteTask();
-// }
-
-// function closeBlogReader() {
-//     taskBlogApp.closeBlogReader();
-// }
-
-// function closeDeleteModal() {
-//     taskBlogApp.closeDeleteModal();
-// }
-
-// function confirmDelete() {
-//     taskBlogApp.confirmDelete();
-// }
-
-// // Initialize app
-// let taskBlogApp;
-// document.addEventListener('DOMContentLoaded', () => {
-//     taskBlogApp = new TaskBlogApp();
-// });
-
-// // Keyboard shortcuts
-// document.addEventListener('keydown', (e) => {
-//     if (e.key === 'Escape') {
-//         closeModal();
-//         closeBlogReader();
-//         closeDeleteModal();
-//     }
-// });
 
 function taskModelcss() {
   // console.log("Task css");
@@ -1556,3 +1441,202 @@ function taskModelcss() {
 
   $("style").first().append(container_css);
 }
+
+// createProject() {
+//     $(document).on("click", "#open-model", function (event) {
+//         console.log("creating task ...")
+//         // document.getElementById('postModal').style.display = 'block';
+//         let project = $(this).data('project-id');
+//         console.log("creating task for project ",project);
+
+//         let d = new frappe.ui.Dialog({
+//             title: "Create Task for project "+project,
+//             fields: [
+//                 { fieldtype: 'Data', label: 'Project Name', fieldname: 'project_name' },
+//                 { fieldtype: 'Data', label: 'Project', fieldname: 'project',default:project,read_only:true},
+//                 { fieldtype: 'Date', label: 'Expected Start Date', fieldname: 'expected_start_date'},
+//                 { fieldtype: 'Date', label: 'Expected End Date', fieldname: 'expected_end_date'},
+//                 { fieldtype: 'Data', label: 'Status', fieldname: 'status', default:'Open'},
+//                 { fieldtype: 'Select', label: 'Priority', fieldname: 'priority', options: ['High', 'Medium', 'Low'],reqd: 1, default:'Medium'},
+//                 { fieldtype: 'Select', label: 'Priority', fieldname: 'priority', options: 'High \nMedium \nLow',default:'Medium'},
+//                 { fieldtype: 'Text Editor', label: 'Task Description', fieldname: 'description' },
+//                 // { fieldtype: 'Data', label: 'created', fieldname: 'task_name' },
+//             ],
+//             primary_action_label: 'Create Task',
+//             primary_action(values) {
+
+//                 frappe.xcall("task_blogger.task_blogger.page.task_blogging.task_blogging.new_task", {
+//                     new_task: values
+//                 }).then(r => {
+//                     console.log(r);
+
+//                     d.hide();
+
+//                     const newTask = {
+//                         id: Date.now(),
+//                         blogger: values.frappe.session.user,
+//                         taskTitle: values.task_name,
+//                         content: values.description,
+//                         priority: this.selectedPriority,
+//                         status: values.status,
+//                         startTime: values.expected_start_date,
+//                         endTime: values.expected_end_date,
+//                         createdAt: new Date().toISOString(),
+//                         author: 'TaskUser'
+//                     };
+
+//                     frappe.msgprint(`Task ${values.task_name} Created Successfully !`);
+
+//                     this.projects.unshift(newTask);
+//                     this.saveProjects();
+//                     this.renderTasks();
+//                     this.updateStats();
+//                     this.closeModal();
+//                     form.reset();
+//                     this.setDefaultDateTime();
+
+//                     // Reset priority selection
+//                     document.querySelectorAll('.priority-tag').forEach(t => t.classList.remove('selected'));
+//                     document.querySelector('.priority-tag.medium').classList.add('selected');
+//                     this.selectedPriority = 'medium';
+
+//                 });
+//             }
+//         });
+//         d.show();
+//         var values = d.get_values();
+//         console.log("values",values);
+
+//     })
+
+// }
+
+///////////////////////////////////////////////////////////////////
+
+// console.log("postmodel opened",$.fn.datepicker);
+// console.log(typeof $.fn.datepicker);
+// console.log("with window vanila js",window.AirDatepicker);
+
+// new AirDatepicker('#startTime', {
+//     view: 'months',
+//     minView: 'months',
+//     dateFormat: 'MMMM yyyy'
+// })
+
+// new AirDatepicker('#endTime', {
+//     view: 'months',
+//     minView: 'months',
+//     dateFormat: 'MMMM yyyy'
+// })
+
+// $('#startTime').datepicker({
+//     view: 'months',
+//     minView: 'months',
+//     dateFormat: 'MM yyyy'
+// });
+
+// $('#endTime').datepicker({
+//     view: 'months',
+//     minView: 'months',
+//     dateFormat: 'MM yyyy'
+// });
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// viewTask(taskId) {
+//     const task = task.projects.find(t => t.id === taskId);
+//     if (!task) return;
+//     this.currentTaskId = taskId;
+//     // Populate blog reader modal
+//     document.getElementById('blogTitle').textContent = task.title;
+//     document.getElementById('blogAvatar').textContent = task.author.charAt(0);
+//     document.getElementById('blogAuthor').textContent = task.author;
+//     document.getElementById('blogDate').textContent = this.formatDate(task.createdAt);
+//     document.getElementById('blogContent').innerHTML = task.description.replace(/\n/g, '<br>');
+
+//     // $(".container2").html("");
+
+//     // Populate task details
+
+//     document.getElementById('blogDetails').innerHTML = `
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">Category</div>
+//             <div class="blog-reader-detail-value">${task.category.charAt(0).toUpperCase() + task.category.slice(1)}</div>
+//         </div>
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">Priority</div>
+//             <div class="blog-reader-detail-value">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</div>
+//         </div>
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">Status</div>
+//             <div class="blog-reader-detail-value">${task.status.replace('-', ' ').toUpperCase()}</div>
+//         </div>
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">Start Time</div>
+//             <div class="blog-reader-detail-value">${this.formatFullDateTime(task.startTime)}</div>
+//         </div>
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">End Time</div>
+//             <div class="blog-reader-detail-value">${this.formatFullDateTime(task.endTime)}</div>
+//         </div>
+//         <div class="blog-reader-detail-item">
+//             <div class="blog-reader-detail-label">Duration</div>
+//             <div class="blog-reader-detail-value">${this.calculateDuration(task.startTime, task.endTime)}</div>
+//         </div>
+//     `;
+//     // Show blog reader modal
+//     document.getElementById('blogReaderModal').style.display = 'block';
+// }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Global functions
+// function openModal() {
+//     taskBlogApp.openModal();
+// }
+
+// function closeModal() {
+//     taskBlogApp.closeModal();
+// }
+
+// function filterTasks(filter) {
+//     taskBlogApp.filterTasks(filter);
+// }
+
+// function viewTask(taskId) {
+//     taskBlogApp.viewTask(taskId);
+// }
+
+// function confirmDeleteTask(taskId) {
+//     taskBlogApp.confirmDeleteTask(taskId);
+// }
+
+// function deleteTask() {
+//     taskBlogApp.deleteTask();
+// }
+
+// function closeBlogReader() {
+//     taskBlogApp.closeBlogReader();
+// }
+
+// function closeDeleteModal() {
+//     taskBlogApp.closeDeleteModal();
+// }
+
+// function confirmDelete() {
+//     taskBlogApp.confirmDelete();
+// }
+
+// // Initialize app
+// let taskBlogApp;
+// document.addEventListener('DOMContentLoaded', () => {
+//     taskBlogApp = new TaskBlogApp();
+// });
+
+// // Keyboard shortcuts
+// document.addEventListener('keydown', (e) => {
+//     if (e.key === 'Escape') {
+//         closeModal();
+//         closeBlogReader();
+//         closeDeleteModal();
+//     }
+// });
