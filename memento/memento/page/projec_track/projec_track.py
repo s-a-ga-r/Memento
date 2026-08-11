@@ -31,7 +31,7 @@ def new_task(new_task):
     doc.status = new_task.get('status').capitalize()
     doc.priority_level = new_task.get('priority').capitalize()
     doc.description = new_task.get('description')
-    doc.user = frappe.session.user
+    doc.created_by = frappe.session.user
     # doc.insert()
     return doc.insert()
 
@@ -43,4 +43,15 @@ def delete_project(project_id):
     # doc = frappe.get_doc('Projects', project_id)
     # doc.delete()
     return {"status":"Success","project_id":project_id}
+
+
+
+@frappe.whitelist()
+def get_tasks(project):
+    tasks = frappe.get_all('Tasks', filters={'project': project}, fields=['name', 'task_name', 'from_date', 'to_date', 'status', 'priority', 'description'])
+
+    for task in tasks:
+        print(task)
+
+    return tasks
     
