@@ -149,12 +149,10 @@
           limit: 10,
         })
         .then((records) => {
-          console.log("render records", records);
 
           self.projects = records;
           // self.saveProjects();
 
-          console.log("rendering Projects");
           const projectPosts = document.getElementById("projectPosts");
           let filteredProjects = self.projects;
 
@@ -230,7 +228,6 @@
     }
 
     renderTasks(project) {
-      console.log(project);
       self = this;
       const blogPosts = document.getElementById("blogPosts");
       if (this.posts.length === 111) {
@@ -251,7 +248,8 @@
             project: project,
         },
         callback: function (r) {
-            if (!r.message) {
+            if (r.message.length == 0) {
+                console.log("r message got the tasks ",r.message);
                 blogPosts.innerHTML = `
                       <div class="empty-state">
                           <h3>No Task yet</h3>
@@ -259,9 +257,6 @@
                       </div>`;
                 return;
             }
-
-            console.log(r.message);
-            
 
             blogPosts.innerHTML = r.message
             .map(
@@ -280,13 +275,8 @@
               `,
             )
             .join("");
-
-
-
-          
         },
       });
-
 
 
     //   frappe.db
@@ -363,8 +353,8 @@
           // var project = $(".project-post").data("project-id");
           let project = $(this).data("project-id");
 
-          console.log("project", project);
-          console.log("Task List opened of this project");
+        //   console.log("project", project);
+        //   console.log("Task List opened of this project"); 
           $(".container2").html("");
           $("#open-modal").remove();
 
@@ -1118,6 +1108,7 @@
               label: "Priority",
               fieldname: "priority",
               options: "High \nMedium \nLow",
+              
               default: "Medium",
             },
             {
@@ -1137,7 +1128,7 @@
               fieldtype: "Data",
               label: "Project",
               fieldname: "project",
-              default: project,
+              default: this.project,
               read_only: true,
             },
             {
@@ -1176,8 +1167,8 @@
               label: "Task Description",
               fieldname: "description",
             },
-        ],
-        return fields;
+        ]
+        return fields1;
     }
 
     select_priorities() {
