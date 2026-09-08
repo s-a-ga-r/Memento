@@ -243,7 +243,7 @@ app_license = "mit"
 # }
 
 
-fixtures = [
-    "Projects",
-    "Tasks"
-]
+# fixtures = [
+#     "Projects",
+#     "Tasks"
+# ]
