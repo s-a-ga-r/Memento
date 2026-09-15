@@ -13,6 +13,15 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
     single_column: true,
   });
 
+    const options = frappe.route_options || {};
+    const { date, task, project } = options;
+    // clear so stale data doesn't leak into next visit
+    frappe.route_options = null;
+
+    console.log(date, task, project);
+
+
+
   $(".page-container").css("background-color", "#ffffff");
   $("body").css("background-color", "#ffffff");
 

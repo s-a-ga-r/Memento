@@ -503,10 +503,21 @@
         console.log("clicked");
         // document.getElementById('projectModal').style.display = 'block';
 
-        const taskDate = $(this).data("task-date") || frappe.datetime.nowdate(); // Use data attribute or today
+        const taskDate = $(this).data("task-date") || frappe.datetime.nowdate();
+        const taskName = $(this).data("post-title");
+        const projectName = this.project//$(this).data("project-name");
+
+
+        frappe.route_options = {
+          date: taskDate,
+          task: taskName,
+          project: projectName
+        };
+
+        // const taskDate = $(this).data("task-date") || frappe.datetime.nowdate(); // Use data attribute or today
 
         // Navigate to comment-section-v3 with date parameter
-        frappe.set_route("comment-section-v5", { date: taskDate });
+        frappe.set_route("timeline");
       });
 
       // $(document).on("click", "#open-modal", function (event) {
