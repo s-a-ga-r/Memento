@@ -26,7 +26,7 @@ body {
     color: #1a150e;
     transition: 0.3s linear;
 }
-
+git branch -a
 .darker {
     background-image: linear-gradient(100deg, #001214, #001f29);
     color: white;
