@@ -280,6 +280,24 @@ body {
     border-bottom: none;
 }
 
+
+/* .dashboard-section {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-content {
+    padding: 20px;
+} */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

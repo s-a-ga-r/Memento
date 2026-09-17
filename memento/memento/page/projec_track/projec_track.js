@@ -664,73 +664,73 @@
     createProject() {
       let me = this;
       $(document).on("click", "#open-modal", function (event) {
-        var d = new frappe.ui.Dialog({
-          title: this.title || this.subject || __("New Project"),
-          no_submit_on_enter: true,
-          fields: me.get_fields(),
-          primary_action_label: __("Create", null, "Send Email"),
-          primary_action(values) {
-            // me.send_action();
+        // var d = new frappe.ui.Dialog({
+        //   title: this.title || this.subject || __("New Project"),
+        //   no_submit_on_enter: true,
+        //   fields: me.get_fields(),
+        //   primary_action_label: __("Create", null, "Send Email"),
+        //   primary_action(values) {
+        //     // me.send_action();
 
-            frappe
-              .xcall(
-                "task_blogger.task_blogger.page.task_blogging.task_blogging.new_project",
-                {
-                  new_task: values,
-                },
-              )
-              .then((r) => {
-                console.log(r);
+        //     frappe
+        //       .xcall(
+        //         "task_blogger.task_blogger.page.task_blogging.task_blogging.new_project",
+        //         {
+        //           new_task: values,
+        //         },
+        //       )
+        //       .then((r) => {
+        //         console.log(r);
 
-                d.hide();
+        //         d.hide();
 
-                const newTask = {
-                  id: Date.now(),
-                  blogger: values.frappe.session.user,
-                  taskTitle: values.task_name,
-                  content: values.description,
-                  priority: this.selectedPriority,
-                  status: values.status,
-                  startTime: values.expected_start_date,
-                  endTime: values.expected_end_date,
-                  createdAt: new Date().toISOString(),
-                  author: "TaskUser",
-                };
+        //         const newTask = {
+        //           id: Date.now(),
+        //           blogger: values.frappe.session.user,
+        //           taskTitle: values.task_name,
+        //           content: values.description,
+        //           priority: this.selectedPriority,
+        //           status: values.status,
+        //           startTime: values.expected_start_date,
+        //           endTime: values.expected_end_date,
+        //           createdAt: new Date().toISOString(),
+        //           author: "TaskUser",
+        //         };
 
-                frappe.msgprint(
-                  `Task ${values.task_name} Created Successfully !`,
-                );
+        //         frappe.msgprint(
+        //           `Task ${values.task_name} Created Successfully !`,
+        //         );
 
-                this.projects.unshift(newTask);
-                this.saveProjects();
-                this.renderTasks();
-                this.updateStats();
-                this.closeModal();
-                form.reset();
-                this.setDefaultDateTime();
+        //         this.projects.unshift(newTask);
+        //         this.saveProjects();
+        //         this.renderTasks();
+        //         this.updateStats();
+        //         this.closeModal();
+        //         form.reset();
+        //         this.setDefaultDateTime();
 
-                // Reset priority selection
-                document
-                  .querySelectorAll(".priority-tag")
-                  .forEach((t) => t.classList.remove("selected"));
-                document
-                  .querySelector(".priority-tag.medium")
-                  .classList.add("selected");
-                this.selectedPriority = "medium";
-              });
+        //         // Reset priority selection
+        //         document
+        //           .querySelectorAll(".priority-tag")
+        //           .forEach((t) => t.classList.remove("selected"));
+        //         document
+        //           .querySelector(".priority-tag.medium")
+        //           .classList.add("selected");
+        //         this.selectedPriority = "medium";
+        //       });
 
 
-          },
-          secondary_action_label: __("Discard", null, "Discard Email"),
-          secondary_action() {
-            d.hide();
-            // me.clear_cache();
-          },
-          size: "large",
-          minimizable: true,
-        });
+        //   },
+        //   secondary_action_label: __("Discard", null, "Discard Email"),
+        //   secondary_action() {
+        //     d.hide();
+        //     // me.clear_cache();
+        //   },
+        //   size: "large",
+        //   minimizable: true,
+        // });
 
-        d.show();
+        // d.show();
 
         // console.log("clicked project");
         // document.getElementById("projectModal").style.display = "block";
