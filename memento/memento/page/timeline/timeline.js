@@ -405,3 +405,168 @@ function renderWeekPicker($parent) {
   render();
   updateSelectedDisplay();
 }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+
+
+// This code i found from frappe forum to checking dialog box select field is not working properly. I have added this code in timeline.js file. Please check and let me know if you need any changes.
+
+
+
+// random_app_name.dialogs.updateVisitDialog = function (name) {
+//     frappe.call({
+//         method: 'random_app_name.random_project___prod.doctype.lead_database_prod.lead_database_prod.visit_child_data',
+//         args: {
+//             name: name
+//         },
+//         callback: function(message) {
+//             if (message.message) {
+//                 let value = message.message;
+//                 const updateItemsData = value.final_data.map(item => ({
+//                     employee_name: item.employee_name,
+//                     brand_visit_item: item.brand_visit_item,
+//                     item_group_visit_item: item.item_group_visit_item,
+//                     item_name_visit_item: item.item_name_visit_item,
+//                     quantity_visit_item: item.quantity_visit_item,
+//                     price_range_visit_item: item.price_range_visit_item,
+//                     category_visit_item: item.category_visit_item,
+//                     date_visit_child: item.date_visit_child,
+//                     delivery_date: item.delivery_date,
+//                     status_visit_child: item.status_visit_child
+//                 }));
+//                 let dialog = new frappe.ui.Dialog({
+//                     title: __("Update Items"),
+//                     fields: [
+//                         {
+//                             label: __("Visit Details"),
+//                             fieldname: "update_visit_detail",
+//                             fieldtype: "Table",
+//                             fields: [
+//                                 {
+//                                     fieldname: "employee_name",
+//                                     label: __("Employee Name"),
+//                                     fieldtype: "Link",
+//                                     options: "Users AP Prod",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "brand_visit_item",
+//                                     label: __("Brand Name"),
+//                                     fieldtype: "Link",
+//                                     options: 'Brand Name Prod',
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "item_group_visit_item",
+//                                     label: __("Item Group"),
+//                                     fieldtype: "Link",
+//                                     options: 'Item Group AP Prod',
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "item_name_visit_item",
+//                                     label: __("Item Name"),
+//                                     fieldtype: "Link",
+//                                     options: 'Item Name AP Prod',
+//                                     in_list_view: 1,
+//                                     columns: 1,
+//                                     get_query: function (doc) {
+//                                         const brand = doc.brand_visit_item;
+//                                         const itemGroup = doc.item_group_visit_item;
+//                                         return {
+//                                             query: 'random_app_name.controllers.queries.item_name_visit_item_query',
+//                                             filters: {
+//                                                 'associate_brand_item_ap': brand,
+//                                                 'associated_item_group_item_ap': itemGroup
+//                                             }
+//                                         };
+//                                     }
+//                                 },
+//                                 {
+//                                     fieldname: "quantity_visit_item",
+//                                     label: __("Quantity"),
+//                                     fieldtype: "Float",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "price_range_visit_item",
+//                                     label: __("Price"),
+//                                     fieldtype: "Currency",
+//                                     non_negative: 1,
+//                                     precision: 0,
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "category_visit_item",
+//                                     label: __("Category"),
+//                                     fieldtype: "Select",
+//                                     options : "Buyer\nSeller",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "date_visit_child",
+//                                     label: __("Date of Visit"),
+//                                     fieldtype: "Date",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "delivery_date",
+//                                     label: __("Delivery Date"),
+//                                     fieldtype: "Date",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 },
+//                                 {
+//                                     fieldname: "status_visit_child",
+//                                     label: __("Status"),
+//                                     fieldtype: "Select",
+//                                     options: "Inquiry\nCancelled\nDelivered\nReturned",
+//                                     in_list_view: 1,
+//                                     columns: 1
+//                                 }
+//                             ],
+//                             data: updateItemsData,
+//                             in_place_edit: true,
+//                             cannot_add_rows: true
+//                         }
+//                     ],
+//                     size: 'extra-large',
+//                     primary_action_label: __("Update"),
+//                     primary_action: function() {
+//                         let updatedData = dialog.fields_dict.update_visit_detail.grid.get_data();
+//                         frappe.call({
+//                             method: 'random_app_name.random_project___prod.doctype.lead_database_prod.lead_database_prod.update_record',
+//                             args: {
+//                                 name: name,
+//                                 updated_data: updatedData
+//                             },
+//                             callback: function (response) {
+//                                 if (response.message) {
+//                                     frappe.msgprint(__('Data Updated successfully.'));
+//                                     dialog.hide();
+//                                 } else {
+//                                     frappe.msgprint(__('Failed to update data.'));
+//                                 }
+//                             }
+//                         })
+//                     }
+//                 })
+//                dialog.set_df_property('status_visit_child', 'options', "Inquiry\nCancelled\nDelivered\nReturned");
+//                dialog.set_df_property('category_visit_item', 'options', "Buyer\Seller");
+//               dialog.show();
+//             } else {
+//                 frappe.msgprint(__('No data returned from the API.'));
+//             }
+//         }
+//     })
+// }

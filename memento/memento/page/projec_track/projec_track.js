@@ -153,6 +153,12 @@
           self.projects = records;
           // self.saveProjects();
 
+          console.log("records", records);
+        
+
+          console.log(self.projects);
+          
+
           const projectPosts = document.getElementById("projectPosts");
           let filteredProjects = self.projects;
 
@@ -431,69 +437,78 @@
         let project = $(this).data("project-id");
         console.log("creating task for project ", project);
 
-        let d = new frappe.ui.Dialog({
-          title: "Create Task for project " + project,
-          fields: me.get_task_fields(),
-          primary_action_label: "Create Task",
-          primary_action(values) {
-            frappe
-              .xcall(
-                "task_blogger.task_blogger.page.task_blogging.task_blogging.new_task",
-                {
-                  new_task: values,
-                },
-              )
-              .then((r) => {
-                console.log(r);
+        let new_docname = frappe.model.make_new_doc_and_get_name('Tasks');
+        frappe.set_route('Form', 'Tasks', new_docname);
 
-                d.hide();
 
-                const newTask = {
-                  id: Date.now(),
-                  blogger: frappe.session.user,
-                  taskTitle: values.task_name,
-                  content: values.description,
-                  priority: this.selectedPriority,
-                  status: values.status,
-                  startTime: values.expected_start_date,
-                  endTime: values.expected_end_date,
-                  createdAt: new Date().toISOString(),
-                  author: "TaskUser",
-                };
 
-                frappe.msgprint(
-                  `Task ${values.task_name} Created Successfully !`,
-                );
 
-                this.projects.unshift(newTask);
-                this.saveProjects();
-                this.renderTasks();
-                this.updateStats();
-                this.closeModal();
-                form.reset();
-                this.setDefaultDateTime();
 
-                // Reset priority selection
-                document
-                  .querySelectorAll(".priority-tag")
-                  .forEach((t) => t.classList.remove("selected"));
-                document
-                  .querySelector(".priority-tag.medium")
-                  .classList.add("selected");
-                this.selectedPriority = "medium";
-              });
-          },
-          secondary_action_label: __("Discard", null, "Discard Email"),
-          secondary_action() {
-            d.hide();
-            // me.clear_cache();
-          },
-          size: "large",
-          minimizable: true,
-        });
-        d.show();
-        var values = d.get_values();
-        console.log("values", values);
+        // let d = new frappe.ui.Dialog({
+        //   title: "Create Task for project " + project,
+        //   fields: me.get_task_fields(),
+        //   primary_action_label: "Create Task",
+        //   primary_action(values) {
+        //     frappe
+        //       .xcall(
+        //         "task_blogger.task_blogger.page.task_blogging.task_blogging.new_task",
+        //         {
+        //           new_task: values,
+        //         },
+        //       )
+        //       .then((r) => {
+        //         console.log(r);
+
+        //         d.hide();
+
+        //         const newTask = {
+        //           id: Date.now(),
+        //           blogger: frappe.session.user,
+        //           taskTitle: values.task_name,
+        //           content: values.description,
+        //           priority: this.selectedPriority,
+        //           status: values.status,
+        //           startTime: values.expected_start_date,
+        //           endTime: values.expected_end_date,
+        //           createdAt: new Date().toISOString(),
+        //           author: "TaskUser",
+        //         };
+
+        //         frappe.msgprint(
+        //           `Task ${values.task_name} Created Successfully !`,
+        //         );
+
+        //         this.projects.unshift(newTask);
+        //         this.saveProjects();
+        //         this.renderTasks();
+        //         this.updateStats();
+        //         this.closeModal();
+        //         form.reset();
+        //         this.setDefaultDateTime();
+
+        //         // Reset priority selection
+        //         document
+        //           .querySelectorAll(".priority-tag")
+        //           .forEach((t) => t.classList.remove("selected"));
+        //         document
+        //           .querySelector(".priority-tag.medium")
+        //           .classList.add("selected");
+        //         this.selectedPriority = "medium";
+        //       });
+        //   },
+        //   secondary_action_label: __("Discard", null, "Discard Email"),
+        //   secondary_action() {
+        //     d.hide();
+        //     // me.clear_cache();
+        //   },
+        //   size: "large",
+        //   minimizable: true,
+        // });
+
+        // d.set_df_property('priority', 'options', "High\nMedium\nLow");
+        // d.show();
+        // var values = d.get_values();
+        // console.log("values", values);
       });
     }
 
@@ -664,6 +679,12 @@
     createProject() {
       let me = this;
       $(document).on("click", "#open-modal", function (event) {
+
+          let new_docname = frappe.model.make_new_doc_and_get_name('Projects');
+          frappe.set_route('Form', 'Projects', new_docname);
+
+
+
         // var d = new frappe.ui.Dialog({
         //   title: this.title || this.subject || __("New Project"),
         //   no_submit_on_enter: true,
@@ -1158,20 +1179,22 @@
               fieldname: "status",
               default: "Open",
             },
+            // {
+            //   fieldtype: "Select",
+            //   label: "Priority",
+            //   fieldname: "priority",
+            //   options: ["High", "Medium", "Low"],
+            //   reqd: 1,
+            //   default: "Medium",
+            // },
             {
               fieldtype: "Select",
               label: "Priority",
               fieldname: "priority",
-              options: ["High", "Medium", "Low"],
-              reqd: 1,
-              default: "Medium",
-            },
-            {
-              fieldtype: "Select",
-              label: "Priority",
-              fieldname: "priority",
-              options: "High \nMedium \nLow",
-              default: "Medium",
+              options: "High\nMedium\nLow",
+              in_list_view: 1,
+              columns: 1
+            //   default: "Medium",
             },
             {
               fieldtype: "Text Editor",

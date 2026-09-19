@@ -13,9 +13,8 @@
   "project",
   "to_date",
   "priority",
-  "task_describe_section",
-  "description",
   "section_break_mjym",
+  "description",
   "members",
   "created_by"
  ],
@@ -63,11 +62,6 @@
    "options": "High\nMedium\nLow"
   },
   {
-   "fieldname": "task_describe_section",
-   "fieldtype": "Section Break",
-   "label": "Task Describe"
-  },
-  {
    "fieldname": "description",
    "fieldtype": "Text Editor",
    "label": "Description"
@@ -91,7 +85,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-08 23:08:19.998641",
+ "modified": "2026-09-20 02:09:56.767926",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",

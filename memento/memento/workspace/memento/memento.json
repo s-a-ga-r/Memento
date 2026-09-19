@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"0upeQwOdhi\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\" style=\\\"\\\"><a href=\\\"http://127.0.0.1:8000/app/projec-track\\\"><b><i>ProjecTrack</i></b></a></span>\",\"col\":4}},{\"id\":\"SF_YJsECW_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tasking\",\"col\":3}},{\"id\":\"BJ8aMFRee2\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"aOQxd0xvF8\",\"type\":\"card\",\"data\":{\"card_name\":\"Transactions\",\"col\":4}},{\"id\":\"rxrwg2IE2w\",\"type\":\"card\",\"data\":{\"card_name\":\"Logs\",\"col\":4}}]",
+ "content": "[{\"id\":\"0upeQwOdhi\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\" style=\\\"\\\"><a href=\\\"http://127.0.0.1:8000/app/projec-track\\\"><b><i>ProjecTrack</i></b></a></span>\",\"col\":4}},{\"id\":\"SF_YJsECW_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tasking\",\"col\":3}},{\"id\":\"APOMXc6deY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Settings\",\"col\":3}},{\"id\":\"BJ8aMFRee2\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"aOQxd0xvF8\",\"type\":\"card\",\"data\":{\"card_name\":\"Transactions\",\"col\":4}},{\"id\":\"rxrwg2IE2w\",\"type\":\"card\",\"data\":{\"card_name\":\"Logs\",\"col\":4}}]",
  "creation": "2026-04-09 14:15:44.915663",
  "custom_blocks": [],
  "docstatus": 0,
@@ -72,7 +72,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-08-11 21:09:14.857449",
+ "modified": "2026-09-20 02:07:00.756318",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Memento",
@@ -90,6 +90,13 @@
    "label": "Tasking",
    "link_to": "day-to-day-v3",
    "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Settings",
+   "link_to": "Memento Settings",
+   "type": "DocType"
   }
  ],
  "title": "Memento"
