@@ -243,7 +243,35 @@ app_license = "mit"
 # }
 
 
-# fixtures = [
-#     "Projects",
-#     "Tasks"
-# ]
+fixtures = [
+    {
+        "dt": "Number Card",
+        "filters": [
+            ["name", "in", [
+                "Projects",
+                "Total Tasks",
+                "Task Logs",
+                "Daily ToDo"
+            ]]
+        ],
+    },
+
+    {
+        "dt": "Dashboard Chart",
+        "filters": [
+            ["name", "in", [
+                "Task Overview"
+            ]]
+        ],
+    },
+
+    {
+        "dt": "Custom HTML Block",
+        "filters": [
+            ["name", "in", [
+                "Memento Welcome",
+                "Memento Cards"
+            ]]
+        ],
+    },
+]
