@@ -2,7 +2,8 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "format:PRJ-{#}-{DD}-{MM}-{YY}",
- "creation": "2026-09-25 10:50:26.737313",
+ "creation": "2026-09-25 11:00:51.653252",
+ "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -82,7 +83,7 @@
  "icon": "fa branch",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-25 10:50:26.737313",
+ "modified": "2026-09-25 11:00:51.653252",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "My Projects",
