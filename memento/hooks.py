@@ -238,42 +238,11 @@ app_license = "mit"
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True
 
+
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
-fixtures = ["Projects"]
+# fixtures = ["Projects"]
 
 
-# fixtures = [
-#     {
-#         "dt": "Number Card",
-#         "filters": [
-#             ["name", "in", [
-#                 "Projects",
-#                 "Total Tasks",
-#                 "Task Logs",
-#                 "Daily ToDo"
-#             ]]
-#         ],
-#     },
-
-#     {
-#         "dt": "Dashboard Chart",
-#         "filters": [
-#             ["name", "in", [
-#                 "Task Overview"
-#             ]]
-#         ],
-#     },
-
-#     {
-#         "dt": "Custom HTML Block",
-#         "filters": [
-#             ["name", "in", [
-#                 "Memento Welcome",
-#                 "Memento Cards"
-#             ]]
-#         ],
-#     },
-# ]
