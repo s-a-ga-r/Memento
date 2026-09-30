@@ -242,36 +242,38 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = ["Projects"]
 
-fixtures = [
-    {
-        "dt": "Number Card",
-        "filters": [
-            ["name", "in", [
-                "Projects",
-                "Total Tasks",
-                "Task Logs",
-                "Daily ToDo"
-            ]]
-        ],
-    },
 
-    {
-        "dt": "Dashboard Chart",
-        "filters": [
-            ["name", "in", [
-                "Task Overview"
-            ]]
-        ],
-    },
+# fixtures = [
+#     {
+#         "dt": "Number Card",
+#         "filters": [
+#             ["name", "in", [
+#                 "Projects",
+#                 "Total Tasks",
+#                 "Task Logs",
+#                 "Daily ToDo"
+#             ]]
+#         ],
+#     },
 
-    {
-        "dt": "Custom HTML Block",
-        "filters": [
-            ["name", "in", [
-                "Memento Welcome",
-                "Memento Cards"
-            ]]
-        ],
-    },
-]
+#     {
+#         "dt": "Dashboard Chart",
+#         "filters": [
+#             ["name", "in", [
+#                 "Task Overview"
+#             ]]
+#         ],
+#     },
+
+#     {
+#         "dt": "Custom HTML Block",
+#         "filters": [
+#             ["name", "in", [
+#                 "Memento Welcome",
+#                 "Memento Cards"
+#             ]]
+#         ],
+#     },
+# ]
