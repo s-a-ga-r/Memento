@@ -14,7 +14,7 @@
   "category",
   "end_date",
   "priority_level",
-  "project_detail_section",
+  "about_section",
   "description",
   "user"
  ],
@@ -24,20 +24,23 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Project Name"
+   "label": "Project Name",
+   "reqd": 1
   },
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Start Date"
+   "label": "Start Date",
+   "reqd": 1
   },
   {
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Pending\nIn Progress\nCompleted\nPostponed"
+   "options": "Pending\nIn Progress\nCompleted\nPostponed",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_wqin",
@@ -48,7 +51,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Category",
-   "options": "Work\nPersonal\nLearning\nProject\nMeeting"
+   "options": "Work\nPersonal\nLearning\nProject\nMeeting",
+   "reqd": 1
   },
   {
    "fieldname": "end_date",
@@ -61,12 +65,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Priority Level",
-   "options": "High\nMedium\nLow"
-  },
-  {
-   "fieldname": "project_detail_section",
-   "fieldtype": "Section Break",
-   "label": "Project Detail"
+   "options": "High\nMedium\nLow",
+   "reqd": 1
   },
   {
    "fieldname": "description",
@@ -78,12 +78,17 @@
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
+  },
+  {
+   "fieldname": "about_section",
+   "fieldtype": "Section Break",
+   "label": "About"
   }
  ],
  "icon": "fa branch",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-25 11:00:51.653252",
+ "modified": "2026-10-01 00:22:19.285379",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "My Projects",
@@ -103,6 +108,7 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
