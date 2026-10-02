@@ -8,12 +8,14 @@
  "engine": "InnoDB",
  "field_order": [
   "project_name",
-  "start_date",
-  "status",
   "column_break_wqin",
-  "category",
+  "start_date",
+  "classification",
   "end_date",
+  "category",
+  "column_break_awse",
   "priority_level",
+  "status",
   "about_section",
   "description",
   "user"
@@ -83,12 +85,22 @@
    "fieldname": "about_section",
    "fieldtype": "Section Break",
    "label": "About"
+  },
+  {
+   "fieldname": "column_break_awse",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "classification",
+   "fieldtype": "Section Break",
+   "label": "Classification"
   }
  ],
  "icon": "fa branch",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-01 00:22:19.285379",
+ "modified": "2026-10-01 19:52:46.575519",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "My Projects",
