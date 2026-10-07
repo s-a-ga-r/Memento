@@ -16,7 +16,8 @@
   "column_break_awse",
   "priority_level",
   "status",
-  "about_section",
+  "monograph_section",
+  "about",
   "description",
   "user"
  ],
@@ -82,11 +83,6 @@
    "options": "User"
   },
   {
-   "fieldname": "about_section",
-   "fieldtype": "Section Break",
-   "label": "About"
-  },
-  {
    "fieldname": "column_break_awse",
    "fieldtype": "Column Break"
   },
@@ -95,12 +91,22 @@
    "fieldname": "classification",
    "fieldtype": "Section Break",
    "label": "Classification"
+  },
+  {
+   "fieldname": "monograph_section",
+   "fieldtype": "Section Break",
+   "label": "Monograph"
+  },
+  {
+   "fieldname": "about",
+   "fieldtype": "Small Text",
+   "label": "About"
   }
  ],
  "icon": "fa branch",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-01 19:52:46.575519",
+ "modified": "2026-10-06 00:35:19.349438",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "My Projects",

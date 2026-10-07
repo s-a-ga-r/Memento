@@ -48,7 +48,7 @@ def delete_project(project_id):
 
 @frappe.whitelist()
 def get_tasks(project):
-    tasks = frappe.get_all('Tasks', filters={'project': project}, fields=['name', 'task_name', 'from_date', 'to_date', 'status', 'priority', 'description'])
+    tasks = frappe.get_all('Tasks', filters={'project': project}, fields=['name', 'task_name', 'project', 'from_date', 'to_date', 'status', 'priority', 'description'])
 
     for task in tasks:
         print(task)

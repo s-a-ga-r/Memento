@@ -17,7 +17,10 @@ class Projects {
       parent: this.wrapper,
       title: "ProjecTrack",
       single_column: true,
+      
     });
+
+    this.project = null
 
     this.renderTemplate();
   }
@@ -162,22 +165,21 @@ class Projects {
         limit: 100,
       })
       .then((records) => {
-        console.log("MY PROJECTS RECORDS:", records);
+        console.log("Rendered Projects:", records);
 
         self.projects = records;
-        console.log("TOTAL PROJECTS FROM DOCTYPE:", self.projects.length);
+        // console.log("TOTAL PROJECTS FROM DOCTYPE:", self.projects.length);
 
         // self.saveProjects();
 
-        console.log("records", records);
-        console.log(self.projects);
+        // console.log("records", records);
+        // console.log(self.projects);
 
-        const projectPosts =
-          document.getElementById("projectPosts");
+        const projectPosts = document.getElementById("projectPosts");
 
         let filteredProjects = self.projects;
 
-        console.log("filteredProjects", filteredProjects);
+        // console.log("filteredProjects", filteredProjects);
 
         switch (this.currentFilter) {
           case "today":
@@ -336,9 +338,7 @@ class Projects {
     console.log(`Task rendered for project ${project}`);
 
     frappe.call({
-      method:
-        "memento.memento.page.projec_track.projec_track.get_tasks",
-
+      method:"memento.memento.page.projec_track.projec_track.get_tasks",
       args: {
         project: project,
       },
@@ -363,7 +363,7 @@ class Projects {
         blogPosts.innerHTML = r.message
           .map(
             (post) => `
-              <div class="blog-post">
+              <div class="blog-post" data-project-id=${post.project} data-project-id=${post.name}>
 
                   <div class="post-header">
 
@@ -471,9 +471,7 @@ class Projects {
     let self = this;
 
     // Opening the task post where those tasks are belongs to this project.
-    $(document)
-      .off("click", ".project-post")
-      .on("click", ".project-post", function (event) {
+    $(document).off("click", ".project-post").on("click", ".project-post", function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -481,6 +479,21 @@ class Projects {
         // var project = $(".project-post").data("project-id");
 
         let project = $(this).data("project-id");
+
+        self.project = project;
+
+
+
+
+
+        // self.page.set_title(__(folder));
+        let base_url = window.location.pathname
+
+        console.log("base_url", base_url, "project :", project);
+
+
+        let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
+        history.pushState({ folder: project }, "", newUrl);
 
         // console.log("project", project);
         // console.log("Task List opened of this project");
@@ -521,8 +534,7 @@ class Projects {
           <button
               class="add-task-btn"
               data-project-id="${project}"
-              id="open-task-modal"
-          >
+              id="open-task-modal">
               +
           </button>
 
@@ -1012,17 +1024,28 @@ class Projects {
   goBack() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".go-back",
-      function (event) {
-        console.log("back clicked");
+    $(document).on("click",".go-back",function (event) {
 
+        event.preventDefault();
+        event.stopPropagation();
+
+        let current_url = window.location.pathname;
+
+        console.log("Current URL:", current_url);
+
+
+        // Remove the last part (/project_id)
+        let url = current_url.substring(0, current_url.lastIndexOf("/"));
+
+        // console.log("Current URL:", current_url);
+        console.log("Back URL:", url);
+
+        // history.pushState({}, "", url);
+
+        history.pushState({ project: this.project }, "", url);
         $(".container2").remove();
-
         self.renderTemplate();
-      }
-    );
+    });
   }
 
   createProject() {
