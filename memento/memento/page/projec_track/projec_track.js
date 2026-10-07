@@ -17,16 +17,26 @@ class Projects {
       parent: this.wrapper,
       title: "ProjecTrack",
       single_column: true,
-      
     });
 
-    this.project = null
+    this.project = null;
+    // Frappe keeps this page alive when you leave it, so re-apply the look when it is shown
+    // again, and give the body back to Frappe when you leave.
+    $(this.wrapper).on("show", () => {
+      this.setViewBackground(this.currentView || "project");
+      if (this.currentView === "task") taskModelcss();
+    });
+
+    $(this.wrapper).on("hide", () => {
+      document.body.style.removeProperty("background-color");
+    });
 
     this.renderTemplate();
   }
 
   renderTemplate() {
     console.log("renderTemplate Called");
+    $("#task-page-styles").remove();
     localStorage.clear();
 
     // this.page-head flex.empty();
@@ -36,17 +46,15 @@ class Projects {
 
     $(".page-head").html("");
     $(frappe.render_template("projec_track", {})).appendTo(this.page.main);
+    this.setViewBackground("project");
 
-    this.projects = JSON.parse(
-      localStorage.getItem("ProjectPosts") || "[]"
-    );
-    this.posts = JSON.parse(
-      localStorage.getItem("blogPosts") || "[]"
-    );
+    this.projects = JSON.parse(localStorage.getItem("ProjectPosts") || "[]");
+    this.posts = JSON.parse(localStorage.getItem("blogPosts") || "[]");
 
     this.selectedPriority = "medium";
     this.currentFilter = "all";
     this.currentProjectId = null;
+    this.taskFilter = "all";
 
     this.initSampleData();
     this.renderProjects();
@@ -80,8 +88,7 @@ class Projects {
         },
         {
           id: 2,
-          title:
-            "Research Top 5 YouTube Channels For Learning Programming",
+          title: "Research Top 5 YouTube Channels For Learning Programming",
           description:
             "Find the best programming channels on YouTube. Need to evaluate content quality, teaching style, and community engagement.\n\nThis will help me plan my learning path for the next months.\n\nChannels to research:\n- FreeCodeCamp\n- The Net Ninja\n- Traversy Media\n- Programming with Mosh\n- Corey Schafer\n\nCriteria for evaluation:\n- Content quality and accuracy\n- Teaching methodology\n- Community engagement\n- Regular updates\n- Beginner-friendly approach",
           category: "work",
@@ -122,8 +129,7 @@ class Projects {
         {
           id: 2,
           author: "TestUser",
-          title:
-            "Top 5 YouTube Channels For Learning Programming",
+          title: "Top 5 YouTube Channels For Learning Programming",
           content:
             "Quo inanis quando ea, mel an vide adversarium suscipiantur. Et dicunt eleifend splendide pro. Nibh animal dolorem vim ex, nec te agam referrentur. Usu admodum ocurreret ne.\n\nEt dico audire cotidieque sed, cibo latine ut has, an case magna alienum.",
           date: "August 26, 2018",
@@ -185,30 +191,46 @@ class Projects {
           case "today":
             const today = new Date().toDateString();
 
-            filteredProjects = self.projects.filter(
-              (task) =>
-                new Date(task.startTime).toDateString() === today
+            // CHANGED: uses the real DocType date field (start_date) through isToday()
+            // filteredProjects = self.projects.filter(
+            //   (task) => new Date(task.startTime).toDateString() === today,
+            // );
+            filteredProjects = self.projects.filter((task) =>
+              self.isToday(task),
             );
 
             break;
 
           case "high":
+            // CHANGED: the DocType field is priority_level ("High" / "high")
+            // filteredProjects = self.projects.filter(
+            //   (task) => task.priority === "high",
+            // );
             filteredProjects = self.projects.filter(
-              (task) => task.priority === "high"
+              (task) =>
+                String(task.priority_level || "").toLowerCase() === "high",
             );
 
             break;
 
           case "completed":
+            // CHANGED: status compared through normStatus()
+            // filteredProjects = self.projects.filter(
+            //   (task) => task.status === "completed",
+            // );
             filteredProjects = self.projects.filter(
-              (task) => task.status === "completed"
+              (task) => self.normStatus(task.status) === "completed",
             );
 
             break;
 
           case "pending":
+            // CHANGED: status compared through normStatus()
+            // filteredProjects = self.projects.filter(
+            //   (task) => task.status === "pending",
+            // );
             filteredProjects = self.projects.filter(
-              (task) => task.status === "pending"
+              (task) => self.normStatus(task.status) === "pending",
             );
 
             break;
@@ -227,86 +249,80 @@ class Projects {
           return;
         }
 
+        // CHANGED: the card no longer shows the category (WORK / PERSONAL) – removed from the
+        // title and from the old details row. The category field itself is untouched.
+        // CHANGED: description sits directly under the title.
+
+        // CHANGED: Delete hidden from the card (deleteProject() logic is still below).
         projectPosts.innerHTML = filteredProjects
           .map(
             (p) => `
-              <div class="project-post" data-project-id=${p.name}>
-                  <div class="project-post-header">
+      <div class="project-post" data-project-id=${p.name}>
+          <div class="project-post-header">
 
-                      <div class="task-author-avatar">
-                          ${(p.user || frappe.session.user).charAt(0)}
-                      </div>
-
-                      <div class="project-post-meta">
-                          <div class="task-author-name">
-                              ${p.user || frappe.session.user}
-                          </div>
-
-                          <div class="project-post-date">
-                              ${self.formatDate(p.creation)}
-                          </div>
-                      </div>
-
-                      <div class="project-status ${p.status.replace(
-                        "-",
-                        ""
-                      )}">
-                          ${p.status
-                            .replace("-", " ")
-                            .toUpperCase()}
-                      </div>
-
-                  </div>
-
-                  <h2 class="project-title">
-                      ${p.project_name}
-
-                      <span class="project-category">
-                          ${p.category.toUpperCase()}
-                      </span>
-                  </h2>
-
-                  <div class="project-details">
-
-                      <span class="project-category">
-                          ${p.category.toUpperCase()}
-                      </span>
-
-                      <span class="project-y ${p.priority_level}">
-                          ${p.priority_level.toUpperCase()}
-                      </span>
-
-                  </div>
-
-                  <div class="post-actions">
-
-                      <button
-                          class="action-btn view-btn"
-                          data-project-id=${p.name}
-                      >
-                          Read More
-                      </button>
-
-                      <button
-                          class="action-btn delete-btn"
-                          data-project-id=${p.name}
-                      >
-                          Delete
-                      </button>
-
-                      <span class="project-time">
-                          ${this.formatDateTime(
-                            p.start_date
-                          )} -
-                          ${this.formatDateTime(
-                            p.end_date
-                          )}
-                      </span>
-
-                  </div>
-
+              <div class="task-author-avatar">
+                  ${(p.user || frappe.session.user).charAt(0)}
               </div>
-            `
+
+              <div class="project-post-meta">
+                  <div class="task-author-name">
+                      ${p.user || frappe.session.user}
+                  </div>
+
+                  <div class="project-post-date">
+                      ${self.formatDate(p.creation)}
+                  </div>
+              </div>
+
+              <span class="project-y ${p.priority_level}">
+                  ${p.priority_level.toUpperCase()}
+              </span>
+
+              <div class="project-status ${p.status.replace("-", "")}">
+                  ${p.status.replace("-", " ").toUpperCase()}
+              </div>
+
+          </div>
+
+          <h2 class="project-title">
+              ${p.project_name}
+          </h2>
+
+          ${
+            p.description
+              ? `<div class="project-description">${frappe.utils.escape_html(
+                  $("<div>").html(p.description).text(),
+                )}</div>`
+              : ""
+          }
+
+          <div class="post-actions">
+
+              <button
+                  class="action-btn view-btn"
+                  data-project-id=${p.name}
+              >
+                  Read More
+              </button>
+
+              <span class="project-time">
+                  ${this.formatDateTime(p.start_date)} -
+                  ${this.formatDateTime(p.end_date)}
+              </span>
+
+              <!-- hidden from the card, handler kept in deleteProject()
+              <button
+                  class="action-btn delete-btn"
+                  data-project-id=${p.name}
+              >
+                  Delete
+              </button>
+              -->
+
+          </div>
+
+      </div>
+    `,
           )
           .join("");
 
@@ -319,8 +335,7 @@ class Projects {
   renderTasks(project) {
     self = this;
 
-    const blogPosts =
-      document.getElementById("blogPosts");
+    const blogPosts = document.getElementById("blogPosts");
 
     if (this.posts.length === 111) {
       blogPosts.innerHTML = `
@@ -338,17 +353,14 @@ class Projects {
     console.log(`Task rendered for project ${project}`);
 
     frappe.call({
-      method:"memento.memento.page.projec_track.projec_track.get_tasks",
+      method: "memento.memento.page.projec_track.projec_track.get_tasks",
       args: {
         project: project,
       },
 
       callback: function (r) {
         if (r.message.length == 0) {
-          console.log(
-            "r message got the tasks ",
-            r.message
-          );
+          console.log("r message got the tasks ", r.message);
 
           blogPosts.innerHTML = `
             <div class="empty-state">
@@ -360,7 +372,44 @@ class Projects {
           return;
         }
 
-        blogPosts.innerHTML = r.message
+        let filteredTasks = r.message;
+
+        switch (self.taskFilter) {
+          case "today":
+            filteredTasks = r.message.filter((task) => self.isTaskToday(task));
+            break;
+
+          case "completed":
+            filteredTasks = r.message.filter(
+              (task) => self.normStatus(task.status) === "completed",
+            );
+            break;
+
+          case "pending":
+            filteredTasks = r.message.filter(
+              (task) => self.normStatus(task.status) === "pending",
+            );
+
+            break;
+
+          case "all":
+          default:
+            filteredTasks = r.message;
+            break;
+        }
+
+        if (filteredTasks.length === 0) {
+          blogPosts.innerHTML = `
+            <div class="empty-state">
+                <h3>No Task found</h3>
+                <p>No tasks match this filter.</p>
+            </div>
+          `;
+
+          return;
+        }
+
+        blogPosts.innerHTML = filteredTasks
           .map(
             (post) => `
               <div class="blog-post" data-project-id=${post.project} data-project-id=${post.name}>
@@ -371,17 +420,23 @@ class Projects {
                           ${(post.avatar = "A")}
                       </div>
 
-                      <div class="post-meta">
+                     <div class="post-meta">
 
-                          <div class="author-name">
-                              ${post.created_by}
-                          </div>
-
-                          <div class="post-date">
-                              ${post.creation}
-                          </div>
-
+                      <div class="author-name">
+                          ${post.created_by}
                       </div>
+
+                      <div class="post-date">
+                       ${post.creation}
+                      </div>
+
+                  </div>
+
+                <div class="task-status ${String(post.status || "Open").replace(/[\s-]+/g, "")}">
+                 ${String(post.status || "Open")
+                   .replace(/-/g, " ")
+                   .toUpperCase()}
+               </div>
 
                   </div>
 
@@ -390,14 +445,11 @@ class Projects {
                   </h2>
 
                   <div class="post-content">
-                      ${post.description.replace(
-                        /\n/g,
-                        "<br>"
-                      )}
+                      ${post.description.replace(/\n/g, "<br>")}
                   </div>
 
               </div>
-            `
+            `,
           )
           .join("");
       },
@@ -471,7 +523,9 @@ class Projects {
     let self = this;
 
     // Opening the task post where those tasks are belongs to this project.
-    $(document).off("click", ".project-post").on("click", ".project-post", function (event) {
+    $(document)
+      .off("click", ".project-post")
+      .on("click", ".project-post", function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -482,23 +536,23 @@ class Projects {
 
         self.project = project;
 
-
-
-
-
         // self.page.set_title(__(folder));
-        let base_url = window.location.pathname
+        let base_url = window.location.pathname;
 
         console.log("base_url", base_url, "project :", project);
 
-
-        let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
+        let newUrl =
+          base_url.split("projec-track")[0] + "projec-track/" + project;
         history.pushState({ folder: project }, "", newUrl);
+        self.currentProjectId = project;
+        self.taskFilter = "all";
 
         // console.log("project", project);
         // console.log("Task List opened of this project");
 
         $(".container2").html("");
+        $(".container2").addClass("task-view"); //added
+        self.setViewBackground("task"); //added
         $("#open-modal").remove();
 
         let container_content = `
@@ -514,19 +568,31 @@ class Projects {
 
               <h3>Our Sidebar</h3>
 
-              <p class="sidebar-description">
-                  You can put any information here you'd like.
-              </p>
-
               <ul class="sidebar-menu">
-                  <li>Latest Posts</li>
-                  <li>Announcements</li>
-                  <li>Calendars</li>
+
+                  <li class="task-filter active" data-filter="all">
+                      All Tasks
+                  </li>
+
+                  <li class="task-filter" data-filter="today">
+                      Today's Tasks
+                  </li>
+
+                  <li class="task-filter" data-filter="completed">
+                      Completed
+                  </li>
+
+                  <li class="task-filter" data-filter="pending">
+                      Pending
+                  </li>
+
+                 
 
                   <li class="go-back">
                       <i class="fa fa-arrow-left"></i>
                       Back
                   </li>
+
               </ul>
 
           </div>
@@ -675,103 +741,89 @@ class Projects {
   createTask() {
     let me = this;
 
-    $(document).on(
-      "click",
-      "#open-task-modal",
-      function (event) {
-        console.log("creating task ...");
+    $(document).on("click", "#open-task-modal", function (event) {
+      console.log("creating task ...");
 
-        // document.getElementById('postModal').style.display = 'block';
+      // document.getElementById('postModal').style.display = 'block';
 
-        let project = $(this).data("project-id");
+      let project = $(this).data("project-id");
 
-        console.log(
-          "creating task for project ",
-          project
-        );
+      console.log("creating task for project ", project);
 
-        let new_docname =
-          frappe.model.make_new_doc_and_get_name(
-            "Tasks"
-          );
+      let new_docname = frappe.model.make_new_doc_and_get_name("Tasks");
 
-        frappe.set_route(
-          "Form",
-          "Tasks",
-          new_docname
-        );
+      frappe.set_route("Form", "Tasks", new_docname);
 
-        // old dialog code remains commented
-      }
-    );
+      // old dialog code remains commented
+    });
   }
 
   opnenTask() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".blog-post",
-      function (event) {
-        console.log("clicked");
+    $(document).on("click", ".blog-post", function (event) {
+      console.log("clicked");
 
-        const taskDate =
-          $(this).data("task-date") ||
-          frappe.datetime.nowdate();
+      const taskDate = $(this).data("task-date") || frappe.datetime.nowdate();
 
-        const taskName =
-          $(this).data("post-title");
+      const taskName = $(this).data("post-title");
 
-        const projectName = this.project;
-        // $(this).data("project-name");
+      const projectName = this.project;
+      // $(this).data("project-name");
 
-        frappe.route_options = {
-          date: taskDate,
-          task: taskName,
-          project: projectName,
-        };
+      frappe.route_options = {
+        date: taskDate,
+        task: taskName,
+        project: projectName,
+      };
 
-        // Navigate to comment-section-v3 with date parameter
-        frappe.set_route("timeline");
-      }
-    );
+      // Navigate to comment-section-v3 with date parameter
+      frappe.set_route("timeline");
+    });
   }
 
   bindEvents() {
-    document
-      .getElementById("projectForm")
-      .addEventListener("submit", (e) => {
-        e.preventDefault();
+    document.getElementById("projectForm").addEventListener("submit", (e) => {
+      e.preventDefault();
 
-        // this.addTask();
-        this.addProject();
+      // this.addTask();
+      this.addProject();
+    });
+
+    document.querySelectorAll(".priority-tag").forEach((tag) => {
+      tag.addEventListener("click", (e) => {
+        document
+          .querySelectorAll(".priority-tag")
+          .forEach((t) => t.classList.remove("selected"));
+
+        e.target.classList.add("selected");
+
+        this.selectedPriority = e.target.dataset.priority;
+      });
+    });
+
+    // NEW: Main page Project filters
+    const me = this;
+
+    $(document)
+      .off("click", ".sidebar-menu li.project-filter[data-filter]")
+      .on("click", ".sidebar-menu li.project-filter[data-filter]", function () {
+        me.filterTasks($(this).data("filter"));
       });
 
-    document
-      .querySelectorAll(".priority-tag")
-      .forEach((tag) => {
-        tag.addEventListener("click", (e) => {
-          document
-            .querySelectorAll(".priority-tag")
-            .forEach((t) =>
-              t.classList.remove("selected")
-            );
-
-          e.target.classList.add("selected");
-
-          this.selectedPriority =
-            e.target.dataset.priority;
-        });
+    // NEW: Task page filters
+    $(document)
+      .off("click", ".sidebar-menu li.task-filter[data-filter]")
+      .on("click", ".sidebar-menu li.task-filter[data-filter]", function () {
+        me.filterTaskPosts($(this).data("filter"));
       });
 
     // Close modals when clicking outside
-    document
-      .getElementById("projectModal")
-      .addEventListener("click", (e) => {
-        if (e.target === e.currentTarget) {
-          this.closeModal();
-        }
-      });
+    document.getElementById("projectModal").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) {
+        this.closeModal();
+      }
+    });
 
     document
       .getElementById("blogReaderModal")
@@ -781,13 +833,11 @@ class Projects {
         }
       });
 
-    document
-      .getElementById("deleteModal")
-      .addEventListener("click", (e) => {
-        if (e.target === e.currentTarget) {
-          this.closeDeleteModal();
-        }
-      });
+    document.getElementById("deleteModal").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) {
+        this.closeDeleteModal();
+      }
+    });
 
     // Set default datetime
     this.setDefaultDateTime();
@@ -797,47 +847,34 @@ class Projects {
   viewProject() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".view-btn",
-      function (event) {
+    // CHANGED: .off() added so re-rendering after a filter click does not stack handlers
+    $(document)
+      .off("click", ".view-btn")
+      .on("click", ".view-btn", function (event) {
         event.stopPropagation();
 
         console.log("view-blog clicked");
 
-        let projectId =
-          $(this).data("project-id");
+        let projectId = $(this).data("project-id");
 
-        console.log(
-          "project_id :",
-          projectId
-        );
+        console.log("project_id :", projectId);
 
-        console.log(
-          "My Projects",
-          self.projects
-        );
+        console.log("My Projects", self.projects);
 
-        const project = self.projects.find(
-          (p) => p.name === projectId
-        );
+        const project = self.projects.find((p) => p.name === projectId);
 
-        console.log(
-          "the project",
-          project
-        );
+        console.log("the project", project);
 
-       if (!project) {
-        console.error(`Project with ID ${projectId} not found`);
+        if (!project) {
+          console.error(`Project with ID ${projectId} not found`);
+          return;
+        }
+
+        console.log("Opening BlogPage for project:", projectId);
+
+        frappe.set_route("blog-page", projectId);
         return;
-      }
 
-      console.log("Opening BlogPage for project:", projectId);
-
-      frappe.set_route("blog-page", projectId);
-      return; 
-      
-        
         const blogReaderHTML = `
           <div
               id="blogReaderModal"
@@ -859,9 +896,7 @@ class Projects {
                           </div>
 
                           <div class="blog-reader-date">
-                              ${self.formatDate(
-                                project.creation
-                              )}
+                              ${self.formatDate(project.creation)}
                           </div>
 
                       </div>
@@ -910,12 +945,8 @@ class Projects {
 
                           <div class="blog-reader-detail-value">
                               ${
-                                project.category
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                project.category.slice(
-                                  1
-                                )
+                                project.category.charAt(0).toUpperCase() +
+                                project.category.slice(1)
                               }
                           </div>
 
@@ -929,12 +960,8 @@ class Projects {
 
                           <div class="blog-reader-detail-value">
                               ${
-                                project.priority_level
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                project.priority_level.slice(
-                                  1
-                                )
+                                project.priority_level.charAt(0).toUpperCase() +
+                                project.priority_level.slice(1)
                               }
                           </div>
 
@@ -947,12 +974,7 @@ class Projects {
                           </div>
 
                           <div class="blog-reader-detail-value">
-                              ${project.status
-                                .replace(
-                                  "-",
-                                  " "
-                                )
-                                .toUpperCase()}
+                              ${project.status.replace("-", " ").toUpperCase()}
                           </div>
 
                       </div>
@@ -964,9 +986,7 @@ class Projects {
                           </div>
 
                           <div class="blog-reader-detail-value">
-                              ${self.formatFullDateTime(
-                                project.start_date
-                              )}
+                              ${self.formatFullDateTime(project.start_date)}
                           </div>
 
                       </div>
@@ -978,9 +998,7 @@ class Projects {
                           </div>
 
                           <div class="blog-reader-detail-value">
-                              ${self.formatFullDateTime(
-                                project.end_date
-                              )}
+                              ${self.formatFullDateTime(project.end_date)}
                           </div>
 
                       </div>
@@ -994,7 +1012,7 @@ class Projects {
                           <div class="blog-reader-detail-value">
                               ${self.calculateDuration(
                                 project.start_date,
-                                project.end_date
+                                project.end_date,
                               )}
                           </div>
 
@@ -1009,30 +1027,28 @@ class Projects {
 
         // Clear the container and append the blog reader content
         $(".container2").html("");
-        $(".container2").css(
-          "display",
-          "block"
-        );
+        $(".container2").css("display", "block");
 
-        $(".container2").append(
-          blogReaderHTML
-        );
-      }
-    );
+        $(".container2").append(blogReaderHTML);
+      });
   }
 
   goBack() {
     let self = this;
 
-    $(document).on("click",".go-back",function (event) {
+    $(document)
+      .off("click", ".go-back") // yours: stops handlers stacking up
+      .on("click", ".go-back", function (event) {
+        event.preventDefault(); // upstream
+        event.stopPropagation(); // upstream
 
-        event.preventDefault();
-        event.stopPropagation();
+        console.log("back clicked");
 
-        let current_url = window.location.pathname;
+        let current_url = window.location.pathname; // upstream
 
         console.log("Current URL:", current_url);
 
+        $("#task-page-styles").remove(); // yours: removes the task CSS
 
         // Remove the last part (/project_id)
         let url = current_url.substring(0, current_url.lastIndexOf("/"));
@@ -1042,63 +1058,42 @@ class Projects {
 
         // history.pushState({}, "", url);
 
-        history.pushState({ project: this.project }, "", url);
+        history.pushState({ project: self.project }, "", url);
         $(".container2").remove();
         self.renderTemplate();
-    });
+      });
   }
 
   createProject() {
     let me = this;
 
-    $(document).on(
-      "click",
-      "#open-modal",
-      function (event) {
-        let new_docname =
-          frappe.model.make_new_doc_and_get_name(
-            "My Projects"
-          );
+    $(document).on("click", "#open-modal", function (event) {
+      let new_docname = frappe.model.make_new_doc_and_get_name("My Projects");
 
-        frappe.set_route(
-          "Form",
-          "My Projects",
-          new_docname
-        );
+      frappe.set_route("Form", "My Projects", new_docname);
 
-        // old dialog code remains commented
-      }
-    );
+      // old dialog code remains commented
+    });
   }
 
   closeCreateProject() {
-    $(document).on(
-      "click",
-      ".close-model",
-      function (event) {
-        console.log("close clicked");
+    $(document).on("click", ".close-model", function (event) {
+      console.log("close clicked");
 
-        document.getElementById(
-          "projectModal"
-        ).style.display = "none";
-      }
-    );
+      document.getElementById("projectModal").style.display = "none";
+    });
   }
 
   closeViewer() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".close-viewer",
-      function (event) {
-        console.log("close clicked");
+    $(document).on("click", ".close-viewer", function (event) {
+      console.log("close clicked");
 
-        $(".container2").remove();
+      $(".container2").remove();
 
-        self.closeBlogReader();
-      }
-    );
+      self.closeBlogReader();
+    });
   }
 
   closeBlogReader() {
@@ -1117,68 +1112,42 @@ class Projects {
 
     this.currentTaskId = taskId;
 
-    document.getElementById(
-      "deleteModal"
-    ).style.display = "block";
+    document.getElementById("deleteModal").style.display = "block";
 
-    $(document).on(
-      "click",
-      ".confirm-delete-btn",
-      function (event) {
-        event.stopPropagation();
+    $(document).on("click", ".confirm-delete-btn", function (event) {
+      event.stopPropagation();
 
-        console.log(
-          "confirm clicked clicked"
-        );
+      console.log("confirm clicked clicked");
 
-        self.deletingProject();
-      }
-    );
+      self.deletingProject();
+    });
   }
 
   deleteProject() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".delete-btn",
-      function (event) {
-        event.stopPropagation();
-        event.preventDefault();
+    $(document).on("click", ".delete-btn", function (event) {
+      event.stopPropagation();
+      event.preventDefault();
 
-        console.log(
-          "delete project clicked"
-        );
+      console.log("delete project clicked");
 
-        let project =
-          $(this).data("project-id");
+      let project = $(this).data("project-id");
 
-        console.log(
-          "project id",
-          project
-        );
+      console.log("project id", project);
 
-        self.confirmDeleteProject(
-          project
-        );
-      }
-    );
+      self.confirmDeleteProject(project);
+    });
 
-    $(document).on(
-      "click",
-      ".cancel-btn",
-      function (event) {
-        console.log("cancel");
+    $(document).on("click", ".cancel-btn", function (event) {
+      console.log("cancel");
 
-        self.closeDeleteModal();
-      }
-    );
+      self.closeDeleteModal();
+    });
   }
 
   closeDeleteModal() {
-    document.getElementById(
-      "deleteModal"
-    ).style.display = "none";
+    document.getElementById("deleteModal").style.display = "none";
 
     this.currentTaskId = null;
   }
@@ -1186,9 +1155,7 @@ class Projects {
   confirmDelete() {
     if (!this.currentTaskId) return;
 
-    document.getElementById(
-      "deleteModal"
-    ).style.display = "block";
+    document.getElementById("deleteModal").style.display = "block";
   }
 
   deletingProject() {
@@ -1197,70 +1164,44 @@ class Projects {
     if (!this.currentTaskId) return;
 
     this.projects = this.projects.filter(
-      (task) =>
-        task.id !== this.currentTaskId
+      (task) => task.id !== this.currentTaskId,
     );
 
-    console.log(
-      "current project id",
-      this.currentTaskId
-    );
+    console.log("current project id", this.currentTaskId);
 
     frappe.call({
-      method:
-        "memento.memento.page.projec_track.projec_track.delete_project",
+      method: "memento.memento.page.projec_track.projec_track.delete_project",
 
       args: {
-        project_id:
-          this.currentTaskId,
+        project_id: this.currentTaskId,
       },
 
       callback: function (r) {
-        if (
-          r.message.status ===
-          "Success"
-        ) {
-          console.log(
-            "callback project_id : ",
-            r.message.project_id
-          );
+        if (r.message.status === "Success") {
+          console.log("callback project_id : ", r.message.project_id);
 
           const $projectBox = $(
-            `.project-post[data-project-id="${r.message.project_id}"]`
+            `.project-post[data-project-id="${r.message.project_id}"]`,
           );
 
-          console.log(
-            "Found file box:",
-            $projectBox.length
-          );
+          console.log("Found file box:", $projectBox.length);
 
-          if (
-            $projectBox.length > 0
-          ) {
-            console.log(
-              "vanishing roject here"
-            );
+          if ($projectBox.length > 0) {
+            console.log("vanishing roject here");
 
-            $projectBox.fadeOut(
-              150,
-              function () {
-                $(this).remove();
-              }
-            );
+            $projectBox.fadeOut(150, function () {
+              $(this).remove();
+            });
           } else {
-            console.error(
-              "Element not found!"
-            );
+            console.error("Element not found!");
           }
 
           frappe.show_alert(
             {
-              message: __(
-                "Project Deleted Successfully"
-              ),
+              message: __("Project Deleted Successfully"),
               indicator: "green",
             },
-            5
+            5,
           );
 
           // Refresh the project list after deletion
@@ -1272,12 +1213,10 @@ class Projects {
         } else {
           frappe.show_alert(
             {
-              message: __(
-                "Failed to Delete Project"
-              ),
+              message: __("Failed to Delete Project"),
               indicator: "red",
             },
-            5
+            5,
           );
         }
       },
@@ -1289,48 +1228,26 @@ class Projects {
 
     console.log("hello");
 
-    const form =
-      document.getElementById(
-        "projectForm"
-      );
+    const form = document.getElementById("projectForm");
 
     const formData = new FormData(form);
 
     const newProject = {
-      title: formData.get(
-        "taskTitle"
-      ),
+      title: formData.get("taskTitle"),
 
-      description:
-        formData.get(
-          "taskDescription"
-        ),
+      description: formData.get("taskDescription"),
 
-      category:
-        formData.get(
-          "taskCategory"
-        ),
+      category: formData.get("taskCategory"),
 
-      priority:
-        this.selectedPriority,
+      priority: this.selectedPriority,
 
-      status:
-        formData.get(
-          "taskStatus"
-        ),
+      status: formData.get("taskStatus"),
 
-      startTime:
-        formData.get(
-          "startTime"
-        ),
+      startTime: formData.get("startTime"),
 
-      endTime:
-        formData.get(
-          "endTime"
-        ),
+      endTime: formData.get("endTime"),
 
-      createdAt:
-        new Date().toISOString(),
+      createdAt: new Date().toISOString(),
 
       author: "TaskUser",
     };
@@ -1350,18 +1267,13 @@ class Projects {
       async: false,
 
       callback: function (r) {
-        if (
-          r.message.status ==
-          "Success"
-        ) {
+        if (r.message.status == "Success") {
           frappe.show_alert(
             {
-              message: __(
-                "Successfully Created New Project"
-              ),
+              message: __("Successfully Created New Project"),
               indicator: "green",
             },
-            5
+            5,
           );
 
           self.closeModal();
@@ -1369,9 +1281,7 @@ class Projects {
       },
     });
 
-    this.projects.unshift(
-      newProject
-    );
+    this.projects.unshift(newProject);
 
     // this.saveProjects();
     // this.renderTasks();
@@ -1387,81 +1297,44 @@ class Projects {
 
     // Reset priority selection
     document
-      .querySelectorAll(
-        ".priority-tag"
-      )
-      .forEach((t) =>
-        t.classList.remove(
-          "selected"
-        )
-      );
+      .querySelectorAll(".priority-tag")
+      .forEach((t) => t.classList.remove("selected"));
 
-    document
-      .querySelector(
-        ".priority-tag.medium"
-      )
-      .classList.add("selected");
+    document.querySelector(".priority-tag.medium").classList.add("selected");
 
-    this.selectedPriority =
-      "medium";
+    this.selectedPriority = "medium";
   }
 
   addTask() {
     console.log("helo");
 
-    const form =
-      document.getElementById(
-        "postForm"
-      );
+    const form = document.getElementById("postForm");
 
-    const formData =
-      new FormData(form);
+    const formData = new FormData(form);
 
     const newTask = {
       id: Date.now(),
 
-      blogger:
-        formData.get(
-          "authorName"
-        ),
+      blogger: formData.get("authorName"),
 
-      taskTitle:
-        formData.get(
-          "postTitle"
-        ),
+      taskTitle: formData.get("postTitle"),
 
-      content:
-        formData.get(
-          "postContent"
-        ),
+      content: formData.get("postContent"),
 
-      priority:
-        this.selectedPriority,
+      priority: this.selectedPriority,
 
-      status:
-        formData.get(
-          "taskStatus"
-        ),
+      status: formData.get("taskStatus"),
 
-      startTime:
-        formData.get(
-          "startTime"
-        ),
+      startTime: formData.get("startTime"),
 
-      endTime:
-        formData.get(
-          "endTime"
-        ),
+      endTime: formData.get("endTime"),
 
-      createdAt:
-        new Date().toISOString(),
+      createdAt: new Date().toISOString(),
 
       author: "TaskUser",
     };
 
-    this.projects.unshift(
-      newTask
-    );
+    this.projects.unshift(newTask);
 
     this.saveProjects();
     this.renderTasks();
@@ -1473,23 +1346,12 @@ class Projects {
     this.setDefaultDateTime();
 
     document
-      .querySelectorAll(
-        ".priority-tag"
-      )
-      .forEach((t) =>
-        t.classList.remove(
-          "selected"
-        )
-      );
+      .querySelectorAll(".priority-tag")
+      .forEach((t) => t.classList.remove("selected"));
 
-    document
-      .querySelector(
-        ".priority-tag.medium"
-      )
-      .classList.add("selected");
+    document.querySelector(".priority-tag.medium").classList.add("selected");
 
-    this.selectedPriority =
-      "medium";
+    this.selectedPriority = "medium";
   }
 
   // openModal() {
@@ -1497,151 +1359,134 @@ class Projects {
   // }
 
   closeModal() {
-    document.getElementById(
-      "projectModal"
-    ).style.display = "none";
+    document.getElementById("projectModal").style.display = "none";
   }
 
   saveProjects() {
-    localStorage.setItem(
-      "ProjectPosts",
-      JSON.stringify(
-        this.projects
-      )
-    );
+    localStorage.setItem("ProjectPosts", JSON.stringify(this.projects));
   }
 
   savePosts() {
-    localStorage.setItem(
-      "blogPosts",
-      JSON.stringify(
-        this.posts
-      )
-    );
+    localStorage.setItem("blogPosts", JSON.stringify(this.posts));
   }
 
   updateStats() {
-    const today =
-      new Date().toDateString();
+    const today = new Date().toDateString();
 
-    const todayTasks =
-      this.projects.filter(
-        (task) =>
-          new Date(
-            task.startTime
-          ).toDateString() ===
-          today
-      );
+    // CHANGED: real DocType date field through isToday()
+    // const todayTasks = this.projects.filter(
+    //   (task) => new Date(task.startTime).toDateString() === today,
+    // );
+    const todayTasks = this.projects.filter((task) => this.isToday(task));
 
-    const completedTasks =
-      this.projects.filter(
-        (task) =>
-          task.status ===
-          "completed"
-      );
+    // CHANGED: status compared through normStatus()
+    // const completedTasks = this.projects.filter(
+    //   (task) => task.status === "completed",
+    // );
+    const completedTasks = this.projects.filter(
+      (task) => this.normStatus(task.status) === "completed",
+    );
 
-    const pendingTasks =
-      this.projects.filter(
-        (task) =>
-          task.status ===
-          "pending"
-      );
+    // CHANGED: status compared through normStatus()
+    // const pendingTasks = this.projects.filter(
+    //   (task) => task.status === "pending",
+    // );
+    const pendingTasks = this.projects.filter(
+      (task) => this.normStatus(task.status) === "pending",
+    );
 
-    document.getElementById(
-      "total-projects"
-    ).textContent =
+    document.getElementById("total-projects").textContent =
       this.projects.length;
 
-    $("#total-projects").text(
-      this.projects.length
-    );
+    $("#total-projects").text(this.projects.length);
 
-    document.getElementById(
-      "todayTasks"
-    ).textContent =
-      todayTasks.length;
+    document.getElementById("todayTasks").textContent = todayTasks.length;
 
-    document.getElementById(
-      "completedTasks"
-    ).textContent =
+    document.getElementById("completedTasks").textContent =
       completedTasks.length;
 
-    document.getElementById(
-      "pendingTasks"
-    ).textContent =
-      pendingTasks.length;
+    document.getElementById("pendingTasks").textContent = pendingTasks.length;
   }
 
-  formatDate(dateStr) {
-    const date =
-      new Date(dateStr);
+  // NEW: "In Progress" / "in-progress" / "Completed" / "completed" -> lower case, no spaces/hyphens
+  normStatus(status) {
+    return String(status || "")
+      .toLowerCase()
+      .replace(/[\s-]+/g, "");
+  }
 
-    return date.toLocaleDateString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }
-    );
+  // NEW: true when the project's date field (start_date, startTime as fallback) is today
+  isToday(project) {
+    const d = project.start_date || project.startTime;
+
+    if (!d) return false;
+
+    return String(d).slice(0, 10) === frappe.datetime.get_today();
+  }
+
+  // NEW: true when the task's expected start date is today
+  isTaskToday(task) {
+    const d = task.expected_start_date || task.start_date || task.startTime;
+
+    if (!d) return false;
+
+    return String(d).slice(0, 10) === frappe.datetime.get_today();
+  }
+  // NEW: sets the page background for the current view directly on this page's own
+  // wrapper, so global CSS / Frappe / the other view can never change it.
+  setViewBackground(view) {
+    this.currentView = view;
+    const color = view === "task" ? "#f5f5f5" : "#f5f5f7";
+
+    $(this.wrapper)
+      .add($(this.wrapper).find(".page-body"))
+      .each(function () {
+        this.style.setProperty("background-color", color, "important");
+      });
+
+    this.wrapper.style.setProperty("min-height", "100vh", "important");
+  }
+  formatDate(dateStr) {
+    const date = new Date(dateStr);
+
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
   formatDateTime(dateTimeStr) {
-    const date =
-      new Date(dateTimeStr);
+    const date = new Date(dateTimeStr);
 
-    return date.toLocaleTimeString(
-      "en-US",
-      {
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    );
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
-  formatFullDateTime(
-    dateTimeStr
-  ) {
-    const date =
-      new Date(dateTimeStr);
+  formatFullDateTime(dateTimeStr) {
+    const date = new Date(dateTimeStr);
 
-    return date.toLocaleString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    );
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
-  calculateDuration(
-    startTime,
-    endTime
-  ) {
-    const start =
-      new Date(startTime);
+  calculateDuration(startTime, endTime) {
+    const start = new Date(startTime);
 
-    const end =
-      new Date(endTime);
+    const end = new Date(endTime);
 
-    const diffMs =
-      end - start;
+    const diffMs = end - start;
 
-    const diffHours =
-      Math.floor(
-        diffMs /
-          (1000 * 60 * 60)
-      );
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
-    const diffMinutes =
-      Math.floor(
-        (diffMs %
-          (1000 * 60 * 60)) /
-          (1000 * 60)
-      );
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
     if (diffHours > 0) {
       return `${diffHours}h ${diffMinutes}m`;
@@ -1651,37 +1496,42 @@ class Projects {
   }
 
   filterTasks(filter) {
-    this.currentFilter =
-      filter;
+    this.currentFilter = filter;
 
-    this.renderTasks();
+    // NEW: highlight the selected Project Dashboard filter
+    $(".sidebar-menu li.project-filter[data-filter]")
+      .removeClass("active")
+      .filter(`[data-filter="${filter}"]`)
+      .addClass("active");
+
+    // CHANGED: the filters apply to the project cards on the main page
+    this.renderProjects();
+  }
+
+  // NEW: separate filters for tasks inside an opened project
+  filterTaskPosts(filter) {
+    this.taskFilter = filter;
+
+    $(".sidebar-menu li.task-filter[data-filter]")
+      .removeClass("active")
+      .filter(`[data-filter="${filter}"]`)
+      .addClass("active");
+
+    this.renderTasks(this.currentProjectId);
   }
 
   setDefaultDateTime() {
-    const now =
-      new Date();
+    const now = new Date();
 
-    const startTime =
-      new Date(
-        now.getTime() +
-          30 * 60000
-      );
+    const startTime = new Date(now.getTime() + 30 * 60000);
 
-    const endTime =
-      new Date(
-        now.getTime() +
-          90 * 60000
-      );
+    const endTime = new Date(now.getTime() + 90 * 60000);
 
-    document.getElementById(
-      "startTime"
-    ).value = startTime
+    document.getElementById("startTime").value = startTime
       .toISOString()
       .slice(0, 16);
 
-    document.getElementById(
-      "endTime"
-    ).value = endTime
+    document.getElementById("endTime").value = endTime
       .toISOString()
       .slice(0, 16);
   }
@@ -1704,15 +1554,13 @@ class Projects {
       {
         fieldtype: "Date",
         label: "Expected Start Date",
-        fieldname:
-          "expected_start_date",
+        fieldname: "expected_start_date",
       },
 
       {
         fieldtype: "Date",
         label: "Expected End Date",
-        fieldname:
-          "expected_end_date",
+        fieldname: "expected_end_date",
       },
 
       {
@@ -1736,8 +1584,7 @@ class Projects {
         fieldtype: "Select",
         label: "Priority",
         fieldname: "priority",
-        options:
-          "High \nMedium \nLow",
+        options: "High \nMedium \nLow",
         default: "Medium",
       },
 
@@ -1770,15 +1617,13 @@ class Projects {
       {
         fieldtype: "Date",
         label: "Expected Start Date",
-        fieldname:
-          "expected_start_date",
+        fieldname: "expected_start_date",
       },
 
       {
         fieldtype: "Date",
         label: "Expected End Date",
-        fieldname:
-          "expected_end_date",
+        fieldname: "expected_end_date",
       },
 
       {
@@ -1801,8 +1646,7 @@ class Projects {
         fieldtype: "Select",
         label: "Priority",
         fieldname: "priority",
-        options:
-          "High\nMedium\nLow",
+        options: "High\nMedium\nLow",
         in_list_view: 1,
         columns: 1,
         // default: "Medium",
@@ -1819,19 +1663,17 @@ class Projects {
   }
 
   select_priorities() {
-    this.dialog.set_df_property(
-      "priority",
-      "options",
-      ["High", "Medium", "Low"]
-    );
+    this.dialog.set_df_property("priority", "options", [
+      "High",
+      "Medium",
+      "Low",
+    ]);
 
     // let value = this.dialog.get_value("priority");
     // console.log(value);
     // this.dialog.set_value("priority", value);
 
-    this.dialog.refresh_field(
-      "priority"
-    );
+    this.dialog.refresh_field("priority");
   }
 
   guess_language() {
@@ -1845,41 +1687,28 @@ class Projects {
     // 4. system lang
     // 3 and 4 are resolved already in boot
 
-    let document_lang =
-      this.frm?.doc?.language;
+    let document_lang = this.frm?.doc?.language;
 
-    let print_format =
-      this.dialog.get_value(
-        "select_print_format"
-      );
+    let print_format = this.dialog.get_value("select_print_format");
 
     let print_format_lang;
 
-    if (
-      print_format !=
-      "Standard"
-    ) {
-      print_format_lang =
-        frappe.get_doc(
-          "Print Format",
-          print_format
-        )?.default_print_language;
+    if (print_format != "Standard") {
+      print_format_lang = frappe.get_doc(
+        "Print Format",
+        print_format,
+      )?.default_print_language;
     }
 
-    let lang =
-      document_lang ||
-      print_format_lang ||
-      frappe.boot.lang;
+    let lang = document_lang || print_format_lang || frappe.boot.lang;
 
-    this.dialog.set_value(
-      "print_language",
-      lang
-    );
+    this.dialog.set_value("print_language", lang);
   }
 }
 
 function taskModelcss() {
   // console.log("Task css");
+  $("#task-page-styles").remove();
 
   let container_css = `
 
@@ -1892,12 +1721,10 @@ function taskModelcss() {
         "gap": "30px"
     }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+    .container2,
+    .container2 * {
+    box-sizing: border-box;
     }
-
     body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
         background-color: #f5f5f5;
@@ -1910,13 +1737,22 @@ function taskModelcss() {
     }
 
     .blog-post {
-        background: white;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition:
+      transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
     }
+     .blog-post:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    } 
 
     .blog-post:last-child {
         margin-bottom: 0;
@@ -1929,35 +1765,82 @@ function taskModelcss() {
         padding-bottom: 15px;
         border-bottom: 1px solid #f1f3f4;
     }
+    .task-status {
+        margin-left: auto;
+        flex: none;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+      /* Open - light blue */
+    .task-status.Open {
+        background: #e3effc;
+        color: #2878b5;
+    }
+
+    /* Pending - same light orange as project cards */
+    .task-status.Pending {
+        background: #fff0d9;
+        color: #b36b00;
+    } 
+
+      /* Working - light purple */
+    .task-status.Working {
+        background: #eee7ff;
+        color: #7357b8;
+    }
+
+    /* Completed - same light green as project cards */
+    .task-status.Completed {
+        background: #dff5e3;
+        color: #2e7d32;
+    }
+
+    /* Cancelled - light red */
+    .task-status.Cancelled {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      /* Also supports "In Progress" if that value is used */
+    .task-status.InProgress {
+        background: #eee7ff;
+        color: #7357b8;
+      }
+
 
     .author-avatar {
-        width: 50px;
-        height: 50px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         margin-right: 15px;
+        margin-top: 2px;
         background-color: #6c757d;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 14px;
     }
 
     .author-name {
         font-weight: 600;
         color: #4a90e2;
-        font-size: 14px;
+        font-size: 13px;
         margin-bottom: 2px;
     }
 
     .post-date {
         color: #868e96;
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .post-title {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 600;
         color: #495057;
         margin-bottom: 15px;
@@ -1999,6 +1882,7 @@ function taskModelcss() {
 
     .sidebar-menu li {
         padding: 12px 0;
+        margin: 0;
         border-bottom: 1px solid #f1f3f4;
         color: #6c757d;
         font-size: 14px;
@@ -2164,10 +2048,16 @@ function taskModelcss() {
     }
 
   `;
+  // SCOPE: wrap the whole task stylesheet so it only applies inside the task view
+  // (CSS nesting). Nothing in it can leak to the Project Track page .
+  container_css = `.container2.task-view { ${container_css} }`;
 
-  $("style")
-    .first()
-    .append(container_css);
+  $("#task-page-styles").remove();
+
+  $("<style>", {
+    id: "task-page-styles",
+    text: container_css,
+  }).appendTo("head");
 }
 
 // createProject() {
@@ -2256,18 +2146,6 @@ function taskModelcss() {
 //     minView: 'months',
 //     dateFormat: 'MMMM yyyy'
 // })
-
-// $('#startTime').datepicker({
-//     view: 'months',
-//     minView: 'months',
-//     dateFormat: 'MM yyyy'
-// });
-
-// $('#endTime').datepicker({
-//     view: 'months',
-//     minView: 'months',
-//     dateFormat: 'MM yyyy'
-// });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
