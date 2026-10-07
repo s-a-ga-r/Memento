@@ -27,7 +27,16 @@ class Projects {
 
   renderTemplate() {
     console.log("renderTemplate Called");
-    localStorage.clear();
+    // localStorage.clear();
+
+    if (window.location.pathname !== "/app/projec-track") {
+        console.log("window.location was ", window.location.pathname);
+        console.log("checking current folder ,",this.current_folder);
+        history.pushState({ project: this.project}, "", "/app/projec-track");
+        this.page.set_title(__(this.current_folder));
+        $('.custom-actions .ellipsis').hide();
+    }
+
 
     // this.page-head flex.empty();
     $("footer").remove();
@@ -48,7 +57,7 @@ class Projects {
     this.currentFilter = "all";
     this.currentProjectId = null;
 
-    this.initSampleData();
+    // this.initSampleData();
     this.renderProjects();
     this.updateStats();
     this.bindEvents();
@@ -60,98 +69,7 @@ class Projects {
     // this.openProject()
   }
 
-  initSampleData() {
-    let self = this;
-
-    if (this.projects.length === 111) {
-      this.projects = [
-        {
-          id: 1,
-          title: "Complete Django Tutorial Series",
-          description:
-            "My latest task! This is exciting...\n\nThis will be a good overview of how to use the Django framework. I hope to learn a lot and enjoy the series!\n\nThe tutorial covers:\n- Setting up Django environment\n- Creating models and views\n- Working with templates\n- Database migrations\n- User authentication\n- Deployment strategies\n\nI plan to build a small project alongside the tutorial to practice what I learn.",
-          category: "learning",
-          priority: "high",
-          status: "in-progress",
-          startTime: "2024-08-27T09:00",
-          endTime: "2024-08-27T11:00",
-          createdAt: new Date("2024-08-27").toISOString(),
-          author: "TaskUser",
-        },
-        {
-          id: 2,
-          title:
-            "Research Top 5 YouTube Channels For Learning Programming",
-          description:
-            "Find the best programming channels on YouTube. Need to evaluate content quality, teaching style, and community engagement.\n\nThis will help me plan my learning path for the next months.\n\nChannels to research:\n- FreeCodeCamp\n- The Net Ninja\n- Traversy Media\n- Programming with Mosh\n- Corey Schafer\n\nCriteria for evaluation:\n- Content quality and accuracy\n- Teaching methodology\n- Community engagement\n- Regular updates\n- Beginner-friendly approach",
-          category: "work",
-          priority: "medium",
-          status: "completed",
-          startTime: "2024-08-26T14:00",
-          endTime: "2024-08-26T16:00",
-          createdAt: new Date("2024-08-26").toISOString(),
-          author: "TaskUser",
-        },
-        {
-          id: 3,
-          title: "Data Science Project Planning",
-          description:
-            "Plan the next data science project. Need to define scope, timeline, and required resources.\n\nThis project will focus on analyzing user behavior patterns and creating predictive models.\n\nProject phases:\n1. Data collection and cleaning\n2. Exploratory data analysis\n3. Feature engineering\n4. Model development\n5. Model evaluation\n6. Deployment and monitoring\n\nExpected outcomes:\n- Improved user engagement metrics\n- Better understanding of user patterns\n- Predictive capabilities for user behavior",
-          category: "project",
-          priority: "high",
-          status: "pending",
-          startTime: "2024-08-26T10:00",
-          endTime: "2024-08-26T12:00",
-          createdAt: new Date("2024-08-26").toISOString(),
-          author: "TaskUser",
-        },
-      ];
-    }
-
-    if (this.posts.length === 111) {
-      this.posts = [
-        {
-          id: 1,
-          author: "CoreyMS",
-          title: "My Latest Post!",
-          content:
-            "My latest post! This is exciting...\n\nThis will be a good overview of how to use the Django framework. I hope you all learn a lot and enjoy the series!",
-          date: "August 27, 2018",
-          avatar: "C",
-        },
-        {
-          id: 2,
-          author: "TestUser",
-          title:
-            "Top 5 YouTube Channels For Learning Programming",
-          content:
-            "Quo inanis quando ea, mel an vide adversarium suscipiantur. Et dicunt eleifend splendide pro. Nibh animal dolorem vim ex, nec te agam referrentur. Usu admodum ocurreret ne.\n\nEt dico audire cotidieque sed, cibo latine ut has, an case magna alienum.",
-          date: "August 26, 2018",
-          avatar: "T",
-        },
-        {
-          id: 3,
-          author: "TestUser",
-          title: "The Rise of Data Science",
-          content:
-            "Per omittam placerat at. Eius aeque ei mei. Usu ex partiendo salutandi. Pro illud placerat molestiae ex, habeo vidisse volutpatum cu vel, efficiendi accommodare eum ea! Ne has case minimum facilisis, pertinax efficiendi eu vel!\n\nEt movet semper assueverit his. Mei et liber vitae. Vix et pericula definebas, vero falli.",
-          date: "August 26, 2018",
-          avatar: "T",
-        },
-        {
-          id: 4,
-          author: "TestUser",
-          title: "5 Tips for Writing Catchy Headlines",
-          content:
-            "Learn how to write headlines that grab attention and keep readers engaged. These simple techniques will help you create compelling titles for your blog posts.",
-          date: "August 26, 2018",
-          avatar: "T",
-        },
-      ];
-
-      this.savePosts();
-    }
-  }
+  
 
   renderProjects() {
     let self = this;
@@ -482,18 +400,13 @@ class Projects {
 
         self.project = project;
 
-
-
-
-
-        // self.page.set_title(__(folder));
         let base_url = window.location.pathname
 
         console.log("base_url", base_url, "project :", project);
 
 
         let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
-        history.pushState({ folder: project }, "", newUrl);
+        history.pushState({ project: project }, "", newUrl);
 
         // console.log("project", project);
         // console.log("Task List opened of this project");
@@ -675,10 +588,7 @@ class Projects {
   createTask() {
     let me = this;
 
-    $(document).on(
-      "click",
-      "#open-task-modal",
-      function (event) {
+    $(document).on("click","#open-task-modal",function (event) {
         console.log("creating task ...");
 
         // document.getElementById('postModal').style.display = 'block';
@@ -709,26 +619,18 @@ class Projects {
   opnenTask() {
     let self = this;
 
-    $(document).on(
-      "click",
-      ".blog-post",
-      function (event) {
+    $(document).on("click",".blog-post",function (event) {
         console.log("clicked");
-
-        const taskDate =
-          $(this).data("task-date") ||
-          frappe.datetime.nowdate();
-
-        const taskName =
-          $(this).data("post-title");
-
+        const taskDate = $(this).data("task-date") ||
+        frappe.datetime.nowdate();
+        const taskName = $(this).data("post-title");
         const projectName = this.project;
         // $(this).data("project-name");
 
         frappe.route_options = {
-          date: taskDate,
-          task: taskName,
-          project: projectName,
+            date: taskDate,
+            task: taskName,
+            project: projectName,
         };
 
         // Navigate to comment-section-v3 with date parameter
@@ -1341,7 +1243,6 @@ class Projects {
     frappe.call({
       method:
         "task_blogger.task_blogger.page.task_blogging.task_blogging.new_project",
-
       args: {
         user: frappe.session.user,
         newproject: newProject,
@@ -1472,15 +1373,7 @@ class Projects {
 
     this.setDefaultDateTime();
 
-    document
-      .querySelectorAll(
-        ".priority-tag"
-      )
-      .forEach((t) =>
-        t.classList.remove(
-          "selected"
-        )
-      );
+    document.querySelectorAll(".priority-tag").forEach((t) => t.classList.remove("selected"));
 
     document
       .querySelector(
@@ -1512,12 +1405,7 @@ class Projects {
   }
 
   savePosts() {
-    localStorage.setItem(
-      "blogPosts",
-      JSON.stringify(
-        this.posts
-      )
-    );
+    localStorage.setItem("blogPosts",JSON.stringify(this.posts));
   }
 
   updateStats() {
@@ -1541,11 +1429,10 @@ class Projects {
       );
 
     const pendingTasks =
-      this.projects.filter(
-        (task) =>
-          task.status ===
-          "pending"
-      );
+        this.projects.filter(
+            (task) =>
+            task.status ==="pending"
+        );
 
     document.getElementById(
       "total-projects"
