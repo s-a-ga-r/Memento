@@ -58,3 +58,4 @@ def get_tasks(project):
         t["created_by"] = t.get("created_by") or t.get("owner")
         t["description"] = t.get("description") or ""
     return tasks
+

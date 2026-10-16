@@ -5,18 +5,10 @@
 }
 
 body {
-<<<<<<< HEAD
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background-color: #f5f5f7;
     color: #333;
     line-height: 1.6;
-=======
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background-color: #f5f5f7;
-  color: #333;
-  line-height: 1.6;
->>>>>>> f6c6635e3a2124be656435fc341ce4298cb68b7a
 }
 
 .page-container {
@@ -767,4 +759,22 @@ body {
   .post-actions {
     flex-wrap: wrap; /* keeps the single-row layout, wraps only if too narrow */
   }
+}
+/* TASK READ MORE — SIMPLE TEXT LINK */
+
+.task-read-more {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #7d9fc7 !important;
+    padding: 0 !important;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.task-read-more:hover {
+    background: transparent !important;
+    color: #a58ac4 !important;
+    text-decoration: underline;
 }

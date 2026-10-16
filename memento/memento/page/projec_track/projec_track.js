@@ -366,12 +366,50 @@ class Projects {
                   <div class="post-content">
                       ${post.description.replace(/\n/g, "<br>")}
                   </div>
+                  <div class="task-post-footer">
+                      <button
+                          type="button"
+                          class="task-read-more"
+                          data-task-id="${post.name}"
+                          data-project-id="${post.project}"
+                      >
+                          Read More →
+                      </button>
+                  </div>
 
               </div>
             `,
           )
           .join("");
       },
+    });
+    // TASK READ MORE — OPEN TASK BLOG IN THE EXISTING BLOG PAGE
+$(document)
+    .off("click", ".task-read-more")
+    .on("click", ".task-read-more", function (event) {
+
+        // Prevent the task card click from opening Daily Timeline
+        event.preventDefault();
+        event.stopPropagation();
+
+        const taskId = $(this).attr("data-task-id");
+        const projectId = $(this).attr("data-project-id");
+
+        console.log("TASK READ MORE CLICKED");
+        console.log("Task ID:", taskId);
+        console.log("Project ID:", projectId);
+
+        if (!taskId) {
+            console.error("Task ID is missing");
+            return;
+        }
+
+        // Open the existing blog-page with task information
+        frappe.set_route(
+            "blog-page",
+            taskId
+            
+        );
     });
 
     // frappe.db

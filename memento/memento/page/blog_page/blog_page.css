@@ -12,6 +12,7 @@
     line-height: 1.65;
 }
 
+
 /* =========================================
    HEADINGS
 ========================================= */
@@ -98,7 +99,6 @@
     background: #222;
 }
 
-
 /* =========================================
    AUTHOR / USER
 ========================================= */
@@ -107,14 +107,17 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 0 16px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #e5e2dc;
+    padding: 12px 0 18px;
+    margin-top: 18px;
+    margin-bottom: 25px;
+    border-top: 1px solid #e2dfd9;
+    border-bottom: 1px solid #e2dfd9;
 }
 
 .author-avatar {
     width: 34px;
     height: 34px;
+    min-width: 34px;
     border-radius: 50%;
     background: #dfe4df;
     display: flex;
@@ -216,121 +219,178 @@
 
 
 /* =========================================
-   CODE CARD
+   CODE CARD — SOFT & CLEAN
 ========================================= */
 
 .code-card {
     margin: 24px 0;
-    border: 1px solid #ddd9d1;
-    border-radius: 7px;
+    border: 1px solid #e8e5ed;
+    border-radius: 9px;
     overflow: hidden;
-    background: #f5f4f0;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, .05);
+    background: #fcfbfe;
+    box-shadow: 0 2px 8px rgba(70, 50, 90, 0.04);
 }
 
 .code-header {
-    height: 30px;
-    padding: 0 9px 0 12px;
+    min-height: 34px;
+    padding: 0 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #eceae5;
+    background:#eceae5;
     border-bottom: 1px solid #ddd9d1;
 }
 
 .code-language {
-    font-family: Arial, sans-serif;
-    font-size: 9px;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 10px;
     font-weight: 600;
-    color: #777;
+    color: #9387a3;
     text-transform: uppercase;
-    letter-spacing: .4px;
+    letter-spacing: 0.7px;
 }
 
 .copy-code {
-    border: 1px solid #d2cfc8;
-    border-radius: 4px;
-    padding: 3px 8px;
-    background: #f8f7f4;
-    color: #555;
-    font-family: Arial, sans-serif;
-    font-size: 9px;
+    border: 1px solid #e3dceb;
+    border-radius: 5px;
+    padding: 4px 9px;
+    background: #fcfbfe;
+    color: #80718f;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 10px;
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .copy-code:hover {
-    background: #e5e3de;
+    background: #ece5f4;
+    color: #705d83;
 }
 
 .code-card pre {
     margin: 0;
-    padding: 15px 17px;
+    padding: 18px 19px;
     overflow-x: auto;
-    background: #f5f4f0;
-    color: #555555;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono",
-        "Courier New", monospace;
-    font-size: 11px;
-    line-height: 1.25;
+    background: #fcfbfe;
+    color: #666174;
+    font-family:inherit;
+    font-size: 12px;
+    line-height: 1.7;
     white-space: pre;
     tab-size: 4;
 }
 
 .code-card code {
     font-family: inherit;
+    font-size: inherit;
 }
 
 
 /* =========================================
-   CODE COLORS
+   CODE COLORS — SOFT PASTEL PALETTE
 ========================================= */
 
 .code-keyword {
-    color: #9b5a9a;
+    color: #a58ac4;
     font-weight: 500;
 }
 
 .code-string {
-    color: #4f9462;
+    color: #83a98d;
 }
 
 .code-function {
-    color: #4d82ad;
+    color: #7d9fc7;
 }
 
 .code-comment {
-    color: #999b9a;
+    color: #aaa6b2;
     font-style: italic;
 }
 
 .code-number {
-    color: #b27a45;
+    color: #c7a078;
 }
 
 .code-decorator {
-    color: #a97855;
+    color: #c29a83;
 }
 
 .code-variable {
-    color: #555;
+    color: #716b7e;
 }
 
 .code-builtin {
-    color: #8664a0;
+    color: #a18bc0;
 }
 
 .code-class {
-    color: #5f7f9f;
+    color: #7e9eb5;
 }
 
 .code-operator {
-    color: #777;
+    color: #a49bad;
 }
 
 .code-property {
-    color: #607f9a;
+    color: #829eb0;
 }
 
+
+/* =========================================
+   PRISM.JS SYNTAX COLORS
+========================================= */
+
+.memento-blog .code-card code[class*="language-"] {
+    color: #716b7e;
+    background: transparent;
+}
+
+.memento-blog .code-card .token.comment,
+.memento-blog .code-card .token.prolog,
+.memento-blog .code-card .token.doctype {
+    color: #aaa6b2;
+    font-style: italic;
+}
+
+.memento-blog .code-card .token.keyword {
+    color: #a58ac4;
+}
+
+.memento-blog .code-card .token.string,
+.memento-blog .code-card .token.char,
+.memento-blog .code-card .token.attr-value {
+    color: #83a98d;
+}
+
+.memento-blog .code-card .token.function {
+    color: #7d9fc7;
+}
+
+.memento-blog .code-card .token.number,
+.memento-blog .code-card .token.boolean {
+    color: #c7a078;
+}
+
+.memento-blog .code-card .token.decorator,
+.memento-blog .code-card .token.annotation {
+    color: #c29a83;
+}
+
+.memento-blog .code-card .token.builtin,
+.memento-blog .code-card .token.class-name {
+    color: #8e9fbe;
+}
+
+.memento-blog .code-card .token.operator,
+.memento-blog .code-card .token.punctuation {
+    color: #a49bad;
+}
+
+.memento-blog .code-card .token.property,
+.memento-blog .code-card .token.constant {
+    color: #829eb0;
+}
 /* =========================================
    QUOTE
 ========================================= */
@@ -347,144 +407,304 @@
 
 
 /* =========================================
-   RESPONSIVE
+   BLOG TAGS
 ========================================= */
 
-@media (max-width: 700px) {
+.blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 30px;
+    padding-top: 18px;
+    border-top: 1px solid #e2dfd9;
+}
 
-    .memento-blog {
-        max-width: 100%;
-        padding: 25px 16px 45px;
-    }
+.blog-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd9d1;
+    border-radius: 5px;
+    background: #f5f4f0;
+    color: #777;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease,
+                border-color 0.15s ease,
+                color 0.15s ease;
+}
 
-    .memento-blog h1 {
-        font-size: 31px;
-    }
-
-    .memento-blog h2 {
-        font-size: 22px;
-        margin-top: 32px;
-    }
-
-    .project-meta {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .code-card pre {
-        font-size: 10px;
-        padding: 13px;
-    }
+.blog-tag:hover {
+    background: #eae8e2;
+    border-color: #ccc8bf;
+    color: #444;
 }
 
 
-@media (max-width: 450px) {
-
-    .memento-blog {
-        padding: 20px 13px 40px;
-    }
-
-    .memento-blog h1 {
-        font-size: 27px;
-    }
-
-    .memento-blog h2 {
-        font-size: 20px;
-    }
-
-    .project-meta {
-        grid-template-columns: 1fr;
-    }
-
-    .project-details {
-        grid-template-columns: 1fr;
-    }
-
-    .detail-row {
-        border-right: 1px solid #e2dfd9;
-    }
-
-    .blog-actions {
-        justify-content: flex-start;
-    }
-}
 /* =========================================
-   AUTHOR / USER
+   TASK LOG DETAILS
 ========================================= */
 
-.blog-author {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 0 18px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #e2dfd9;
+.log-details-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.author-avatar {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: #dfe4df;
+.log-details-row .log-column {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #e2dfd9;
+    background: #faf9f6;
+    box-sizing: border-box;
+}
 
+.log-details-row .log-column strong {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: #999;
+}
+
+.log-details-row .log-column span {
     font-family: Arial, sans-serif;
     font-size: 12px;
-    font-weight: bold;
-    color: #59655d;
+    color: #333;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
-.author-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+
+/* =========================================================
+   TASK BLOG PAGE ONLY
+   Every selector below is scoped to .task-log-blog, so the
+   Project Blog Page is not affected in any way.
+========================================================= */
+
+/* ---- Header (title + description) ---- */
+
+.task-log-blog h1.blog-title {
+    margin: 30px 0 8px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: #222;
 }
 
-.author-name {
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    font-weight: 600;
+.task-log-blog .blog-intro {
+    margin: 0 0 22px;
+    font-size: 14px;
     color: #333;
 }
 
-.author-meta {
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    color: #888;
-}
-.blog-author {
+
+/* ---- Shared card cell (label on top, value below, centred) ---- */
+
+.task-log-blog .task-log-cell {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 12px 0 18px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #e2dfd9;
+    justify-content: center;
+    gap: 14px;
+    padding: 14px 10px 16px;
+    min-width: 0;
+    text-align: center;
+    box-sizing: border-box;
+    background: transparent;
 }
 
-.blog-author-image {
-    width: 38px;
-    height: 38px;
-    object-fit: cover;
-    display: block;
-}
-
-.author-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.author-name {
+.task-log-blog .task-log-cell strong {
     font-family: Arial, sans-serif;
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    color: #777;
+}
+
+.task-log-blog .task-log-cell span {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #222;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* ---- Summary card (2 columns) ---- */
+
+.task-log-blog .task-log-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 25px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.task-log-blog .task-log-summary .task-log-cell + .task-log-cell {
+    border-left: 1px solid #d9d9d9;
+}
+
+
+/* ---- Task Log Entries heading ---- */
+
+.task-log-blog h2.task-log-heading {
+    margin: 0 0 22px;
+    font-size: 21px;
+    font-weight: 700;
+    color: #222;
+}
+
+
+/* ---- Single log entry (indented like the reference) ---- */
+
+.task-log-blog .task-log-entry {
+    margin: 0 0 30px;
+    padding: 0 0 0 14px;
+    border: none;
+    background: transparent;
+}
+
+.task-log-blog .task-log-entry h3 {
+    margin: 0 0 14px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+}
+
+
+/* ---- Log details card (3 columns) ---- */
+
+.task-log-blog .task-log-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0 0 40px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.task-log-blog .task-log-grid .task-log-cell + .task-log-cell {
+    border-left: 1px solid #d9d9d9;
+}
+
+
+/* ---- Members -
+
+.task-log-blog .task-log-entry h3.task-log-members-heading {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.task-log-blog ul.task-log-members {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+
+.task-log-blog ul.task-log-members li {
+    margin-bottom: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #222;
+}
+
+--- */
+/* ---- Small screens ---- */
+
+@media (max-width: 540px) {
+
+    .task-log-blog .task-log-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .task-log-blog .task-log-grid .task-log-cell + .task-log-cell {
+        border-left: none;
+        border-top: 1px solid #d9d9d9;
+    }
+
+    .task-log-blog .task-log-entry {
+        padding-left: 0;
+    }
+}
+/* TASK LOG COMMENTS */
+
+.task-log-comments {
+    margin-top: 15px;
+}
+
+.task-log-comment {
+    padding: 16px;
+    margin-bottom: 6px;
+    background: #ffffff;
+    border: 1px solid #eee5f2;
+    border-radius: 5px;
+}
+
+.task-log-comment-author {
+    color: #0a0a0a;
+    font-size: 14px;
     font-weight: 600;
-    color: #333;
+    margin-bottom: 8px;
 }
 
-.author-meta {
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    color: #888;
+.task-log-comment-content {
+    color: #090909;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left !important;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    margin: 0 0 10px 0;
+    padding: 0;
+    text-indent: 0;
+}
+
+.task-log-comment-date {
+    color: #060506;
+    font-size: 12px;
+    border-top: 1px solid #f0eaf2;
+    padding-top: 10px;
+}
+
+.no-task-comments {
+    color: #897b90;
+    font-size: 13px;
+}
+.memento-blog .code-card pre code .code-keyword {
+    color: #9b5a9a !important;
+}
+
+.memento-blog .code-card pre code .code-string {
+    color: #4f9462 !important;
+}
+
+.memento-blog .code-card pre code .code-function {
+    color: #4d82ad !important;
+}
+
+.memento-blog .code-card pre code .code-decorator {
+    color: #a97855 !important;
+}
+/* AUTHOR BELOW TASK COMMENT */
+
+.task-log-comment .blog-author {
+    border-top: none;
+    border-bottom: none;
+    padding: 8px 0 6px;
+    margin-top: 1px;
+    margin-bottom: 1px;
 }
