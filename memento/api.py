@@ -570,3 +570,52 @@ def delete_task_todo(task_name, todo_name):
         "success": True,
         "message": "To Do deleted successfully"
     }
+
+
+
+@frappe.whitelist()
+def get_workspace_todos():
+    parent_doctype = "Tasks"
+    child_fieldname = "to_do_table"
+
+    parents = frappe.get_all(
+        parent_doctype,
+        fields=["name", "task_name", "project", "modified"],
+        order_by="modified desc",
+        limit_page_length=50
+    )
+
+    results = []
+
+    for parent in parents:
+        doc = frappe.get_doc(parent_doctype, parent.name)
+
+        for row in doc.get(child_fieldname) or []:
+            item = row.as_dict()
+
+            # Keep the existing child-row information
+            item["parent"] = parent.name
+            item["parent_name"] = parent.name
+
+            # Include the parent Task and Project details
+            item["parent_task_name"] = parent.task_name
+            item["project"] = parent.project
+
+            item["parent_modified"] = str(parent.modified)
+
+            results.append(item)
+
+    results.sort(
+        key=lambda item: str(
+            item.get("time")
+            or item.get("modified")
+            or item.get("parent_modified")
+            or ""
+        ),
+        reverse=True
+    )
+
+    return {
+        "success": True,
+        "items": results
+    }
