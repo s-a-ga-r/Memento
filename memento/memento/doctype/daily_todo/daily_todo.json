@@ -5,27 +5,16 @@
  "default_view": "List",
  "doctype": "DocType",
  "document_type": "Setup",
- "email_append_to": 1,
  "engine": "InnoDB",
  "field_order": [
   "description_and_status",
   "status",
   "priority",
   "column_break_2",
-  "color",
+  "start_time",
   "date",
-  "allocated_to",
   "description_section",
-  "description",
-  "section_break_6",
-  "reference_type",
-  "reference_name",
-  "column_break_10",
-  "role",
-  "assigned_by",
-  "assigned_by_full_name",
-  "sender",
-  "assignment_rule"
+  "description"
  ],
  "fields": [
   {
@@ -58,29 +47,15 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "color",
-   "fieldtype": "Color",
-   "label": "Color"
-  },
-  {
    "allow_in_quick_entry": 1,
    "default": "Today",
    "fieldname": "date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Due Date",
    "oldfieldname": "date",
    "oldfieldtype": "Date"
-  },
-  {
-   "fieldname": "allocated_to",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "in_global_search": 1,
-   "in_standard_filter": 1,
-   "label": "Allocated To",
-   "options": "User"
   },
   {
    "fieldname": "description_section",
@@ -98,70 +73,14 @@
    "width": "300px"
   },
   {
-   "fieldname": "section_break_6",
-   "fieldtype": "Section Break",
-   "label": "Reference"
-  },
-  {
-   "fieldname": "reference_type",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Reference Type",
-   "oldfieldname": "reference_type",
-   "oldfieldtype": "Data",
-   "options": "DocType"
-  },
-  {
-   "fieldname": "reference_name",
-   "fieldtype": "Dynamic Link",
-   "label": "Reference Name",
-   "oldfieldname": "reference_name",
-   "oldfieldtype": "Data",
-   "options": "reference_type"
-  },
-  {
-   "fieldname": "column_break_10",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "role",
-   "fieldtype": "Link",
-   "label": "Role",
-   "oldfieldname": "role",
-   "oldfieldtype": "Link",
-   "options": "Role"
-  },
-  {
-   "fieldname": "assigned_by",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Assigned By",
-   "options": "User"
-  },
-  {
-   "fetch_from": "assigned_by.full_name",
-   "fieldname": "assigned_by_full_name",
-   "fieldtype": "Read Only",
-   "label": "Assigned By Full Name"
-  },
-  {
-   "fieldname": "sender",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Sender",
-   "options": "Email"
-  },
-  {
-   "fieldname": "assignment_rule",
-   "fieldtype": "Link",
-   "label": "Assignment Rule",
-   "options": "Assignment Rule",
-   "read_only": 1
+   "fieldname": "start_time",
+   "fieldtype": "Datetime",
+   "label": "Start Time"
   }
  ],
  "icon": "fa fa-check",
  "links": [],
- "modified": "2026-09-08 23:08:54.227806",
+ "modified": "2026-10-24 10:35:32.083362",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Daily ToDo",
@@ -193,8 +112,7 @@
  ],
  "quick_entry": 1,
  "row_format": "Dynamic",
- "search_fields": "description, reference_type, reference_name",
- "sender_field": "sender",
+ "search_fields": "description",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

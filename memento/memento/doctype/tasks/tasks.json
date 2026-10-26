@@ -17,7 +17,8 @@
   "description",
   "task_todo",
   "members",
-  "created_by"
+  "created_by",
+  "total_duration"
  ],
  "fields": [
   {
@@ -27,9 +28,9 @@
   },
   {
    "fieldname": "from_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
-   "label": "From Date"
+   "label": "Task Start Time"
   },
   {
    "fieldname": "status",
@@ -53,9 +54,11 @@
   },
   {
    "fieldname": "to_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
+   "hidden": 1,
    "in_list_view": 1,
-   "label": "To Date"
+   "label": "Task End Time",
+   "read_only": 1
   },
   {
    "fieldname": "priority",
@@ -90,11 +93,16 @@
    "fieldtype": "Table",
    "label": "Task ToDo",
    "options": "ToDo Table"
+  },
+  {
+   "fieldname": "total_duration",
+   "fieldtype": "Duration",
+   "label": "Total Duration"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-22 23:39:13.790609",
+ "modified": "2026-10-24 00:54:28.559473",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
