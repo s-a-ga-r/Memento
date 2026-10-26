@@ -9,11 +9,18 @@
     "parenttype": "Workspace"
    }
   ],
-  "content": "[{\"id\":\"gejC9SR6KH\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Welcome\",\"col\":12}},{\"id\":\"RAgzQor2jc\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Projects\",\"col\":3}},{\"id\":\"i89X5Wkr2r\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Tasks\",\"col\":3}},{\"id\":\"pU6pM--nHg\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Daily ToDo\",\"col\":3}},{\"id\":\"qw4KcuVrkt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Logs\",\"col\":3}},{\"id\":\"cRW8Vegz4U\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Cards\",\"col\":12}},{\"id\":\"9FfUPl5mpy\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Recent ToDo</i></span>\",\"col\":12}},{\"id\":\"0LQjs6iqMX\",\"type\":\"paragraph\",\"data\":{\"text\":\"<i><span class=\\\"h1\\\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Task Overview</span></i>\",\"col\":12}},{\"id\":\"ZJ7XwrpCsA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task Overview\",\"col\":12}}]",
+  "content": "[{\"id\":\"gejC9SR6KH\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Welcome\",\"col\":12}},{\"id\":\"RAgzQor2jc\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Projects\",\"col\":3}},{\"id\":\"i89X5Wkr2r\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Tasks\",\"col\":3}},{\"id\":\"pU6pM--nHg\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Daily ToDo\",\"col\":3}},{\"id\":\"qw4KcuVrkt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Logs\",\"col\":3}},{\"id\":\"cRW8Vegz4U\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Cards\",\"col\":12}},{\"id\":\"9FfUPl5mpy\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Recent ToDo</i></span>\",\"col\":12}},{\"id\":\"51JSdKKnBe\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Todo Memento\",\"col\":12}},{\"id\":\"0LQjs6iqMX\",\"type\":\"paragraph\",\"data\":{\"text\":\"<i><span class=\\\"h1\\\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Task Overview</span></i>\",\"col\":12}},{\"id\":\"ZJ7XwrpCsA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task Overview\",\"col\":12}}]",
   "custom_blocks": [
    {
     "custom_block_name": "Memento Cards",
     "label": "Memento Cards",
+    "parent": "Memento",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Todo Memento",
+    "label": "Todo Memento",
     "parent": "Memento",
     "parentfield": "custom_blocks",
     "parenttype": "Workspace"
@@ -35,7 +42,7 @@
   "is_hidden": 0,
   "label": "Memento",
   "links": [],
-  "modified": "2026-10-15 12:51:03.485111",
+  "modified": "2026-10-21 17:03:51.147883",
   "module": "Memento",
   "name": "Memento",
   "number_cards": [

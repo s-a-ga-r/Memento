@@ -1,30 +1,30 @@
 /* ============================================================
    TITLE TYPING ANIMATION
 ============================================================ */
+const urlParams = new URLSearchParams(window.location.search);
+
+const urlTodoId = urlParams.get("todo");
+const urlTaskId = urlParams.get("task");
+const urlProjectId = urlParams.get("project");
 
 document.addEventListener("DOMContentLoaded", function () {
+	const titleText = document.getElementById("title-text");
+	const titleString = "Just do it";
 
-    const titleText = document.getElementById("title-text");
-    const titleString = "Just do it";
+	let titleIndex = 0;
 
-    let titleIndex = 0;
+	function typeTitle() {
+		if (titleText && titleIndex < titleString.length) {
+			titleText.textContent = titleString.substring(0, titleIndex + 1);
 
-    function typeTitle() {
+			titleIndex++;
 
-        if (titleText && titleIndex < titleString.length) {
+			setTimeout(typeTitle, 180);
+		}
+	}
 
-            titleText.textContent =
-                titleString.substring(0, titleIndex + 1);
-
-            titleIndex++;
-
-            setTimeout(typeTitle, 180);
-        }
-    }
-
-    setTimeout(typeTitle, 500);
+	setTimeout(typeTitle, 500);
 });
-
 
 /* ============================================================
    DOM SELECTORS
@@ -44,13 +44,11 @@ const themeSelectors = document.querySelectorAll(".theme-selector");
 
 const datetimeElement = document.getElementById("datetime");
 
-
 /* ============================================================
    STATE
 ============================================================ */
 
-let currentTheme =
-    localStorage.getItem("savedTheme") || "standard";
+let currentTheme = localStorage.getItem("savedTheme") || "standard";
 
 let selectedProject = "";
 
@@ -58,422 +56,333 @@ let selectedTask = "";
 
 let currentTodos = [];
 
-
 /* ============================================================
    CLOCK
 ============================================================ */
 
 function updateTime() {
+	if (!datetimeElement) {
+		return;
+	}
 
-    if (!datetimeElement) {
-        return;
-    }
+	const now = new Date();
 
-    const now = new Date();
-
-    datetimeElement.textContent =
-        now.toLocaleDateString(
-            undefined,
-            {
-                weekday: "long",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+	datetimeElement.textContent = now.toLocaleDateString(undefined, {
+		weekday: "long",
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	});
 }
 
 updateTime();
 
 setInterval(updateTime, 1000);
 
-
 /* ============================================================
    FRAPPE API HELPER
 ============================================================ */
 
 async function frappeCall(method, args = {}) {
+	const csrfToken =
+		window.csrf_token ||
+		document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ||
+		"";
 
-    const csrfToken =
-        window.csrf_token ||
-        document.querySelector('meta[name="csrf-token"]')
-            ?.getAttribute("content") ||
-        "";
+	const url = "/api/method/" + method;
 
-    const url = "/api/method/" + method;
+	const response = await fetch(url, {
+		method: "POST",
 
-    const response = await fetch(url, {
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+			"X-Frappe-CSRF-Token": csrfToken,
+		},
 
-        method: "POST",
+		credentials: "same-origin",
 
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-Frappe-CSRF-Token": csrfToken
-        },
+		body: JSON.stringify(args),
+	});
 
-        credentials: "same-origin",
+	let data;
 
-        body: JSON.stringify(args)
-    });
+	try {
+		data = await response.json();
+	} catch (error) {
+		console.error("Unable to parse server response:", error);
 
-    let data;
+		throw new Error("The server returned an invalid response.");
+	}
 
-    try {
+	if (!response.ok || data.exc || data.exception) {
+		console.error("Frappe API error:", data);
 
-        data = await response.json();
+		throw new Error(
+			data.exception ||
+				data._server_messages ||
+				data.message ||
+				"Frappe API request failed.",
+		);
+	}
 
-    } catch (error) {
+	if (data && data.message !== undefined) {
+		return data.message;
+	}
 
-        console.error("Unable to parse server response:", error);
-
-        throw new Error("The server returned an invalid response.");
-    }
-
-    if (!response.ok || data.exc || data.exception) {
-
-        console.error("Frappe API error:", data);
-
-        throw new Error(
-            data.exception ||
-            data._server_messages ||
-            data.message ||
-            "Frappe API request failed."
-        );
-    }
-
-    if (data && data.message !== undefined) {
-
-        return data.message;
-    }
-
-    throw new Error("Invalid Frappe response.");
+	throw new Error("Invalid Frappe response.");
 }
-
 
 /* ============================================================
    THEME SWITCHER
 ============================================================ */
 
 function applyTheme(theme) {
+	currentTheme = theme;
 
-    currentTheme = theme;
+	localStorage.setItem("savedTheme", theme);
 
-    localStorage.setItem("savedTheme", theme);
+	document.body.className = theme;
 
-    document.body.className = theme;
+	/* Apply theme to inputs */
 
+	const inputs = document.querySelectorAll("input");
 
-    /* Apply theme to inputs */
+	inputs.forEach(function (input) {
+		input.classList.remove("standard-input", "light-input", "darker-input");
 
-    const inputs = document.querySelectorAll("input");
+		input.classList.add(`${theme}-input`);
+	});
 
-    inputs.forEach(function (input) {
+	/* Apply theme to buttons */
 
-        input.classList.remove(
-            "standard-input",
-            "light-input",
-            "darker-input"
-        );
+	const buttons = document.querySelectorAll("button");
 
-        input.classList.add(`${theme}-input`);
-    });
+	buttons.forEach(function (button) {
+		button.classList.remove("standard-button", "light-button", "darker-button");
 
+		button.classList.add(`${theme}-button`);
+	});
 
-    /* Apply theme to buttons */
+	/* Apply theme to project selector */
 
-    const buttons = document.querySelectorAll("button");
+	if (projectSelect) {
+		projectSelect.classList.remove("standard-select", "light-select", "darker-select");
 
-    buttons.forEach(function (button) {
+		projectSelect.classList.add(`${theme}-select`);
+	}
 
-        button.classList.remove(
-            "standard-button",
-            "light-button",
-            "darker-button"
-        );
+	/* Apply theme to task selector */
 
-        button.classList.add(`${theme}-button`);
-    });
+	if (taskSelect) {
+		taskSelect.classList.remove("standard-select", "light-select", "darker-select");
 
+		taskSelect.classList.add(`${theme}-select`);
+	}
 
-    /* Apply theme to project selector */
-
-    if (projectSelect) {
-
-        projectSelect.classList.remove(
-            "standard-select",
-            "light-select",
-            "darker-select"
-        );
-
-        projectSelect.classList.add(`${theme}-select`);
-    }
-
-
-    /* Apply theme to task selector */
-
-    if (taskSelect) {
-
-        taskSelect.classList.remove(
-            "standard-select",
-            "light-select",
-            "darker-select"
-        );
-
-        taskSelect.classList.add(`${theme}-select`);
-    }
-
-
-    renderTodos();
+	renderTodos();
 }
-
 
 /* ============================================================
    THEME EVENTS
 ============================================================ */
 
 themeSelectors.forEach(function (selector) {
+	selector.addEventListener("click", function () {
+		if (selector.classList.contains("standard-theme")) {
+			applyTheme("standard");
+		}
 
-    selector.addEventListener("click", function () {
+		if (selector.classList.contains("light-theme")) {
+			applyTheme("light");
+		}
 
-        if (selector.classList.contains("standard-theme")) {
-
-            applyTheme("standard");
-        }
-
-        if (selector.classList.contains("light-theme")) {
-
-            applyTheme("light");
-        }
-
-        if (selector.classList.contains("darker-theme")) {
-
-            applyTheme("darker");
-        }
-    });
+		if (selector.classList.contains("darker-theme")) {
+			applyTheme("darker");
+		}
+	});
 });
-
 
 /* ============================================================
    LOAD PROJECTS
 ============================================================ */
 
 async function loadProjects() {
+	if (!projectSelect || !taskSelect) {
+		console.error("Project or task selector was not found in HTML.");
+		return;
+	}
 
-    if (!projectSelect || !taskSelect) {
-        console.error("Project or task selector was not found in HTML.");
-        return;
-    }
+	projectSelect.innerHTML = '<option value="">Select Project</option>';
 
-    projectSelect.innerHTML =
-        '<option value="">Select Project</option>';
+	taskSelect.innerHTML = '<option value="">Select Task</option>';
 
-    taskSelect.innerHTML =
-        '<option value="">Select Task</option>';
+	taskSelect.disabled = true;
 
-    taskSelect.disabled = true;
+	try {
+		console.log("Loading projects...");
 
-    try {
+		const response = await frappeCall("memento.api.get_projects");
 
-        console.log("Loading projects...");
+		console.log("Projects received:", response);
 
-        const response = await frappeCall(
-            "memento.api.get_projects"
-        );
+		if (!Array.isArray(response)) {
+			throw new Error("Projects response is not an array.");
+		}
 
-        console.log("Projects received:", response);
+		response.forEach(function (project) {
+			const option = document.createElement("option");
 
-        if (!Array.isArray(response)) {
+			option.value = project.name;
 
-            throw new Error("Projects response is not an array.");
-        }
+			option.textContent = project.name;
 
-        response.forEach(function (project) {
+			projectSelect.appendChild(option);
+		});
 
-            const option = document.createElement("option");
+		console.log("Projects loaded successfully.");
+	} catch (error) {
+		console.error("Error loading projects:", error);
 
-            option.value = project.name;
-
-            option.textContent = project.name;
-
-            projectSelect.appendChild(option);
-        });
-
-        console.log("Projects loaded successfully.");
-
-    } catch (error) {
-
-        console.error("Error loading projects:", error);
-
-        alert("Unable to load projects. Check the browser console.");
-    }
+		alert("Unable to load projects. Check the browser console.");
+	}
 }
-
 
 /* ============================================================
    LOAD TASKS FOR SELECTED PROJECT
 ============================================================ */
 
 async function loadTasks(projectName) {
+	if (!taskSelect) {
+		return;
+	}
 
-    if (!taskSelect) {
-        return;
-    }
+	taskSelect.innerHTML = '<option value="">Select Task</option>';
 
-    taskSelect.innerHTML =
-        '<option value="">Select Task</option>';
+	taskSelect.disabled = true;
 
-    taskSelect.disabled = true;
+	selectedTask = "";
 
-    selectedTask = "";
+	currentTodos = [];
 
-    currentTodos = [];
+	renderTodos();
 
-    renderTodos();
+	if (!projectName) {
+		selectedProject = "";
 
-    if (!projectName) {
+		return;
+	}
 
-        selectedProject = "";
+	selectedProject = projectName;
 
-        return;
-    }
+	try {
+		console.log("Loading tasks for project:", projectName);
 
-    selectedProject = projectName;
+		const response = await frappeCall("memento.api.get_tasks", {
+			project: projectName,
+		});
 
-    try {
+		console.log("Tasks received:", response);
 
-        console.log("Loading tasks for project:", projectName);
+		if (!Array.isArray(response)) {
+			throw new Error("Tasks response is not an array.");
+		}
 
-        const response = await frappeCall(
-            "memento.api.get_tasks",
-            {
-                project: projectName
-            }
-        );
+		response.forEach(function (task) {
+			const option = document.createElement("option");
 
-        console.log("Tasks received:", response);
+			option.value = task.name;
 
-        if (!Array.isArray(response)) {
+			option.textContent = task.task_name || task.name;
 
-            throw new Error("Tasks response is not an array.");
-        }
+			taskSelect.appendChild(option);
+		});
 
-        response.forEach(function (task) {
+		taskSelect.disabled = false;
 
-            const option = document.createElement("option");
+		console.log("Tasks loaded successfully.");
+	} catch (error) {
+		console.error("Error loading tasks:", error);
 
-            option.value = task.name;
-
-            option.textContent = task.task_name || task.name;
-
-            taskSelect.appendChild(option);
-        });
-
-        taskSelect.disabled = false;
-
-        console.log("Tasks loaded successfully.");
-
-    } catch (error) {
-
-        console.error("Error loading tasks:", error);
-
-        alert("Unable to load tasks. Check the browser console.");
-    }
+		alert("Unable to load tasks. Check the browser console.");
+	}
 }
-
 
 /* ============================================================
    PROJECT CHANGE
 ============================================================ */
 
 if (projectSelect) {
+	projectSelect.addEventListener("change", async function (event) {
+		const projectName = event.target.value;
 
-    projectSelect.addEventListener("change", async function (event) {
+		selectedProject = projectName;
 
-        const projectName = event.target.value;
+		selectedTask = "";
 
-        selectedProject = projectName;
+		currentTodos = [];
 
-        selectedTask = "";
+		renderTodos();
 
-        currentTodos = [];
-
-        renderTodos();
-
-        await loadTasks(projectName);
-    });
+		await loadTasks(projectName);
+	});
 }
-
 
 /* ============================================================
    TASK CHANGE
 ============================================================ */
 
 if (taskSelect) {
+	taskSelect.addEventListener("change", async function (event) {
+		const taskName = event.target.value;
 
-    taskSelect.addEventListener("change", async function (event) {
+		selectedTask = taskName;
 
-        const taskName = event.target.value;
+		currentTodos = [];
 
-        selectedTask = taskName;
+		renderTodos();
 
-        currentTodos = [];
+		if (!taskName) {
+			return;
+		}
 
-        renderTodos();
-
-        if (!taskName) {
-            return;
-        }
-
-        await loadTaskTodos(taskName);
-    });
+		await loadTaskTodos(taskName);
+	});
 }
-
 
 /* ============================================================
    LOAD TODOS FROM SELECTED TASK
 ============================================================ */
 
 async function loadTaskTodos(taskName) {
+	if (!taskName) {
+		currentTodos = [];
 
-    if (!taskName) {
+		renderTodos();
 
-        currentTodos = [];
+		return;
+	}
 
-        renderTodos();
+	try {
+		console.log("Loading To Do items for:", taskName);
 
-        return;
-    }
+		const response = await frappeCall("memento.api.get_task_todos", {
+			task_name: taskName,
+		});
 
-    try {
+		console.log("To Do items received:", response);
 
-        console.log("Loading To Do items for:", taskName);
+		currentTodos = Array.isArray(response) ? response : [];
 
-        const response = await frappeCall(
-            "memento.api.get_task_todos",
-            {
-                task_name: taskName
-            }
-        );
+		renderTodos();
+	} catch (error) {
+		console.error("Error loading To Do items:", error);
 
-        console.log("To Do items received:", response);
-
-        currentTodos = Array.isArray(response)
-            ? response
-            : [];
-
-        renderTodos();
-
-    } catch (error) {
-
-        console.error("Error loading To Do items:", error);
-
-        alert("Unable to load To Do items. Check the browser console.");
-    }
+		alert("Unable to load To Do items. Check the browser console.");
+	}
 }
-
 
 /* ============================================================
    ADD TODO
@@ -482,200 +391,159 @@ async function loadTaskTodos(taskName) {
 ============================================================ */
 
 async function addTodo(event) {
+	event.preventDefault();
 
-    event.preventDefault();
+	if (!todoInput) {
+		console.error("To Do input was not found.");
+		return;
+	}
 
-    if (!todoInput) {
-        console.error("To Do input was not found.");
-        return;
-    }
+	const value = todoInput.value.trim();
 
-    const value = todoInput.value.trim();
+	if (!selectedProject) {
+		alert("Please select a project first.");
 
-    if (!selectedProject) {
+		return;
+	}
 
-        alert("Please select a project first.");
+	if (!selectedTask) {
+		alert("Please select a task first.");
 
-        return;
-    }
+		return;
+	}
 
-    if (!selectedTask) {
+	if (!value) {
+		return;
+	}
 
-        alert("Please select a task first.");
+	try {
+		console.log("Adding To Do:", value);
 
-        return;
-    }
+		console.log("Selected Tasks document:", selectedTask);
 
-    if (!value) {
-        return;
-    }
+		const response = await frappeCall("memento.api.add_task_todo", {
+			task_name: selectedTask,
+			task_text: value,
+		});
 
-    try {
+		console.log("Add To Do response:", response);
 
-        console.log("Adding To Do:", value);
+		todoInput.value = "";
 
-        console.log("Selected Tasks document:", selectedTask);
+		await loadTaskTodos(selectedTask);
 
-        const response = await frappeCall(
-            "memento.api.add_task_todo",
-            {
-                task_name: selectedTask,
-                task_text: value
-            }
-        );
+		console.log("To Do added successfully.");
+	} catch (error) {
+		console.error("Error adding To Do:", error);
 
-        console.log("Add To Do response:", response);
-
-        todoInput.value = "";
-
-        await loadTaskTodos(selectedTask);
-
-        console.log("To Do added successfully.");
-
-    } catch (error) {
-
-        console.error("Error adding To Do:", error);
-
-        alert("Unable to add To Do: " + error.message);
-    }
+		alert("Unable to add To Do: " + error.message);
+	}
 }
-
 
 /* ============================================================
    RENDER TODOS
 ============================================================ */
 
 function renderTodos() {
+	if (!todoList) {
+		return;
+	}
 
-    if (!todoList) {
-        return;
-    }
+	todoList.innerHTML = "";
 
-    todoList.innerHTML = "";
+	if (!selectedProject || !selectedTask) {
+		return;
+	}
 
-    if (!selectedProject || !selectedTask) {
-        return;
-    }
+	currentTodos.forEach(function (todo) {
+		const todoDiv = document.createElement("div");
 
-    currentTodos.forEach(function (todo) {
+		todoDiv.classList.add("todo", `${currentTheme}-todo`);
 
-        const todoDiv = document.createElement("div");
+		if (todo.status === "Completed") {
+			todoDiv.classList.add("completed");
+		}
 
-        todoDiv.classList.add(
-            "todo",
-            `${currentTheme}-todo`
-        );
+		todoDiv.dataset.id = todo.name;
 
-        if (todo.status === "Completed") {
+		/* TODO TEXT */
 
-            todoDiv.classList.add("completed");
-        }
+		const newTodo = document.createElement("li");
 
-        todoDiv.dataset.id = todo.name;
+		newTodo.innerText = todo.todo;
 
+		newTodo.classList.add("todo-item");
 
-        /* TODO TEXT */
+		todoDiv.appendChild(newTodo);
 
-        const newTodo = document.createElement("li");
+		/* STATUS BUTTON */
 
-        newTodo.innerText = todo.todo;
+		const checkBtn = document.createElement("button");
 
-        newTodo.classList.add("todo-item");
+		checkBtn.type = "button";
 
-        todoDiv.appendChild(newTodo);
+		checkBtn.classList.add("check-btn", `${currentTheme}-button`);
 
+		checkBtn.setAttribute(
+			"aria-label",
+			todo.status === "Completed" ? "Mark as pending" : "Mark as completed",
+		);
 
-        /* STATUS BUTTON */
+		checkBtn.innerHTML = '<i class="fas fa-check"></i>';
 
-        const checkBtn = document.createElement("button");
+		todoDiv.appendChild(checkBtn);
 
-        checkBtn.type = "button";
+		/* DELETE BUTTON */
 
-        checkBtn.classList.add(
-            "check-btn",
-            `${currentTheme}-button`
-        );
+		const deleteBtn = document.createElement("button");
 
-        checkBtn.setAttribute(
-            "aria-label",
-            todo.status === "Completed"
-                ? "Mark as pending"
-                : "Mark as completed"
-        );
+		deleteBtn.type = "button";
 
-        checkBtn.innerHTML =
-            '<i class="fas fa-check"></i>';
+		deleteBtn.classList.add("delete-btn", `${currentTheme}-button`);
 
-        todoDiv.appendChild(checkBtn);
+		deleteBtn.setAttribute("aria-label", "Delete To Do");
 
+		deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
 
-        /* DELETE BUTTON */
+		todoDiv.appendChild(deleteBtn);
 
-        const deleteBtn = document.createElement("button");
+		/* ADD TODO TO LIST */
 
-        deleteBtn.type = "button";
-
-        deleteBtn.classList.add(
-            "delete-btn",
-            `${currentTheme}-button`
-        );
-
-        deleteBtn.setAttribute(
-            "aria-label",
-            "Delete To Do"
-        );
-
-        deleteBtn.innerHTML =
-            '<i class="fas fa-trash"></i>';
-
-        todoDiv.appendChild(deleteBtn);
-
-
-        /* ADD TODO TO LIST */
-
-        todoList.appendChild(todoDiv);
-    });
+		todoList.appendChild(todoDiv);
+	});
 }
-
 
 /* ============================================================
    TODO CLICK EVENTS
 ============================================================ */
 
 if (todoList) {
+	todoList.addEventListener("click", async function (event) {
+		const target = event.target;
 
-    todoList.addEventListener("click", async function (event) {
+		const todoDiv = target.closest(".todo");
 
-        const target = event.target;
+		if (!todoDiv) {
+			return;
+		}
 
-        const todoDiv = target.closest(".todo");
+		const todoName = todoDiv.dataset.id;
 
-        if (!todoDiv) {
-            return;
-        }
+		/* COMPLETE / PENDING */
 
-        const todoName = todoDiv.dataset.id;
+		if (target.closest(".check-btn")) {
+			await updateTodoStatus(todoName);
 
+			return;
+		}
 
-        /* COMPLETE / PENDING */
+		/* DELETE */
 
-        if (target.closest(".check-btn")) {
-
-            await updateTodoStatus(todoName);
-
-            return;
-        }
-
-
-        /* DELETE */
-
-        if (target.closest(".delete-btn")) {
-
-            await deleteTodo(todoName);
-        }
-    });
+		if (target.closest(".delete-btn")) {
+			await deleteTodo(todoName);
+		}
+	});
 }
-
 
 /* ============================================================
    UPDATE TODO STATUS
@@ -684,38 +552,29 @@ if (todoList) {
 ============================================================ */
 
 async function updateTodoStatus(todoName) {
+	if (!selectedTask) {
+		alert("Please select a task first.");
 
-    if (!selectedTask) {
+		return;
+	}
 
-        alert("Please select a task first.");
+	try {
+		console.log("Updating To Do:", todoName);
 
-        return;
-    }
+		const response = await frappeCall("memento.api.update_task_todo_status", {
+			task_name: selectedTask,
+			todo_name: todoName,
+		});
 
-    try {
+		console.log("Status update response:", response);
 
-        console.log("Updating To Do:", todoName);
+		await loadTaskTodos(selectedTask);
+	} catch (error) {
+		console.error("Error updating To Do:", error);
 
-        const response = await frappeCall(
-            "memento.api.update_task_todo_status",
-            {
-                task_name: selectedTask,
-                todo_name: todoName
-            }
-        );
-
-        console.log("Status update response:", response);
-
-        await loadTaskTodos(selectedTask);
-
-    } catch (error) {
-
-        console.error("Error updating To Do:", error);
-
-        alert("Unable to update To Do: " + error.message);
-    }
+		alert("Unable to update To Do: " + error.message);
+	}
 }
-
 
 /* ============================================================
    DELETE TODO
@@ -724,60 +583,96 @@ async function updateTodoStatus(todoName) {
 ============================================================ */
 
 async function deleteTodo(todoName) {
+	if (!selectedTask) {
+		alert("Please select a task first.");
 
-    if (!selectedTask) {
+		return;
+	}
 
-        alert("Please select a task first.");
+	try {
+		console.log("Deleting To Do:", todoName);
 
-        return;
-    }
+		const response = await frappeCall("memento.api.delete_task_todo", {
+			task_name: selectedTask,
+			todo_name: todoName,
+		});
 
-    try {
+		console.log("Delete response:", response);
 
-        console.log("Deleting To Do:", todoName);
+		await loadTaskTodos(selectedTask);
+	} catch (error) {
+		console.error("Error deleting To Do:", error);
 
-        const response = await frappeCall(
-            "memento.api.delete_task_todo",
-            {
-                task_name: selectedTask,
-                todo_name: todoName
-            }
-        );
-
-        console.log("Delete response:", response);
-
-        await loadTaskTodos(selectedTask);
-
-    } catch (error) {
-
-        console.error("Error deleting To Do:", error);
-
-        alert("Unable to delete To Do: " + error.message);
-    }
+		alert("Unable to delete To Do: " + error.message);
+	}
 }
-
 
 /* ============================================================
    FORM SUBMIT
 ============================================================ */
 
 if (todoForm) {
-
-    todoForm.addEventListener("submit", addTodo);
+	todoForm.addEventListener("submit", addTodo);
 }
-
 
 /* ============================================================
    INITIAL LOAD
 ============================================================ */
 
+// async function initialize() {
+// 	applyTheme(currentTheme);
+
+// 	await loadProjects();
+
+// 	renderTodos();
+// }
+
+// initialize();
 async function initialize() {
+	applyTheme(currentTheme);
 
-    applyTheme(currentTheme);
+	// 1. Load all projects into the dropdown
+	await loadProjects();
 
-    await loadProjects();
+	// 2. Select the project passed in the URL
+	if (urlProjectId && projectSelect) {
+		projectSelect.value = urlProjectId;
+		selectedProject = urlProjectId;
 
-    renderTodos();
+		// 3. Load tasks belonging to this project
+		await loadTasks(urlProjectId);
+	}
+
+	// 4. Select the task passed in the URL
+	if (urlTaskId && taskSelect) {
+		taskSelect.value = urlTaskId;
+		selectedTask = urlTaskId;
+
+		// 5. Load all ToDos belonging to this task
+		await loadTaskTodos(urlTaskId);
+	} else {
+		renderTodos();
+	}
+
+	// 6. Highlight the specific ToDo that was clicked
+	if (urlTodoId) {
+		setTimeout(() => {
+			const selectedTodo = document.querySelector(
+				`.todo[data-id="${CSS.escape(urlTodoId)}"]`,
+			);
+
+			if (selectedTodo) {
+				selectedTodo.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+
+				selectedTodo.classList.add("selected-todo");
+			} else {
+				console.warn("Clicked ToDo was not found:", urlTodoId);
+			}
+		}, 200);
+	}
 }
 
 initialize();
