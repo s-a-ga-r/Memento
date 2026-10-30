@@ -1,0 +1,420 @@
+/* One wide card per row */
+.record-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Horizontal rectangular card */
+.record-card {
+  display: grid;
+  grid-template-columns: 125px minmax(0, 1fr) 145px;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-surface);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.record-card:hover {
+  border-color: var(--color-focus);
+  box-shadow: 0 8px 26px rgb(20 25 40 / 6%);
+}
+
+/* Left section: icon and status */
+/* .record-card__top {
+  
+} */
+
+/* Project — soft lavender */
+.record-card__top--projects {
+  background: #b0a2df;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  border-right: 1px solid var(--color-border);
+}
+
+/* Task — soft mint green */
+.record-card__top--tasks {
+  background: #b8e0d2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  border-right: 1px solid var(--color-border);
+}
+
+/* Daily To-Do — soft warm yellow */
+.record-card__top--todo {
+  background: #f5dfad;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  border-right: 1px solid var(--color-border);
+}
+
+/* Activity Logs — soft blue */
+.record-card__top--activity {
+  background: #b8d9ef;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  border-right: 1px solid var(--color-border);
+}
+
+.record-card__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 20px;
+}
+
+.record-card__status {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 6px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 10px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Middle section: record information */
+.record-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 22px 26px;
+}
+
+.record-card__eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  overflow-wrap: anywhere;
+}
+
+.record-card__title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 21px;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.record-card__description {
+  display: -webkit-box;
+  margin: 9px 0 0;
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  /* -webkit-line-clamp: 2; */
+}
+
+.record-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.record-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-muted);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.record-card__dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 15px;
+}
+
+.record-card__dates > div {
+  display: flex;
+  min-width: 100px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.record-card__dates span {
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.record-card__dates strong {
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Right section: actions */
+.record-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 20px 16px;
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+}
+
+.record-card__read-more,
+.record-card__update {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    opacity 150ms ease,
+    background 150ms ease;
+}
+
+.record-card__read-more {
+  background: var(--color-text);
+  color: var(--color-page);
+}
+
+.record-card__read-more:hover {
+  opacity: 0.84;
+}
+
+.record-card__update {
+  background: transparent;
+  color: var(--color-muted);
+}
+
+.record-card__update:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-text);
+}
+
+.record-card__update:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.record-card__read-more:focus-visible,
+.record-card__update:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Tablet: keep the card horizontal */
+@media (max-width: 760px) {
+  .record-card {
+    grid-template-columns: 95px minmax(0, 1fr) 115px;
+  }
+
+  .record-card__top {
+    padding: 16px;
+  }
+
+  .record-card__body {
+    padding: 18px;
+  }
+
+  .record-card__actions {
+    padding: 16px 10px;
+  }
+
+  .record-card__dates {
+    gap: 14px;
+  }
+
+  .record-card__dates > div {
+    min-width: 90px;
+  }
+}
+
+/* Mobile: stack sections when horizontal space is limited */
+@media (max-width: 520px) {
+  .record-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .record-card__top {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 0;
+    border-right: 0;
+  }
+
+  .record-card__body {
+    padding: 16px 18px 20px;
+  }
+
+  .record-card__actions {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 13px 18px;
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+
+  .record-card__read-more,
+  .record-card__update {
+    min-width: 100px;
+  }
+}
+
+
+
+
+/* Related to GSAP */
+/* Card interaction polish */
+
+.record-card {
+  transform-origin: center;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background 220ms ease;
+}
+
+.record-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-focus);
+  box-shadow: 0 14px 34px rgb(20 25 40 / 9%);
+}
+
+.record-card__icon {
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    color 220ms ease;
+}
+
+.record-card:hover .record-card__icon {
+  transform: rotate(-4deg) scale(1.05);
+  border-color:
+    color-mix(in srgb, var(--color-focus) 35%, var(--color-border));
+  background:
+    color-mix(in srgb, var(--color-focus) 9%, var(--color-surface-raised));
+  color: var(--color-focus);
+}
+
+.record-card__read-more > i {
+  display: inline-block;
+  transition: transform 180ms ease;
+}
+
+.record-card__read-more:hover > i {
+  transform: translateX(3px);
+}
+
+.record-card__read-more:active,
+.record-card__update:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record-card,
+  .record-card__icon,
+  .record-card__read-more > i {
+    transition: none;
+  }
+
+  .record-card:hover,
+  .record-card:hover .record-card__icon,
+  .record-card__read-more:hover > i {
+    transform: none;
+  }
+}
+
+
+
+/* Linked project name on Task cards */
+.record-card__related-project {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin: 8px 0 10px;
+  min-width: 0;
+}
+
+.record-card__related-project-label {
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+}
+
+.record-card__related-project-name {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .record-card__related-project-name {
+    font-size: 14px;
+  }
+}

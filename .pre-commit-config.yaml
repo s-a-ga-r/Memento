@@ -1,5 +1,5 @@
 exclude: 'node_modules|.git'
-default_stages: [pre-commit]
+default_stages: [commit]
 fail_fast: false
 
 
@@ -13,6 +13,7 @@ repos:
       - id: check-merge-conflict
       - id: check-ast
       - id: check-json
+        exclude: '^frontend/tsconfig(\..+)?\.json$'
       - id: check-toml
       - id: check-yaml
       - id: debug-statements
@@ -42,7 +43,8 @@ repos:
                 .*node_modules.*|
                 .*boilerplate.*|
                 memento/templates/includes/.*|
-                memento/public/js/lib/.*
+                memento/public/js/lib/.*|
+                memento/public/memento-ui/assets/.*|
             )$
 
 
@@ -56,6 +58,7 @@ repos:
         exclude: |
             (?x)^(
                 memento/public/dist/.*|
+                memento/public/memento-ui/assets/.*|
                 cypress/.*|
                 .*node_modules.*|
                 .*boilerplate.*|

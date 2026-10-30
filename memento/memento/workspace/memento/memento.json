@@ -5,8 +5,8 @@
    "label": "Task Overview"
   }
  ],
- "content": "[{\"id\":\"gejC9SR6KH\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Welcome\",\"col\":12}},{\"id\":\"RAgzQor2jc\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Projects\",\"col\":3}},{\"id\":\"i89X5Wkr2r\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Tasks\",\"col\":3}},{\"id\":\"pU6pM--nHg\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Daily ToDo\",\"col\":3}},{\"id\":\"qw4KcuVrkt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Logs\",\"col\":3}},{\"id\":\"cRW8Vegz4U\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Cards\",\"col\":12}},{\"id\":\"9FfUPl5mpy\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Recent Tasks</i></span>\",\"col\":6}},{\"id\":\"0LQjs6iqMX\",\"type\":\"paragraph\",\"data\":{\"text\":\"<i><span class=\\\"h1\\\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Task Overview</span></i>\",\"col\":6}},{\"id\":\"V0n719HyQT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Recent Tasks\",\"col\":6}},{\"id\":\"ZJ7XwrpCsA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task Overview\",\"col\":6}}]",
- "creation": "2026-04-09 14:15:44.915663",
+ "content": "[{\"id\":\"gejC9SR6KH\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Welcome\",\"col\":12}},{\"id\":\"ypUj5P4iAF\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Memento WebSite\",\"col\":3}},{\"id\":\"RAgzQor2jc\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Projects\",\"col\":3}},{\"id\":\"i89X5Wkr2r\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Tasks\",\"col\":3}},{\"id\":\"pU6pM--nHg\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Daily ToDo\",\"col\":3}},{\"id\":\"qw4KcuVrkt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Logs\",\"col\":3}},{\"id\":\"cRW8Vegz4U\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Memento Cards\",\"col\":12}},{\"id\":\"9FfUPl5mpy\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Recent Tasks</i></span>\",\"col\":6}},{\"id\":\"0LQjs6iqMX\",\"type\":\"paragraph\",\"data\":{\"text\":\"<i><span class=\\\"h1\\\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Task Overview</span></i>\",\"col\":6}},{\"id\":\"V0n719HyQT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Recent Tasks\",\"col\":6}},{\"id\":\"ZJ7XwrpCsA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task Overview\",\"col\":6}}]",
+ "creation": "2026-10-21 17:08:20.430719",
  "custom_blocks": [
   {
    "custom_block_name": "Memento Cards",
@@ -22,12 +22,12 @@
  "for_user": "",
  "hide_custom": 0,
  "icon": "group-by",
- "idx": 1,
+ "idx": 0,
  "indicator_color": "blue",
  "is_hidden": 0,
  "label": "Memento",
  "links": [],
- "modified": "2026-09-25 11:26:00.072425",
+ "modified": "2026-10-22 12:48:55.061749",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Memento",
@@ -49,32 +49,26 @@
    "number_card_name": "Total Tasks"
   }
  ],
- "modified": "2026-09-20 02:07:00.756318",
- "modified_by": "Administrator",
- "module": "Memento",
- "name": "Memento",
- "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [
   {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Tasking",
-   "link_to": "day-to-day-v3",
-   "type": "Page"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Settings",
-   "link_to": "Memento Settings",
-   "type": "DocType"
+   "document_type": "Tasks",
+   "label": "Recent Tasks",
+   "quick_list_filter": "[]"
   }
  ],
  "roles": [],
  "sequence_id": 1.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Memento WebSite",
+   "type": "URL",
+   "url": "http://test.site:8000/memento-ui/"
+  }
+ ],
  "title": "Memento"
 }

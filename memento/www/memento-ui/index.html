@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <link rel="icon" type="image/svg+xml" href="/assets/memento/memento-ui/assets/memento-logo.svg" />
+
+    <meta
+        name="csrf-token"
+        content="{{ frappe.session.csrf_token }}"
+        />
+
+    <title>Memento</title>
+
+    <link rel="stylesheet" href="/assets/memento/memento-ui/assets/app.css">
+
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="module" src="/assets/memento/memento-ui/assets/app.js"></script>
+
+</body>
+</html>
