@@ -773,186 +773,26 @@ class Projects {
 	// Read project
 	viewProject() {
 		let self = this;
-
 		// CHANGED: .off() added so re-rendering after a filter click does not stack handlers
 		$(document).off("click", ".view-btn").on("click", ".view-btn", function (event) {
             event.stopPropagation();
 
             console.log("view-blog clicked");
-
             let projectId = $(this).data("project-id");
-
             console.log("project_id :", projectId);
-
             console.log("My Projects", self.projects);
-
             const project = self.projects.find((p) => p.name === projectId);
-
             console.log("the project", project);
-
             if (!project) {
                 console.error(`Project with ID ${projectId} not found`);
                 return;
             }
 
             console.log("Opening BlogPage for project:", projectId);
-
             frappe.set_route("blog-page", projectId);
             return;
 
-				const blogReaderHTML = `
-          <div
-              id="blogReaderModal"
-              class="blog-reader-content"
-          >
-
-              <div class="blog-reader-header">
-
-                  <div class="blog-reader-meta">
-
-                      <div class="blog-reader-avatar">
-                          ${(project.user || frappe.session.user).charAt(0)}
-                      </div>
-
-                      <div class="blog-reader-author-info">
-
-                          <div class="blog-reader-author-name">
-                              ${project.user || frappe.session.user}
-                          </div>
-
-                          <div class="blog-reader-date">
-                              ${self.formatDate(project.creation)}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-actions">
-
-                          <button
-                              class="action-btn delete-btn"
-                          >
-                              Delete
-                          </button>
-
-                      </div>
-
-                      <div class="blog-reader-actions">
-
-                          <button
-                              class="action-btn close-viewer"
-                          >
-                              Close
-                          </button>
-
-                      </div>
-
-                  </div>
-
-              </div>
-
-              <div class="blog-reader-content-body">
-
-                  <h1 class="blog-reader-title">
-                      ${project.project_name}
-                  </h1>
-
-                  <div class="blog-reader-text">
-                      ${(project.description || "").replace(/\n/g, "<br>")}
-                  </div>
-
-                  <div class="blog-reader-details">
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              Category
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${
-									project.category.charAt(0).toUpperCase() +
-									project.category.slice(1)
-								}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              Priority
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${
-									project.priority_level.charAt(0).toUpperCase() +
-									project.priority_level.slice(1)
-								}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              Status
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${project.status.replace("-", " ").toUpperCase()}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              Start Time
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${self.formatFullDateTime(project.start_date)}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              End Time
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${self.formatFullDateTime(project.end_date)}
-                          </div>
-
-                      </div>
-
-                      <div class="blog-reader-detail-item">
-
-                          <div class="blog-reader-detail-label">
-                              Duration
-                          </div>
-
-                          <div class="blog-reader-detail-value">
-                              ${self.calculateDuration(project.start_date, project.end_date)}
-                          </div>
-
-                      </div>
-
-                  </div>
-
-              </div>
-
-          </div>
-        `;
-
-				// Clear the container and append the blog reader content
-				$(".container2").html("");
-				$(".container2").css("display", "block");
-
-				$(".container2").append(blogReaderHTML);
-			});
+		});
 	}
 
 	goBack() {
