@@ -202,19 +202,33 @@ class Projects {
           </h2>
 
           ${
-				p.description
-					? `<div class="project-description">${frappe.utils.escape_html(
-							$("<div>").html(p.description).text(),
-						)}</div>`
-					: ""
+				// p.description
+				// 	? `<div class="project-description">${frappe.utils.escape_html(
+				// 			$("<div>").html(p.description).split(" ").slice(0, 30).join(" ") + "...",
+				// 		)}</div>`
+				// 	: ""
+
+               p.description
+                    ? (() => {
+                            // Safely strip HTML using jQuery's text() method
+                            const plainText = $("<div>").html(p.description).text().trim();
+                            const words = plainText.split(/\s+/);
+                            
+                            // Limit to 30 words
+                            const truncatedText = words.length > 25
+                                ? words.slice(0, 25).join(" ") + "..." 
+                                : plainText;
+
+                            return `<div class="project-description">${frappe.utils.escape_html(truncatedText)}</div>`;
+                    })()
+                    : ""
 			}
 
           <div class="post-actions">
 
               <button
                   class="action-btn view-btn"
-                  data-project-id=${p.name}
-              >
+                  data-project-id=${p.name}>
                   Read More
               </button>
 
@@ -226,8 +240,7 @@ class Projects {
               <!-- hidden from the card, handler kept in deleteProject()
               <button
                   class="action-btn delete-btn"
-                  data-project-id=${p.name}
-              >
+                  data-project-id=${p.name}>
                   Delete
               </button>
               -->
@@ -235,14 +248,12 @@ class Projects {
           </div>
 
       </div>
-    `,
-					)
-					.join("");
+    `,).join("");
 
-				this.viewProject();
-				this.updateStats();
-				this.openProject();
-			});
+        this.viewProject();
+        this.updateStats();
+        this.openProject();
+	});
 	}
 
 	renderTasks(project) {
@@ -276,13 +287,12 @@ class Projects {
 					console.log("r message got the tasks ", r.message);
 
 					blogPosts.innerHTML = `
-            <div class="empty-state">
-                <h3>No Task yet</h3>
-                <p>Start by creating your first blog post!</p>
-            </div>
-          `;
-
-					return;
+                    <div class="empty-state">
+                        <h3>No Task yet</h3>
+                        <p>Start by creating your first blog post!</p>
+                    </div>
+                `;
+				return;
 				}
 
 				let filteredTasks = r.message;
@@ -317,32 +327,23 @@ class Projects {
                 <h3>No Task found</h3>
                 <p>No tasks match this filter.</p>
             </div>
-          `;
+          `;return;
+        }
 
-					return;
-				}
-
-				blogPosts.innerHTML = filteredTasks
-					.map(
-						(post) => `
-              <div class="blog-post" data-project-id=${post.project} data-project-id=${post.name}>
-
+		blogPosts.innerHTML = filteredTasks
+		.map((post) => `
+              <div class="blog-post" data-project-id=${post.project} data-task-id=${post.name}>
                   <div class="post-header">
-
                       <div class="author-avatar">
                           ${(post.avatar = "A")}
                       </div>
-
                      <div class="post-meta">
-
                       <div class="author-name">
                           ${post.created_by}
                       </div>
-
                       <div class="post-date">
                        ${post.creation}
                       </div>
-
                   </div>
 
                 <div class="task-status ${String(post.status || "Open").replace(/[\s-]+/g, "")}">
@@ -378,10 +379,7 @@ class Projects {
       },
     });
     // TASK READ MORE — OPEN TASK BLOG IN THE EXISTING BLOG PAGE
-$(document)
-    .off("click", ".task-read-more")
-    .on("click", ".task-read-more", function (event) {
-
+    $(document).off("click", ".task-read-more").on("click", ".task-read-more", function (event) {
         // Prevent the task card click from opening Daily Timeline
         event.preventDefault();
         event.stopPropagation();
@@ -474,24 +472,15 @@ $(document)
     let self = this;
 
     // Opening the task post where those tasks are belongs to this project.
-    $(document)
-      .off("click", ".project-post")
-      .on("click", ".project-post", function (event) {
+    $(document).off("click", ".project-post").on("click", ".project-post", function (event) {
         event.preventDefault();
         event.stopPropagation();
-
         // Prevent the click event from propagating to the parent project-post div
         // var project = $(".project-post").data("project-id");
-
         let project = $(this).data("project-id");
-
         self.project = project;
-
         let base_url = window.location.pathname
-
         console.log("base_url", base_url, "project :", project);
-
-
         let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
         history.pushState({ project: project }, "", newUrl);
 
@@ -676,37 +665,35 @@ $(document)
           </div>
         `;
 
-				$(".container2").append(container_content);
+        $(".container2").append(container_content);
 
-				self.renderTasks(project);
-				self.createTask();
-				self.opnenTask();
+        self.renderTasks(project);
+        self.createTask();
+        self.opnenTask();
 
 				// geting style for task model
 			});
 	}
 
 	createTask() {
-		$(document)
-			.off("click", "#open-task-modal")
-			.on("click", "#open-task-modal", function (event) {
-				event.preventDefault();
-				event.stopPropagation();
+		$(document).off("click", "#open-task-modal").on("click", "#open-task-modal", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-				const projectId = $(this).attr("data-project-id");
+            const projectId = $(this).attr("data-project-id");
 
-				console.log("Creating task for project:", projectId);
+            console.log("Creating task for project:", projectId);
 
-				if (!projectId) {
-					frappe.msgprint("Project ID not found.");
-					return;
-				}
+            if (!projectId) {
+                frappe.msgprint("Project ID not found.");
+                return;
+            }
 
-				// Open a new Tasks document with the Project field prefilled
-				frappe.new_doc("Tasks", {
-					project: projectId,
-				});
-			});
+            // Open a new Tasks document with the Project field prefilled
+            frappe.new_doc("Tasks", {
+                project: projectId,
+            });
+        });
 	}
 
 	opnenTask() {
@@ -724,7 +711,6 @@ $(document)
 				task: taskName,
 				project: projectName,
 			};
-
 			// Navigate to comment-section-v3 with date parameter
 			frappe.set_route("timeline");
 		});
@@ -752,19 +738,14 @@ $(document)
 
 		// NEW: Main page Project filters
 		const me = this;
-
-		$(document)
-			.off("click", ".sidebar-menu li.project-filter[data-filter]")
-			.on("click", ".sidebar-menu li.project-filter[data-filter]", function () {
-				me.filterTasks($(this).data("filter"));
-			});
+		$(document).off("click", ".sidebar-menu li.project-filter[data-filter]").on("click", ".sidebar-menu li.project-filter[data-filter]", function () {
+			me.filterTasks($(this).data("filter"));
+		});
 
 		// NEW: Task page filters
-		$(document)
-			.off("click", ".sidebar-menu li.task-filter[data-filter]")
-			.on("click", ".sidebar-menu li.task-filter[data-filter]", function () {
-				me.filterTaskPosts($(this).data("filter"));
-			});
+		$(document).off("click", ".sidebar-menu li.task-filter[data-filter]").on("click", ".sidebar-menu li.task-filter[data-filter]", function () {
+			me.filterTaskPosts($(this).data("filter"));
+		});
 
 		// Close modals when clicking outside
 		document.getElementById("projectModal").addEventListener("click", (e) => {
@@ -794,32 +775,30 @@ $(document)
 		let self = this;
 
 		// CHANGED: .off() added so re-rendering after a filter click does not stack handlers
-		$(document)
-			.off("click", ".view-btn")
-			.on("click", ".view-btn", function (event) {
-				event.stopPropagation();
+		$(document).off("click", ".view-btn").on("click", ".view-btn", function (event) {
+            event.stopPropagation();
 
-				console.log("view-blog clicked");
+            console.log("view-blog clicked");
 
-				let projectId = $(this).data("project-id");
+            let projectId = $(this).data("project-id");
 
-				console.log("project_id :", projectId);
+            console.log("project_id :", projectId);
 
-				console.log("My Projects", self.projects);
+            console.log("My Projects", self.projects);
 
-				const project = self.projects.find((p) => p.name === projectId);
+            const project = self.projects.find((p) => p.name === projectId);
 
-				console.log("the project", project);
+            console.log("the project", project);
 
-				if (!project) {
-					console.error(`Project with ID ${projectId} not found`);
-					return;
-				}
+            if (!project) {
+                console.error(`Project with ID ${projectId} not found`);
+                return;
+            }
 
-				console.log("Opening BlogPage for project:", projectId);
+            console.log("Opening BlogPage for project:", projectId);
 
-				frappe.set_route("blog-page", projectId);
-				return;
+            frappe.set_route("blog-page", projectId);
+            return;
 
 				const blogReaderHTML = `
           <div
