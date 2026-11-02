@@ -7,25 +7,22 @@
 // };
 
 frappe.pages["timeline"].on_page_load = function (wrapper) {
-  const page = frappe.ui.make_app_page({
-    parent: wrapper,
-    title: "Daily Timeline",
-    single_column: true,
-  });
+    const page = frappe.ui.make_app_page({
+        parent: wrapper,
+        title: "Daily Timeline",
+        single_column: true,
+    });
 
     const options = frappe.route_options || {};
     const { date, task, project } = options;
     // clear so stale data doesn't leak into next visit
     frappe.route_options = null;
-
     console.log(date, task, project);
 
+    $(".page-container").css("background-color", "#ffffff");
+    $("body").css("background-color", "#ffffff");
 
-
-  $(".page-container").css("background-color", "#ffffff");
-  $("body").css("background-color", "#ffffff");
-
-  $(page.body).html(`
+    $(page.body).html(`
         <div style="display: flex; gap: 20px; padding: 15px;">
             <div class="form-footer-wrapper" style="flex: 1;"></div>
             <div class="week-picker-container" style="width: 450px; flex-shrink: 0;"></div>
@@ -61,15 +58,15 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
 
       // Find Task Log(s) matching the selected date
       const taskLogs = await frappe.call({
-        method: "frappe.client.get_list",
-        args: {
-          doctype: "Task Log",
-          filters: {
-            today: dateStr,
-          },
-          fields: ["name", "today"],
-          limit: 1,
-        },
+            method: "frappe.client.get_list",
+            args: {
+            doctype: "Task Log",
+            filters: {
+                today: dateStr,
+            },
+            fields: ["name", "today"],
+            limit: 1,
+            },
       });
 
       let taskLogName;

@@ -258,30 +258,22 @@ class Projects {
 
 	renderTasks(project) {
 		self = this;
-
 		const blogPosts = document.getElementById("blogPosts");
-
 		if (this.posts.length === 111) {
 			blogPosts.innerHTML = `
-        <div class="empty-state">
-            <h3>No Task yet</h3>
-            <p>Start by creating your first blog post!</p>
-        </div>
-      `;
-
+            <div class="empty-state">
+                <h3>No Task yet</h3>
+                <p>Start by creating your first blog post!</p>
+            </div>`;
 			return;
 		}
-
 		// console.log(this.posts);
-
 		console.log(`Task rendered for project ${project}`);
-
 		frappe.call({
 			method: "memento.memento.page.projec_track.projec_track.get_tasks",
 			args: {
 				project: project,
 			},
-
 			callback: function (r) {
 				if (r.message.length == 0) {
 					console.log("r message got the tasks ", r.message);
@@ -301,13 +293,11 @@ class Projects {
 					case "today":
 						filteredTasks = r.message.filter((task) => self.isTaskToday(task));
 						break;
-
 					case "completed":
 						filteredTasks = r.message.filter(
 							(task) => self.normStatus(task.status) === "completed",
 						);
 						break;
-
 					case "pending":
 						filteredTasks = r.message.filter(
 							(task) => self.normStatus(task.status) === "pending",
@@ -332,51 +322,43 @@ class Projects {
 
 		blogPosts.innerHTML = filteredTasks
 		.map((post) => `
-              <div class="blog-post" data-project-id=${post.project} data-task-id=${post.name}>
-                  <div class="post-header">
-                      <div class="author-avatar">
-                          ${(post.avatar = "A")}
-                      </div>
-                     <div class="post-meta">
-                      <div class="author-name">
-                          ${post.created_by}
-                      </div>
-                      <div class="post-date">
-                       ${post.creation}
-                      </div>
-                  </div>
-
-                <div class="task-status ${String(post.status || "Open").replace(/[\s-]+/g, "")}">
-                 ${String(post.status || "Open")
-						.replace(/-/g, " ")
-						.toUpperCase()}
-               </div>
-
-                  </div>
-
-                  <h2 class="post-title">
-                      ${post.task_name}
-                  </h2>
-
-                  <div class="post-content">
-                      ${post.description.replace(/\n/g, "<br>")}
-                  </div>
-                  <div class="task-post-footer">
-                      <button
-                          type="button"
-                          class="task-read-more"
-                          data-task-id="${post.name}"
-                          data-project-id="${post.project}"
-                      >
-                          Read More →
-                      </button>
-                  </div>
-
-              </div>
-            `,
-          )
-          .join("");
-      },
+                <div class="blog-post" data-project-id=${post.project} data-task-id=${post.name}>
+                    <div class="post-header">
+                        <div class="author-avatar">
+                            ${(post.avatar = "A")}
+                        </div>
+                        <div class="post-meta">
+                            <div class="author-name">
+                                ${post.created_by}
+                            </div>
+                        <div class="post-date">
+                            ${post.creation}
+                        </div>
+                    </div>
+                    <div class="task-status ${String(post.status || "Open").replace(/[\s-]+/g, "")}">
+                        ${String(post.status || "Open")
+                            .replace(/-/g, " ")
+                            .toUpperCase()}
+                    </div>
+                </div>
+                <h2 class="post-title">
+                    ${post.task_name}
+                </h2>
+                <div class="post-content">
+                    ${post.description.replace(/\n/g, "<br>")}
+                </div>
+                <div class="task-post-footer">
+                    <button
+                        type="button"
+                        class="task-read-more"
+                        data-task-id="${post.name}"
+                        data-project-id="${post.project}">
+                        Read More →
+                    </button>
+                </div>
+                </div>`,
+          ).join("");
+        },
     });
     // TASK READ MORE — OPEN TASK BLOG IN THE EXISTING BLOG PAGE
     $(document).off("click", ".task-read-more").on("click", ".task-read-more", function (event) {
@@ -397,11 +379,7 @@ class Projects {
         }
 
         // Open the existing blog-page with task information
-        frappe.set_route(
-            "blog-page",
-            taskId
-            
-        );
+        frappe.set_route("blog-page",taskId);
     });
 
     // frappe.db
@@ -704,15 +682,19 @@ class Projects {
 			const taskDate = $(this).data("task-date") || frappe.datetime.nowdate();
 			const taskName = $(this).data("post-title");
 			const projectName = this.project;
+            const taskId = $(this).data("task-id");
 			// $(this).data("project-name");
 
 			frappe.route_options = {
 				date: taskDate,
 				task: taskName,
 				project: projectName,
+				task_id: taskId
 			};
 			// Navigate to comment-section-v3 with date parameter
-			frappe.set_route("timeline");
+			// frappe.set_route("timeline");
+
+            frappe.set_route("timeline",taskId);
 		});
 	}
 
