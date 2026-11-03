@@ -17,7 +17,18 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
     const { date, task, project } = options;
     // clear so stale data doesn't leak into next visit
     frappe.route_options = null;
-    console.log(date, task, project);
+    console.log("date", date);
+    console.log("task", task);
+    console.log("project", project);
+    frappe.db.get_value('Tasks',task,["task_name","project"])
+        .then(r => {
+            if (r.message) {
+                const task_name = r.message.task_name
+                const project = r.message.project
+                console.log("project",project)
+                this.page.set_title(__(task_name, project));
+            }
+        })
 
     $(".page-container").css("background-color", "#ffffff");
     $("body").css("background-color", "#ffffff");
@@ -29,10 +40,10 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
         </div>
     `);
 
-  const $body = $(page.body);
-  let currentFooter = null;
+    const $body = $(page.body);
+    let currentFooter = null;
 
-  renderWeekPicker($body.find(".week-picker-container"));
+    renderWeekPicker($body.find(".week-picker-container"));
 
   // Function to load or create Task Log by date
   async function loadTaskLogByDate(selectedDate) {
@@ -60,12 +71,10 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
       const taskLogs = await frappe.call({
             method: "frappe.client.get_list",
             args: {
-            doctype: "Task Log",
-            filters: {
-                today: dateStr,
-            },
-            fields: ["name", "today"],
-            limit: 1,
+                doctype: "Task Log",
+                filters: {today: dateStr},
+                fields: ["name", "today"],
+                limit: 1,
             },
       });
 
@@ -134,23 +143,23 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
       });
 
       // Create mock frm object
-      const frm = {
-        doc,
-        docname: doc.name,
-        doctype: "Task Log",
-        meta: frappe.get_meta("Task Log"),
-        perm: frappe.perm.get_perm("Task Log"),
+        const frm = {
+            doc,
+            docname: doc.name,
+            doctype: "Task Log",
+            meta: frappe.get_meta("Task Log"),
+            perm: frappe.perm.get_perm("Task Log"),
 
-        get_docinfo: function () {
-          return frappe.model.docinfo["Task Log"]?.[taskLogName] || {};
-        },
+            get_docinfo: function () {
+            return frappe.model.docinfo["Task Log"]?.[taskLogName] || {};
+            },
 
-        get_field: () => null,
-        fields_dict: {},
-        events: {},
-        trigger: () => {},
-        dashboard: { reset: () => {} },
-      };
+            get_field: () => null,
+            fields_dict: {},
+            events: {},
+            trigger: () => {},
+            dashboard: { reset: () => {} },
+        };
 
       // Clear previous footer
       $body.find(".form-footer-wrapper").empty();

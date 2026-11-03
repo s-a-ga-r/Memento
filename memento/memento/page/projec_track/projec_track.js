@@ -77,11 +77,8 @@ class Projects {
 
 	renderProjects() {
 		let self = this;
-
 		// console.log("in sample");
-
-		frappe.db
-			.get_list("My Projects", {
+		frappe.db.get_list("My Projects", {
 				fields: ["*"],
 				// order_by: 'employee_name asc',
 				limit: 100,
@@ -91,30 +88,21 @@ class Projects {
 
 				self.projects = records;
 				// console.log("TOTAL PROJECTS FROM DOCTYPE:", self.projects.length);
-
 				// self.saveProjects();
-
 				// console.log("records", records);
 				// console.log(self.projects);
-
 				const projectPosts = document.getElementById("projectPosts");
-
 				let filteredProjects = self.projects;
-
 				// console.log("filteredProjects", filteredProjects);
-
 				switch (this.currentFilter) {
 					case "today":
 						const today = new Date().toDateString();
-
 						// CHANGED: uses the real DocType date field (start_date) through isToday()
 						// filteredProjects = self.projects.filter(
 						//   (task) => new Date(task.startTime).toDateString() === today,
 						// );
 						filteredProjects = self.projects.filter((task) => self.isToday(task));
-
 						break;
-
 					case "high":
 						// CHANGED: the DocType field is priority_level ("High" / "high")
 						// filteredProjects = self.projects.filter(
@@ -123,9 +111,7 @@ class Projects {
 						filteredProjects = self.projects.filter(
 							(task) => String(task.priority_level || "").toLowerCase() === "high",
 						);
-
 						break;
-
 					case "completed":
 						// CHANGED: status compared through normStatus()
 						// filteredProjects = self.projects.filter(
@@ -134,9 +120,7 @@ class Projects {
 						filteredProjects = self.projects.filter(
 							(task) => self.normStatus(task.status) === "completed",
 						);
-
 						break;
-
 					case "pending":
 						// CHANGED: status compared through normStatus()
 						// filteredProjects = self.projects.filter(
@@ -145,7 +129,6 @@ class Projects {
 						filteredProjects = self.projects.filter(
 							(task) => self.normStatus(task.status) === "pending",
 						);
-
 						break;
 				}
 
@@ -153,13 +136,11 @@ class Projects {
 					console.log("no task found");
 
 					projectPosts.innerHTML = `
-            <div class="empty-state">
-                <h3>No tasks found</h3>
-                <p>Start by creating your first task!</p>
-            </div>
-          `;
-
-					return;
+                        <div class="empty-state">
+                            <h3>No tasks found</h3>
+                            <p>Start by creating your first task!</p>
+                        </div>`;
+                    return;
 				}
 
 				// CHANGED: the card no longer shows the category (WORK / PERSONAL) – removed from the
@@ -167,88 +148,85 @@ class Projects {
 				// CHANGED: description sits directly under the title.
 
 				// CHANGED: Delete hidden from the card (deleteProject() logic is still below).
-				projectPosts.innerHTML = filteredProjects
-					.map(
-						(p) => `
-      <div class="project-post" data-project-id=${p.name}>
-          <div class="project-post-header">
+				projectPosts.innerHTML = filteredProjects.map(
+                    (p) => `
+                        <div class="project-post" data-project-id=${p.name}>
+                            <div class="project-post-header">
 
-              <div class="task-author-avatar">
-                  ${(p.user || frappe.session.user).charAt(0)}
-              </div>
+                                <div class="task-author-avatar">
+                                    ${(p.user || frappe.session.user).charAt(0)}
+                                </div>
 
-              <div class="project-post-meta">
-                  <div class="task-author-name">
-                      ${p.user || frappe.session.user}
-                  </div>
+                                <div class="project-post-meta">
+                                    <div class="task-author-name">
+                                        ${p.user || frappe.session.user}
+                                    </div>
 
-                  <div class="project-post-date">
-                      ${self.formatDate(p.creation)}
-                  </div>
-              </div>
+                                    <div class="project-post-date">
+                                        ${self.formatDate(p.creation)}
+                                    </div>
+                                </div>
 
-              <span class="project-y ${p.priority_level}">
-                  ${p.priority_level.toUpperCase()}
-              </span>
+                                <span class="project-y ${p.priority_level}">
+                                    ${p.priority_level.toUpperCase()}
+                                </span>
 
-              <div class="project-status ${p.status.replace("-", "")}">
-                  ${p.status.replace("-", " ").toUpperCase()}
-              </div>
+                                <div class="project-status ${p.status.replace("-", "")}">
+                                    ${p.status.replace("-", " ").toUpperCase()}
+                                </div>
 
-          </div>
+                            </div>
 
-          <h2 class="project-title">
-              ${p.project_name}
-          </h2>
+                            <h2 class="project-title">
+                                ${p.project_name}
+                            </h2>
+                        ${
+                            //  ${p.description
+                            // 	? `<div class="project-description">${frappe.utils.escape_html(
+                            // 			$("<div>").html(p.description).split(" ").slice(0, 30).join(" ") + "...",
+                            // 		)}</div>`
+                            // 	: ""
+                        p.description
+                                ? (() => {
+                                        // Safely strip HTML using jQuery's text() method
+                                        const plainText = $("<div>").html(p.description).text().trim();
+                                        const words = plainText.split(/\s+/);
+                                        
+                                        // Limit to 30 words
+                                        const truncatedText = words.length > 25
+                                            ? words.slice(0, 25).join(" ") + "..." 
+                                            : plainText;
 
-          ${
-				// p.description
-				// 	? `<div class="project-description">${frappe.utils.escape_html(
-				// 			$("<div>").html(p.description).split(" ").slice(0, 30).join(" ") + "...",
-				// 		)}</div>`
-				// 	: ""
+                                        return `<div class="project-description">${frappe.utils.escape_html(truncatedText)}</div>`;
+                                })()
+                                : ""
+                        }
 
-               p.description
-                    ? (() => {
-                            // Safely strip HTML using jQuery's text() method
-                            const plainText = $("<div>").html(p.description).text().trim();
-                            const words = plainText.split(/\s+/);
-                            
-                            // Limit to 30 words
-                            const truncatedText = words.length > 25
-                                ? words.slice(0, 25).join(" ") + "..." 
-                                : plainText;
+                <div class="post-actions">
 
-                            return `<div class="project-description">${frappe.utils.escape_html(truncatedText)}</div>`;
-                    })()
-                    : ""
-			}
+                    <button
+                        class="action-btn view-btn"
+                        data-project-id=${p.name}>
+                        Read More
+                    </button>
 
-          <div class="post-actions">
+                    <span class="project-time">
+                        ${this.formatDateTime(p.start_date)} -
+                        ${this.formatDateTime(p.end_date)}
+                    </span>
 
-              <button
-                  class="action-btn view-btn"
-                  data-project-id=${p.name}>
-                  Read More
-              </button>
+                    <!-- hidden from the card, handler kept in deleteProject()
+                    <button
+                        class="action-btn delete-btn"
+                        data-project-id=${p.name}>
+                        Delete
+                    </button>
+                    -->
 
-              <span class="project-time">
-                  ${this.formatDateTime(p.start_date)} -
-                  ${this.formatDateTime(p.end_date)}
-              </span>
+                </div>
 
-              <!-- hidden from the card, handler kept in deleteProject()
-              <button
-                  class="action-btn delete-btn"
-                  data-project-id=${p.name}>
-                  Delete
-              </button>
-              -->
-
-          </div>
-
-      </div>
-    `,).join("");
+            </div>
+            `,).join("");
 
         this.viewProject();
         this.updateStats();
@@ -313,12 +291,13 @@ class Projects {
 
 				if (filteredTasks.length === 0) {
 					blogPosts.innerHTML = `
-            <div class="empty-state">
-                <h3>No Task found</h3>
-                <p>No tasks match this filter.</p>
-            </div>
-          `;return;
-        }
+                        <div class="empty-state">
+                            <h3>No Task found</h3>
+                            <p>No tasks match this filter.</p>
+                        </div>
+                    `;
+                    return;
+                }
 
 		blogPosts.innerHTML = filteredTasks
 		.map((post) => `
@@ -447,210 +426,210 @@ class Projects {
   }
 
   openProject() {
-    let self = this;
+        let self = this;
 
-    // Opening the task post where those tasks are belongs to this project.
-    $(document).off("click", ".project-post").on("click", ".project-post", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        // Prevent the click event from propagating to the parent project-post div
-        // var project = $(".project-post").data("project-id");
-        let project = $(this).data("project-id");
-        self.project = project;
-        let base_url = window.location.pathname
-        console.log("base_url", base_url, "project :", project);
-        let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
-        history.pushState({ project: project }, "", newUrl);
+        // Opening the task post where those tasks are belongs to this project.
+        $(document).off("click", ".project-post").on("click", ".project-post", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            // Prevent the click event from propagating to the parent project-post div
+            // var project = $(".project-post").data("project-id");
+            let project = $(this).data("project-id");
+            self.project = project;
+            let base_url = window.location.pathname
+            console.log("base_url", base_url, "project :", project);
+            let newUrl = base_url.split("projec-track")[0] + "projec-track/" + project; 
+            history.pushState({ project: project }, "", newUrl);
 
-        // console.log("project", project);
-        // console.log("Task List opened of this project");
+            // console.log("project", project);
+            // console.log("Task List opened of this project");
 
-        $(".container2").html("");
-        $(".container2").addClass("task-view"); //added
-        self.setViewBackground("task"); //added
-        $("#open-modal").remove();
+            $(".container2").html("");
+            $(".container2").addClass("task-view"); //added
+            self.setViewBackground("task"); //added
+            $("#open-modal").remove();
 
-        let container_content = `
-          <div class="post-main-content">
+            let container_content = `
+            <div class="post-main-content">
 
-              <div id="blogPosts">
-                  <!-- Sample posts will be loaded here -->
-              </div>
+                <div id="blogPosts">
+                    <!-- Sample posts will be loaded here -->
+                </div>
 
-          </div>
+            </div>
 
-          <div class="sidebar">
+            <div class="sidebar">
 
-              <h3>Our Sidebar</h3>
+                <h3>Our Sidebar</h3>
 
-              <ul class="sidebar-menu">
+                <ul class="sidebar-menu">
 
-                  <li class="task-filter active" data-filter="all">
-                      All Tasks
-                  </li>
+                    <li class="task-filter active" data-filter="all">
+                        All Tasks
+                    </li>
 
-                  <li class="task-filter" data-filter="today">
-                      Today's Tasks
-                  </li>
+                    <li class="task-filter" data-filter="today">
+                        Today's Tasks
+                    </li>
 
-                  <li class="task-filter" data-filter="completed">
-                      Completed
-                  </li>
+                    <li class="task-filter" data-filter="completed">
+                        Completed
+                    </li>
 
-                  <li class="task-filter" data-filter="pending">
-                      Pending
-                  </li>
+                    <li class="task-filter" data-filter="pending">
+                        Pending
+                    </li>
 
-                 
+                    
 
-                  <li class="go-back">
-                      <i class="fa fa-arrow-left"></i>
-                      Back
-                  </li>
+                    <li class="go-back">
+                        <i class="fa fa-arrow-left"></i>
+                        Back
+                    </li>
 
-              </ul>
+                </ul>
 
-          </div>
+            </div>
 
-          <button
-              class="add-task-btn"
-              data-project-id="${project}"
-              id="open-task-modal">
-              +
-          </button>
+            <button
+                class="add-task-btn"
+                data-project-id="${project}"
+                id="open-task-modal">
+                +
+            </button>
 
-          <div id="postModal" class="modal">
+            <div id="postModal" class="modal">
 
-              <div class="modal-content">
+                <div class="modal-content">
 
-                  <div class="modal-header1">
+                    <div class="modal-header1">
 
-                      <h2 class="modal-title">
-                          Create New Post
-                      </h2>
+                        <h2 class="modal-title">
+                            Create New Post
+                        </h2>
 
-                      <button
-                          class="close-btn"
-                          onclick="closeModal()"
-                      >
-                          &times;
-                      </button>
+                        <button
+                            class="close-btn"
+                            onclick="closeModal()"
+                        >
+                            &times;
+                        </button>
 
-                  </div>
+                    </div>
 
-                  <form id="postForm">
+                    <form id="postForm">
 
-                      <div class="form-group">
+                        <div class="form-group">
 
-                          <label for="authorName">
-                              Author Name
-                          </label>
+                            <label for="authorName">
+                                Author Name
+                            </label>
 
-                          <input
-                              type="text"
-                              id="authorName"
-                              name="authorName"
-                              required
-                          >
+                            <input
+                                type="text"
+                                id="authorName"
+                                name="authorName"
+                                required
+                            >
 
-                      </div>
+                        </div>
 
-                      <div class="form-group">
+                        <div class="form-group">
 
-                          <label for="postTitle">
-                              Post Title
-                          </label>
+                            <label for="postTitle">
+                                Post Title
+                            </label>
 
-                          <input
-                              type="text"
-                              id="postTitle"
-                              name="postTitle"
-                              required
-                          >
+                            <input
+                                type="text"
+                                id="postTitle"
+                                name="postTitle"
+                                required
+                            >
 
-                      </div>
+                        </div>
 
-                      <div class="datetime-row">
+                        <div class="datetime-row">
 
-                          <div class="form-group">
+                            <div class="form-group">
 
-                              <label for="startTime">
-                                  Start Time
-                              </label>
+                                <label for="startTime">
+                                    Start Time
+                                </label>
 
-                              <input
-                                  type="datetime-local"
-                                  id="startTime"
-                                  name="startTime"
-                                  required
-                              >
+                                <input
+                                    type="datetime-local"
+                                    id="startTime"
+                                    name="startTime"
+                                    required
+                                >
 
-                          </div>
+                            </div>
 
-                          <div class="form-group">
+                            <div class="form-group">
 
-                              <label for="endTime">
-                                  End Time
-                              </label>
+                                <label for="endTime">
+                                    End Time
+                                </label>
 
-                              <input
-                                  type="datetime-local"
-                                  id="endTime"
-                                  name="endTime"
-                              >
+                                <input
+                                    type="datetime-local"
+                                    id="endTime"
+                                    name="endTime"
+                                >
 
-                          </div>
+                            </div>
 
-                      </div>
+                        </div>
 
-                      <div class="form-group">
+                        <div class="form-group">
 
-                          <label for="postContent">
-                              Post Content
-                          </label>
+                            <label for="postContent">
+                                Post Content
+                            </label>
 
-                          <textarea
-                              id="postContent"
-                              name="postContent"
-                              required
-                          ></textarea>
+                            <textarea
+                                id="postContent"
+                                name="postContent"
+                                required
+                            ></textarea>
 
-                      </div>
+                        </div>
 
-                      <div style="text-align: right;">
+                        <div style="text-align: right;">
 
-                          <button
-                              type="button"
-                              class="cancel-btn"
-                              onclick="closeModal()"
-                          >
-                              Cancel
-                          </button>
+                            <button
+                                type="button"
+                                class="cancel-btn"
+                                onclick="closeModal()"
+                            >
+                                Cancel
+                            </button>
 
-                          <button
-                              type="submit"
-                              class="submit-btn"
-                          >
-                              Publish Post
-                          </button>
+                            <button
+                                type="submit"
+                                class="submit-btn"
+                            >
+                                Publish Post
+                            </button>
 
-                      </div>
+                        </div>
 
-                  </form>
+                    </form>
 
-              </div>
+                </div>
 
-          </div>
-        `;
+            </div>
+            `;
 
-        $(".container2").append(container_content);
+            $(".container2").append(container_content);
 
-        self.renderTasks(project);
-        self.createTask();
-        self.opnenTask();
+            self.renderTasks(project);
+            self.createTask();
+            self.opnenTask();
 
-				// geting style for task model
-			});
+                    // geting style for task model
+        });
 	}
 
 	createTask() {
@@ -668,9 +647,7 @@ class Projects {
             }
 
             // Open a new Tasks document with the Project field prefilled
-            frappe.new_doc("Tasks", {
-                project: projectId,
-            });
+            frappe.new_doc("Tasks", {project: projectId});
         });
 	}
 
