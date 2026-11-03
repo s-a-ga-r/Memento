@@ -8,6 +8,7 @@
  "field_order": [
   "task_name",
   "from_date",
+  "total_duration",
   "status",
   "column_break_ugmt",
   "project",
@@ -17,8 +18,7 @@
   "description",
   "task_todo",
   "members",
-  "created_by",
-  "total_duration"
+  "created_by"
  ],
  "fields": [
   {
@@ -102,7 +102,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-24 00:54:28.559473",
+ "modified": "2026-11-03 23:50:48.603804",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
