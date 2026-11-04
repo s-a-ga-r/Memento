@@ -14,18 +14,22 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
     });
 
     const options = frappe.route_options || {};
-    const { date, task, project } = options;
+    console.log("route_options", options);
+    // const { date, task } = options;
+
+    const date = options.date || frappe.datetime.nowdate();
+    const task = options.task_id || null;
     // clear so stale data doesn't leak into next visit
     frappe.route_options = null;
     console.log("date", date);
     console.log("task", task);
-    console.log("project", project);
+
     frappe.db.get_value('Tasks',task,["task_name","project"])
         .then(r => {
             if (r.message) {
                 const task_name = r.message.task_name
                 const project = r.message.project
-                console.log("project",project)
+                // console.log("project",project)
                 this.page.set_title(__(task_name, project));
             }
         })
@@ -58,15 +62,10 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
       // console.log("Searching for Task Log with today =", dateStr);
 
       console.log("selected date is", selectedDate);
-
       const dateObj = frappe.datetime.str_to_obj(selectedDate);
-
       console.log("dateObj", dateObj);
-
       const dateStr = frappe.datetime.obj_to_str(dateObj);
-
       console.log("Searching for Task Log with today =", dateStr);
-
       // Find Task Log(s) matching the selected date
       const taskLogs = await frappe.call({
             method: "frappe.client.get_list",
@@ -82,19 +81,20 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
 
       // If no Task Log exists, create one
       if (!taskLogs.message || taskLogs.message.length === 0) {
-        console.log("No Task Log found, creating new one...");
+        console.log("No Task Log found, creating new one...",task);
 
         const newTaskLog = await frappe.call({
           method: "frappe.client.insert",
           args: {
             doc: {
-              doctype: "Task Log",
-              today: dateStr,
-              members: [
-                {
-                  user: frappe.session.user,
-                },
-              ],
+                doctype: "Task Log",
+                today: dateStr,
+                task_id:task,
+                members: [
+                    {
+                        user: frappe.session.user,
+                    },
+                ],
               // members:frappe.session.user
               // Add any other required fields here
             },
@@ -186,10 +186,12 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
     }
   }
 
+  console.log("Im herrrrrrrr...............e",task)
+
   // Listen for date selection
   $body.find(".week-picker-container").on("date-selected", (e, date) => {
-    console.log("Date selected:", date);
-    loadTaskLogByDate(date);
+        console.log("Date selected:", date);
+        loadTaskLogByDate(date);
   });
 
   // Load Task Log for today on page load

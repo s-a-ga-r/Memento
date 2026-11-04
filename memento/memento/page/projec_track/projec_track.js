@@ -359,73 +359,73 @@ class Projects {
 
         // Open the existing blog-page with task information
         frappe.set_route("blog-page",taskId);
-    });
+        });
 
-    // frappe.db
-    //   .get_list("Tasks", {
-    //     fields: ["*"],
-    //     filters: {
-    //       members: frappe.session.user,
-    //       project: project,
-    //     },
-    //     // order_by: 'employee_name asc',
-    //     limit: 10,
-    //   })
-    //   .then((t) => {
-    //     console.log(t);
-    //     self.posts = t;
-    //     if (t.length === 0) {
-    //       blogPosts.innerHTML = `
-    //                 <div class="empty-state">
-    //                     <h3>No Task yet</h3>
-    //                     <p>Start by creating your first task!</p>
-    //                 </div>
-    //             `;
-    //       return;
-    //     }
-    //     blogPosts.innerHTML = t
-    //       .map(
-    //         (post) => `
-    //             <div class="blog-post">
-    //                 <div class="post-header">
-    //                     <div class="author-avatar">${(post.avatar = "A")}</div>
-    //                     <div class="post-meta">
-    //                         <div class="author-name">${post.created_by}</div>
-    //                         <div class="post-date">${post.creation}</div>
-    //                     </div>
-    //                 </div>
-    //                 <h2 class="post-title">${post.task_name}</h2>
-    //                 <div class="post-content">${post.description.replace(/\n/g, "<br>")}</div>
-    //             </div>
-    //         `,
-    //       )
-    //       .join("");
-    //   });
+        // frappe.db
+        //   .get_list("Tasks", {
+        //     fields: ["*"],
+        //     filters: {
+        //       members: frappe.session.user,
+        //       project: project,
+        //     },
+        //     // order_by: 'employee_name asc',
+        //     limit: 10,
+        //   })
+        //   .then((t) => {
+        //     console.log(t);
+        //     self.posts = t;
+        //     if (t.length === 0) {
+        //       blogPosts.innerHTML = `
+        //                 <div class="empty-state">
+        //                     <h3>No Task yet</h3>
+        //                     <p>Start by creating your first task!</p>
+        //                 </div>
+        //             `;
+        //       return;
+        //     }
+        //     blogPosts.innerHTML = t
+        //       .map(
+        //         (post) => `
+        //             <div class="blog-post">
+        //                 <div class="post-header">
+        //                     <div class="author-avatar">${(post.avatar = "A")}</div>
+        //                     <div class="post-meta">
+        //                         <div class="author-name">${post.created_by}</div>
+        //                         <div class="post-date">${post.creation}</div>
+        //                     </div>
+        //                 </div>
+        //                 <h2 class="post-title">${post.task_name}</h2>
+        //                 <div class="post-content">${post.description.replace(/\n/g, "<br>")}</div>
+        //             </div>
+        //         `,
+        //       )
+        //       .join("");
+        //   });
 
-    // blogPosts.innerHTML = this.posts
-    //   .map(
-    //     (post) =>
-    //       console.log("post-", post)`
-    //         <div class="blog-post">
-    //             <div class="post-header">
-    //                 <div class="author-avatar">${post.avatar}</div>
-    //                 <div class="post-meta">
-    //                     <div class="author-name">${post.author}</div>
-    //                     <div class="post-date">${post.date}</div>
-    //                 </div>
-    //             </div>
-    //             <h2 class="post-title">${post.title}</h2>
-    //             <div class="post-content">${post.content.replace(/\n/g, "<br>")}</div>
-    //         </div>
-    //     `,
-    //   )
-    //   .join("");
+        // blogPosts.innerHTML = this.posts
+        //   .map(
+        //     (post) =>
+        //       console.log("post-", post)`
+        //         <div class="blog-post">
+        //             <div class="post-header">
+        //                 <div class="author-avatar">${post.avatar}</div>
+        //                 <div class="post-meta">
+        //                     <div class="author-name">${post.author}</div>
+        //                     <div class="post-date">${post.date}</div>
+        //                 </div>
+        //             </div>
+        //             <h2 class="post-title">${post.title}</h2>
+        //             <div class="post-content">${post.content.replace(/\n/g, "<br>")}</div>
+        //         </div>
+        //     `,
+        //   )
+        //   .join("");
 
-    taskModelcss();
-    this.goBack();
-  }
+        taskModelcss();
+        this.goBack();
+    }
 
-  openProject() {
+    openProject() {
         let self = this;
 
         // Opening the task post where those tasks are belongs to this project.
@@ -662,12 +662,9 @@ class Projects {
             const taskId = $(this).data("task-id");
 			// $(this).data("project-name");
 
-			frappe.route_options = {
-				date: taskDate,
-				task: taskName,
-				project: projectName,
-				task_id: taskId
-			};
+            console.log("taskDate:", taskDate, "taskName:", taskName, "projectName:", projectName, "taskId:", taskId);
+
+			frappe.route_options = {date: taskDate,task_id: taskId};
 			// Navigate to comment-section-v3 with date parameter
 			// frappe.set_route("timeline");
 
