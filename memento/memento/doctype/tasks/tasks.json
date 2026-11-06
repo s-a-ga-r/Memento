@@ -7,12 +7,12 @@
  "engine": "InnoDB",
  "field_order": [
   "task_name",
-  "from_date",
+  "task_start_time",
   "total_duration",
   "status",
   "column_break_ugmt",
   "project",
-  "to_date",
+  "task_end_time",
   "priority",
   "section_break_mjym",
   "description",
@@ -25,12 +25,6 @@
    "fieldname": "task_name",
    "fieldtype": "Data",
    "label": "Task Name"
-  },
-  {
-   "fieldname": "from_date",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "Task Start Time"
   },
   {
    "fieldname": "status",
@@ -51,14 +45,6 @@
    "in_standard_filter": 1,
    "label": "Project",
    "options": "My Projects"
-  },
-  {
-   "fieldname": "to_date",
-   "fieldtype": "Datetime",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Task End Time",
-   "read_only": 1
   },
   {
    "fieldname": "priority",
@@ -98,11 +84,25 @@
    "fieldname": "total_duration",
    "fieldtype": "Duration",
    "label": "Total Duration"
+  },
+  {
+   "fieldname": "task_end_time",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Task End Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "task_start_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Task Start Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-03 23:50:48.603804",
+ "modified": "2026-11-05 17:43:47.890374",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
