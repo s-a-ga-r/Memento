@@ -1,8 +1,8 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:TSK-{DD}-{MM}-{YYYY}-{#}",
- "creation": "2026-10-16 16:44:10.180947",
+ "autoname": "format:TSK-{DD}-{MM}-{YY}-{#}",
+ "creation": "2026-11-05 17:05:30.543422",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -16,7 +16,7 @@
   "task_end_time",
   "section_break_mjym",
   "description",
-  "task_todo",
+  "to_do_table",
   "members",
   "created_by"
  ],
@@ -42,7 +42,6 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Project",
    "options": "My Projects"
   },
@@ -75,9 +74,9 @@
    "options": "User"
   },
   {
-   "fieldname": "task_todo",
+   "fieldname": "to_do_table",
    "fieldtype": "Table",
-   "label": "Task ToDo",
+   "label": "To do Lists",
    "options": "ToDo Table"
   },
   {
