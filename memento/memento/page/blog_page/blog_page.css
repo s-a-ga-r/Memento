@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 0 18px;
+    padding: 8px 0 6px;
     margin-top: 18px;
     margin-bottom: 25px;
     border-top: 1px solid #e2dfd9;
@@ -478,7 +478,7 @@
 .log-details-row .log-column span {
     font-family: Arial, sans-serif;
     font-size: 12px;
-    color: #333;
+    color: #000000;
     overflow-wrap: anywhere;
     word-break: break-word;
 }
@@ -583,8 +583,6 @@
     font-weight: 700;
     color: #222;
 }
-
-
 /* ---- Log details card (3 columns) ---- */
 
 .task-log-blog .task-log-grid {
@@ -600,30 +598,6 @@
 .task-log-blog .task-log-grid .task-log-cell + .task-log-cell {
     border-left: 1px solid #d9d9d9;
 }
-
-
-/* ---- Members -
-
-.task-log-blog .task-log-entry h3.task-log-members-heading {
-    margin: 0 0 8px;
-    font-size: 16px;
-}
-
-.task-log-blog ul.task-log-members {
-    margin: 0;
-    padding-left: 18px;
-    list-style: disc;
-}
-
-.task-log-blog ul.task-log-members li {
-    margin-bottom: 4px;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    color: #222;
-}
-
---- */
-/* ---- Small screens ---- */
 
 @media (max-width: 540px) {
 
@@ -679,26 +653,6 @@
     border-top: 1px solid #f0eaf2;
     padding-top: 10px;
 }
-
-.no-task-comments {
-    color: #897b90;
-    font-size: 13px;
-}
-.memento-blog .code-card pre code .code-keyword {
-    color: #9b5a9a !important;
-}
-
-.memento-blog .code-card pre code .code-string {
-    color: #4f9462 !important;
-}
-
-.memento-blog .code-card pre code .code-function {
-    color: #4d82ad !important;
-}
-
-.memento-blog .code-card pre code .code-decorator {
-    color: #a97855 !important;
-}
 /* AUTHOR BELOW TASK COMMENT */
 
 .task-log-comment .blog-author {
@@ -707,4 +661,276 @@
     padding: 8px 0 6px;
     margin-top: 1px;
     margin-bottom: 1px;
+}
+/* =========================================
+   CODE BLOCK FONT AND STYLE FIX
+========================================= */
+
+.memento-blog .code-card pre,
+.memento-blog .code-card pre code {
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    font-size: 12px !important;
+    font-weight: normal;
+    line-height: 1.7;
+    font-style: normal;
+    color: #716b7e;
+    background: #f5f3f0;
+    tab-size: 4;
+}
+
+/* Code box background */
+.memento-blog .code-card {
+    background: #f5f3f0;
+    border: 1px solid #e8e5ed;
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+/* Code content area */
+.memento-blog .code-card pre {
+    background: #f5f3f0 !important;
+    padding: 18px 19px;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* Preserve syntax highlighting */
+.memento-blog .code-card pre code span {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+/* DARKER CODE TEXT — MATCH FIRST SCREENSHOT */
+
+.memento-blog .code-card pre,
+.memento-blog .code-card pre code {
+    color: #333333 !important;
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+/* Darker syntax colours */
+
+.memento-blog .code-card .token.keyword,
+.memento-blog .code-card .code-keyword {
+    color: #a052a0 !important;
+}
+
+.memento-blog .code-card .token.string,
+.memento-blog .code-card .code-string {
+    color: #4d9860 !important;
+}
+
+.memento-blog .code-card .token.function,
+.memento-blog .code-card .code-function {
+    color: #548bbd !important;
+}
+
+.memento-blog .code-card .token.comment,
+.memento-blog .code-card .code-comment {
+    color: #777777 !important;
+}
+
+.memento-blog .code-card .token.operator,
+.memento-blog .code-card .token.punctuation {
+    color: #555555 !important;
+}
+
+.memento-blog .code-card .token.builtin,
+.memento-blog .code-card .token.class-name {
+    color: #586f9b !important;
+}
+/* PROJECT DESCRIPTION CODE BLOCK */
+
+.project-description .code-card {
+    margin: 18px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.project-description .code-card pre {
+    margin: 0 !important;
+    padding: 16px 20px !important;
+    white-space: pre !important;
+    overflow-x: auto;
+    line-height: 1.5 !important;
+    font-size: 13px;
+}
+
+.project-description .code-card code {
+    display: block;
+    white-space: pre !important;
+    line-height: 1.5 !important;
+    font-size: 13px;
+}
+/* =========================================
+   PROJECT DESCRIPTION CODE CARD
+========================================= */
+
+.memento-blog .project-description .code-card {
+    margin: 18px 0;
+    padding: 0;
+    background: #f5f3f0;
+    border: 1px solid #e8e5ed;
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+/* CODE HEADER */
+
+.memento-blog .project-description .code-header {
+    height: 36px;
+    min-height: 36px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #eceae5;
+    border-bottom: 1px solid #ddd9d1;
+}
+
+/* LANGUAGE NAME */
+
+.memento-blog .project-description .code-language {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #9387a3;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+/* COPY BUTTON */
+
+.memento-blog .project-description .copy-code {
+    padding: 4px 9px;
+    font-size: 10px;
+}
+
+/* CODE CONTENT */
+
+.memento-blog .project-description .code-card pre {
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    background: #f5f3f0 !important;
+    color: #333 !important;
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    font-size: 12px !important;
+    font-weight: normal !important;
+    line-height: 1.5 !important;
+    white-space: pre !important;
+    overflow-x: auto;
+    tab-size: 4;
+}
+
+/* CODE TEXT */
+
+.memento-blog .project-description .code-card pre code {
+    display: block;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    color: inherit;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    white-space: pre !important;
+}
+/* TASK LOG TWO-COLUMN LAYOUT */
+
+.task-log-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 28px;
+    max-width: 1150px;
+    margin: 25px auto;
+    align-items: start;
+}
+
+.task-log-blog {
+    width: 100%;
+    min-width: 0;
+}
+
+/* RIGHT SIDEBAR */
+
+.task-log-sidebar {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.task-log-sidebar h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.task-sidebar-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #eeeeee;
+    color: #727b86;
+    font-size: 14px;
+}
+
+.task-sidebar-item:last-child {
+    border-bottom: none;
+}
+
+.task-sidebar-item:not(:has(input)) {
+    cursor: pointer;
+}
+
+.task-sidebar-item:hover {
+    color: #333333;
+}
+
+.task-sidebar-item input {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* DATE FILTER */
+
+.task-log-date-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.task-log-date-filter input {
+    padding: 8px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+
+.task-log-date-filter button {
+    padding: 8px 14px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .task-log-layout {
+        grid-template-columns: 1fr;
+        margin: 15px;
+    }
+
+}
+.task-log-comment {
+    margin-bottom: 20px;
+}
+
+.task-log-comment-content {
+    margin-top: 10px;
 }

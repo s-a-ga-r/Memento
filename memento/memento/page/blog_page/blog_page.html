@@ -137,12 +137,7 @@ $(page.main).html(`
 
 
     <div class="project-description">
-
-        ${
-            project.description ||
-            "<p>No project description has been added yet.</p>"
-        }
-
+        ${formatProjectDescription(project.description)}
     </div>
 
 
@@ -548,22 +543,6 @@ $(page.main).html(`
             data-target="about-project"
         >
             frappe
-        </a>
-
-        <a
-            href="javascript:void(0);"
-            class="blog-tag"
-            data-target="python-section"
-        >
-            python
-        </a>
-
-        <a
-            href="javascript:void(0);"
-            class="blog-tag"
-            data-target="javascript-section"
-        >
-            javascript
         </a>
 
     </div>
