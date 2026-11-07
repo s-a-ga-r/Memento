@@ -1,14 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:TSK-{DD}-{MM}-{YYYY}-{#}",
- "creation": "2026-10-16 16:44:10.180947",
+ "autoname": "format:TSK-{DD}-{MM}-{YY}-{#}",
+ "creation": "2026-11-05 17:05:30.543422",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "task_name",
   "from_date",
-  "total_duration",
   "status",
   "column_break_ugmt",
   "project",
@@ -16,7 +15,7 @@
   "priority",
   "section_break_mjym",
   "description",
-  "task_todo",
+  "to_do_table",
   "members",
   "created_by"
  ],
@@ -28,9 +27,9 @@
   },
   {
    "fieldname": "from_date",
-   "fieldtype": "Datetime",
+   "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Task Start Time"
+   "label": "From Date"
   },
   {
    "fieldname": "status",
@@ -48,17 +47,14 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Project",
    "options": "My Projects"
   },
   {
    "fieldname": "to_date",
-   "fieldtype": "Datetime",
-   "hidden": 1,
+   "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Task End Time",
-   "read_only": 1
+   "label": "To Date"
   },
   {
    "fieldname": "priority",
@@ -89,20 +85,15 @@
    "options": "User"
   },
   {
-   "fieldname": "task_todo",
+   "fieldname": "to_do_table",
    "fieldtype": "Table",
-   "label": "Task ToDo",
+   "label": "To do Lists",
    "options": "ToDo Table"
-  },
-  {
-   "fieldname": "total_duration",
-   "fieldtype": "Duration",
-   "label": "Total Duration"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-03 23:50:48.603804",
+ "modified": "2026-11-06 09:53:03.366876",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
