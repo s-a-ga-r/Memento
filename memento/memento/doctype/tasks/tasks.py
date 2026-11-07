@@ -7,8 +7,8 @@ from frappe.utils import now_datetime,get_datetime
 
 class Tasks(Document):
 	def before_insert(self):
-		if not self.start_time:
-			self.start_time = now_datetime()
+		if not self.task_start_time:
+			self.task_start_time = now_datetime()
 
 	def on_update(self):
 		if self.status == "Completed" and not self.task_end_time:
