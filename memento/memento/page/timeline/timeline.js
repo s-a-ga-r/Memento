@@ -52,22 +52,22 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
   // Function to load or create Task Log by date
   async function loadTaskLogByDate(selectedDate) {
     try {
-      // Format date as YYYY-MM-DD for comparison
-      // console.log("selected date is", selectedDate);
+        // Format date as YYYY-MM-DD for comparison
+        // console.log("selected date is", selectedDate);
 
-      // const dateObj = frappe.datetime.str_to_obj(selectedDate);
-      // console.log("dateObj",dateObj);
+        // const dateObj = frappe.datetime.str_to_obj(selectedDate);
+        // console.log("dateObj",dateObj);
 
-      // const dateStr = dateObj.toISOString().split('T')[0];
-      // console.log("Searching for Task Log with today =", dateStr);
+        // const dateStr = dateObj.toISOString().split('T')[0];
+        // console.log("Searching for Task Log with today =", dateStr);
 
-      console.log("selected date is", selectedDate);
-      const dateObj = frappe.datetime.str_to_obj(selectedDate);
-      console.log("dateObj", dateObj);
-      const dateStr = frappe.datetime.obj_to_str(dateObj);
-      console.log("Searching for Task Log with today =", dateStr);
-      // Find Task Log(s) matching the selected date
-      const taskLogs = await frappe.call({
+        console.log("selected date is", selectedDate);
+        const dateObj = frappe.datetime.str_to_obj(selectedDate);
+        console.log("dateObj", dateObj);
+        const dateStr = frappe.datetime.obj_to_str(dateObj);
+        console.log("Searching for Task Log with today =", dateStr);
+        // Find Task Log(s) matching the selected date
+        const taskLogs = await frappe.call({
             method: "frappe.client.get_list",
             args: {
                 doctype: "Task Log",
@@ -75,7 +75,7 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
                 fields: ["name", "today"],
                 limit: 1,
             },
-      });
+        });
 
       let taskLogName;
 
@@ -84,21 +84,21 @@ frappe.pages["timeline"].on_page_load = function (wrapper) {
         console.log("No Task Log found, creating new one...",task);
 
         const newTaskLog = await frappe.call({
-          method: "frappe.client.insert",
-          args: {
-            doc: {
-                doctype: "Task Log",
-                today: dateStr,
-                task_id:task,
-                members: [
-                    {
-                        user: frappe.session.user,
+            method: "frappe.client.insert",
+            args: {
+                    doc: { 
+                        doctype: "Task Log",
+                        today: dateStr,
+                        task_id:task,
+                        members: [
+                            {
+                                user: frappe.session.user,
+                            },
+                        ],
+                    // members:frappe.session.user
+                    // Add any other required fields here
                     },
-                ],
-              // members:frappe.session.user
-              // Add any other required fields here
-            },
-          },
+                },
         });
 
         if (!newTaskLog.message) {

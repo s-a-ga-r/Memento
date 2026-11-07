@@ -7,12 +7,13 @@
  "engine": "InnoDB",
  "field_order": [
   "task_name",
-  "from_date",
-  "status",
+  "task_start_time",
+  "total_duration",
+  "priority",
   "column_break_ugmt",
   "project",
-  "to_date",
-  "priority",
+  "status",
+  "task_end_time",
   "section_break_mjym",
   "description",
   "to_do_table",
@@ -24,12 +25,6 @@
    "fieldname": "task_name",
    "fieldtype": "Data",
    "label": "Task Name"
-  },
-  {
-   "fieldname": "from_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "From Date"
   },
   {
    "fieldname": "status",
@@ -49,12 +44,6 @@
    "in_list_view": 1,
    "label": "Project",
    "options": "My Projects"
-  },
-  {
-   "fieldname": "to_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "To Date"
   },
   {
    "fieldname": "priority",
@@ -89,11 +78,30 @@
    "fieldtype": "Table",
    "label": "To do Lists",
    "options": "ToDo Table"
+  },
+  {
+   "depends_on": "doc.task_end_time==1;",
+   "fieldname": "total_duration",
+   "fieldtype": "Duration",
+   "label": "Total Duration"
+  },
+  {
+   "depends_on": "doc.status == \"Completed\";",
+   "fieldname": "task_end_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Task End Time"
+  },
+  {
+   "fieldname": "task_start_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Task Start Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-06 09:53:03.366876",
+ "modified": "2026-11-07 23:26:36.331533",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
