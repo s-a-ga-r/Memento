@@ -1,8 +1,8 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:TSK-{DD}-{MM}-{YY}-{#}",
- "creation": "2026-11-05 17:05:30.543422",
+ "autoname": "format:TSK-{DD}-{MM}-{YYYY}-{#}",
+ "creation": "2026-10-16 16:44:10.180947",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -16,7 +16,7 @@
   "task_end_time",
   "section_break_mjym",
   "description",
-  "to_do_table",
+  "task_todo",
   "members",
   "created_by"
  ],
@@ -42,6 +42,7 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Project",
    "options": "My Projects"
   },
@@ -74,34 +75,36 @@
    "options": "User"
   },
   {
-   "fieldname": "to_do_table",
-   "fieldtype": "Table",
-   "label": "To do Lists",
-   "options": "ToDo Table"
-  },
-  {
    "depends_on": "doc.task_end_time==1;",
    "fieldname": "total_duration",
    "fieldtype": "Duration",
    "label": "Total Duration"
   },
   {
-   "depends_on": "doc.status == \"Completed\";",
+   "depends_on": "eval:doc.status == \"Completed\";",
    "fieldname": "task_end_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
-   "label": "Task End Time"
+   "label": "Task End Time",
+   "read_only": 1
   },
   {
    "fieldname": "task_start_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
-   "label": "Task Start Time"
+   "label": "Task Start Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "task_todo",
+   "fieldtype": "Table",
+   "label": "Task ToDo",
+   "options": "ToDo Table"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-07 23:26:36.331533",
+ "modified": "2026-11-10 21:49:19.769697",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
