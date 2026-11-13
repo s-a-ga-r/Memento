@@ -368,7 +368,7 @@ class TodoComments {
 				<div class="tc-input">
 					<textarea class="form-control" rows="1"
 						placeholder="${__("Add a todo... (Enter to add, Shift+Enter for new line)")}"></textarea>
-					<button class="btn btn-primary btn-sm tc-add">${__("Add")}</button>
+					<button class="btn btn-primary btn-sm tc-add">${__("ToDo")}</button>
 				</div>
 			</div>
 		`).appendTo(this.page.main);

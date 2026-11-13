@@ -14,7 +14,10 @@
   "start_time",
   "date",
   "description_section",
-  "description"
+  "description",
+  "section_break_cdha",
+  "allocated_by",
+  "allocated_to"
  ],
  "fields": [
   {
@@ -76,11 +79,27 @@
    "fieldname": "start_time",
    "fieldtype": "Datetime",
    "label": "Start Time"
+  },
+  {
+   "fieldname": "section_break_cdha",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "allocated_by",
+   "fieldtype": "Link",
+   "label": "Allocated By",
+   "options": "User"
+  },
+  {
+   "fieldname": "allocated_to",
+   "fieldtype": "Link",
+   "label": "Allocated To",
+   "options": "User"
   }
  ],
  "icon": "fa fa-check",
  "links": [],
- "modified": "2026-10-24 10:35:32.083362",
+ "modified": "2026-11-13 12:02:55.375915",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Daily ToDo",

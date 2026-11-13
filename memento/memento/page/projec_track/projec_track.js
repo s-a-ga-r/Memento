@@ -648,6 +648,10 @@ class Projects {
 
             // Open a new Tasks document with the Project field prefilled
             frappe.new_doc("Tasks", {project: projectId});
+
+            // frappe.set_route("Form", "Tasks", "new-task-1", {
+            //     project: projectId
+            // });
         });
 	}
 

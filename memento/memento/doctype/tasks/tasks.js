@@ -9,7 +9,6 @@ frappe.ui.form.on("Tasks", {
 	},
 
 	refresh(frm) {
-        // frm.trigger("update_primary_action");
         const description_field = frm.get_field("description");
         if (description_field && description_field.wrapper) {
             $(description_field.wrapper).find(".ql-editor").css({
@@ -18,11 +17,49 @@ frappe.ui.form.on("Tasks", {
             });
         }
 
+        frm.trigger("update_primary_action");
+
+
+        frm.$wrapper.on("change", () => {
+            console.log("form changed");
+            frm.trigger("update_primary_action");
+        });
+
+
         if (frm.doc.status === "Completed") {
-            frm.disable_form();
+            frm.disable_form(); // then how to enable ? for that you can use frm.enable_form() method to enable the form again.
         }
 
-        frm.disable_save();
+
+
+        // if (frm.is_dirty()) {
+		// 	console.log("for_month changed");
+		// 	frm.page.set_primary_action(__("Save"), () => frm.save());
+		// 	// frm.set_value("status", "Pending")
+		// 	frm.enable_save();
+		// }
+
+        // frm.disable_save();
+
+    
+    },
+
+
+    update_primary_action(frm){
+
+        if (frm.is_dirty()) {
+			// if (frm.doc.status === "Pending") {
+			// 	frm.set_value("status", "Not Saved");
+			// }
+			console.log("form is dirty Save() gets activate");
+			frm.page.set_primary_action(__("Save"), () => frm.save());
+			frm.enable_save();
+            // frm.refresh()
+			return;
+		}else{
+            console.log("form is not dirty Save() gets deactivate");
+		    frm.disable_save();
+        }
 
         let status_actions = {
             "Open": __("Open"),
@@ -44,7 +81,7 @@ frappe.ui.form.on("Tasks", {
             }
 
         });
-    
+
     },
 
     change_project_status(frm, status) {
@@ -60,4 +97,14 @@ frappe.ui.form.on("Tasks", {
         );
 
     },
+
+
+    description(frm) {
+		if (frm.is_dirty()) {
+			console.log("description edited Save() gets activate");
+			frm.page.set_primary_action(__("Save"), () => frm.save());
+			// frm.set_value("status", "Pending")
+			frm.enable_save();
+		}
+	},
 });

@@ -24,7 +24,8 @@
   {
    "fieldname": "task_name",
    "fieldtype": "Data",
-   "label": "Task Name"
+   "label": "Task Name",
+   "reqd": 1
   },
   {
    "fieldname": "status",
@@ -44,7 +45,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "My Projects"
+   "options": "My Projects",
+   "reqd": 1
   },
   {
    "fieldname": "priority",
@@ -104,7 +106,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-10 21:49:19.769697",
+ "modified": "2026-11-13 19:17:59.549793",
  "modified_by": "Administrator",
  "module": "Memento",
  "name": "Tasks",
