@@ -244,23 +244,29 @@ app_license = "mit"
 # }
 
 
+# fixtures = [
+#     # {
+#     #     "dt": "DocType",
+#     #     "filters": [
+#     #         ["name", "in", ["Tasks", "To Do Task"]]
+#     #     ]
+#     # },
+#     {
+#         "dt": "Workspace",
+#         "filters": [
+#             ["name", "=", "Memento"]
+#         ]
+#     },
+#     {
+#         "dt": "Custom HTML Block",
+#         "filters": [
+#             ["name", "=", "Todo Memento"]
+#         ]
+#     }
+# ]
+
 fixtures = [
-    # {
-    #     "dt": "DocType",
-    #     "filters": [
-    #         ["name", "in", ["Tasks", "To Do Task"]]
-    #     ]
-    # },
-    {
-        "dt": "Workspace",
-        "filters": [
-            ["name", "=", "Memento"]
-        ]
-    },
-    {
-        "dt": "Custom HTML Block",
-        "filters": [
-            ["name", "=", "Todo Memento"]
-        ]
-    }
+    {"dt": "Workspace", "filters": [["name", "=", "Memento"]]},
+    {"dt": "Custom HTML Block", "filters": [["name", "in", ["Todo Memento", "Memento Welcome"]]]},
+    {"dt": "Number Card", "filters": [["name", "in", ["Projects", "Total Tasks", "Daily ToDo", "Task Logs"]]]},
 ]
